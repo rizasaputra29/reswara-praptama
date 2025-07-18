@@ -1,0 +1,143 @@
+{
+  "hero": {
+    "title": "Dari Izin hingga Konstruksi, Solusi Menyeluruh untuk Proyek Anda",
+    "subtitle": "Kami adalah solusi terintegrasi yang menggabungkan jasa layanan perizinan hingga konstruksi dengan standar kualitas terbaik untuk memastikan proyek Anda berjalan dengan sempurna.",
+    "buttonText": "Coba Sekarang",
+    "image": "https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  "services": {
+    "title": "Solusi Terintegrasi Dunia Teknik",
+    "subtitle": "Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.",
+    "items": [
+      {
+        "title": "Perencanaan & Desain Arsitektur",
+        "description": "Layanan desain arsitektur profesional untuk berbagai jenis bangunan sesuai kebutuhan dan regulasi yang berlaku.",
+        "icon": "Building"
+      },
+      {
+        "title": "Perizinan",
+        "description": "Pengurusan berbagai macam perizinan konstruksi dan pembangunan dengan proses yang cepat dan terpercaya.",
+        "icon": "FileText"
+      },
+      {
+        "title": "Pengawasan",
+        "description": "Pengawasan konstruksi profesional untuk memastikan kualitas dan keamanan proyek sesuai standar yang berlaku.",
+        "icon": "Eye"
+      },
+      {
+        "title": "Studi",
+        "description": "Studi kelayakan proyek konstruksi dan analisis teknis yang mendalam untuk memastikan kesuksesan proyek.",
+        "icon": "BookOpen"
+      },
+      {
+        "title": "Pengadaan Tanah",
+        "description": "Layanan pengadaan tanah untuk berbagai kebutuhan proyek konstruksi dan pembangunan dengan legal yang jelas.",
+        "icon": "MapPin"
+      },
+      {
+        "title": "Pekerja Lain",
+        "description": "Layanan pendukung lainnya yang dibutuhkan untuk kelancaran proyek konstruksi Anda.",
+        "icon": "Users"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Proyek Nyata, Bukti Nyata",
+    "subtitle": "Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan.",
+    "categories": ["Semua", "Perencanaan & Desain", "Perizinan", "Pengawasan", "Pengadaan Tanah"],
+    "items": [
+      {
+        "title": "Burj Khalifa",
+        "category": "Perencanaan & Desain",
+        "description": "Pengujian gedung pencakar langit di dubai, dilakukan dengan profesional sesuai standar.",
+        "image": "https://images.pexels.com/photos/162031/dubai-tower-arab-khalifa-162031.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1",
+        "client": "Sultan Alexander",
+        "completedDate": "23/5/2023"
+      },
+      {
+        "title": "Menara Pisa",
+        "category": "Pengawasan",
+        "description": "Menyelidiki tanah di daerah menara pisa, mencari tahu mengapa bangunan miring.",
+        "image": "https://images.pexels.com/photos/2422588/pexels-photo-2422588.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1",
+        "client": "Valentino Rossi",
+        "completedDate": "4/2/2022"
+      },
+      {
+        "title": "Amanjiwo",
+        "category": "Perizinan",
+        "description": "Mengurus perizinan lingkungan untuk luxury hotel yang berlokasi di Kab. Magelang.",
+        "image": "https://images.pexels.com/photos/1319515/pexels-photo-1319515.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1",
+        "client": "Agus Bambang",
+        "completedDate": "4/2/2018"
+      },
+      {
+        "title": "Marina Bay Sands",
+        "category": "Studi",
+        "description": "Studi kelayakan teknis untuk kompleks hotel dan kasino dengan desain inovatif.",
+        "image": "https://images.pexels.com/photos/1486222/pexels-photo-1486222.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1",
+        "client": "Marina Development",
+        "completedDate": "15/8/2021"
+      },
+      {
+        "title": "Borobudur Temple",
+        "category": "Pengadaan Tanah",
+        "description": "Pengadaan tanah untuk area konservasi dan pengembangan pariwisata berkelanjutan.",
+        "image": "https://images.unsplash.com/photo-1603766806347-54cdf3745953?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGVtcGxlfGVufDB8fDB8fHww",
+        "client": "Heritage Foundation",
+        "completedDate": "10/12/2020"
+      },
+      {
+        "title": "Petronas Towers",
+        "category": "Pekerja Lain",
+        "description": "Layanan konsultasi teknis dan koordinasi proyek untuk gedung kembar ikonik.",
+        "image": "https://images.pexels.com/photos/1134166/pexels-photo-1134166.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1",
+        "client": "Petronas Corporation",
+        "completedDate": "22/9/2019"
+      }
+    ]
+  },
+  "statistics": {
+    "items": [
+      {
+        "number": "100+",
+        "label": "Proyek Completed",
+        "icon": "Building"
+      },
+      {
+        "number": "50+",
+        "label": "Happy Clients",
+        "icon": "Users"
+      },
+      {
+        "number": "10+",
+        "label": "Years Experience",
+        "icon": "Award"
+      }
+    ]
+  },
+  "partners": {
+    "title": "Trusted by Leading Organizations",
+    "subtitle": "We're proud to work with industry leaders and trusted partners worldwide.",
+    "logos": [
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=100&h=50&dpr=1",
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=100&h=50&dpr=1",
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=100&h=50&dpr=1",
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=100&h=50&dpr=1"
+    ]
+  },
+  "about": {
+    "title": "About Our Company",
+    "content": "We are a leading construction and architectural services company with over 10 years of experience in the industry. Our team of professionals provides comprehensive solutions from permits to construction completion.",
+    "mission": "To provide integrated technical solutions that exceed client expectations while maintaining the highest standards of quality and professionalism.",
+    "vision": "To be the leading provider of construction and architectural services in the region, known for innovation and excellence.",
+    "values": ["Quality", "Innovation", "Integrity", "Sustainability", "Customer Focus"]
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Ready to start your project? Contact us for a consultation.",
+    "address": "Jl. Sudirman No. 123, Jakarta, Indonesia",
+    "phone": "+62 21 1234 5678",
+    "email": "info@company.com",
+    "hours": "Mon - Fri: 8:00 AM - 6:00 PM"
+  }
+}
