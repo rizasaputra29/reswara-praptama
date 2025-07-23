@@ -71,11 +71,13 @@ model About {
   values  String[]
 }
 
+//...
 model VisitStats {
   id              Int @id @default(autoincrement())
   totalVisits     Int @default(0)
   uniqueVisitors  Int @default(0)
 }
+//...
 
 model Contact {
   id      Int    @id @default(autoincrement())
