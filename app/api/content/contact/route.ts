@@ -16,21 +16,26 @@ export async function GET() {
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
-    const { items } = await request.json();
+    const data = await request.json();
     
-    await prisma.$transaction([
-      prisma.project.deleteMany(),
-      prisma.project.createMany({
-        data: items.map(({ id, ...rest }: { id: number }) => rest),
-      }),
-    ]);
+    // The contact info is a single record, usually with id: 1
+    const updatedContact = await prisma.contact.update({
+        where: { id: 1 },
+        data: {
+            title: data.title,
+            subtitle: data.subtitle,
+            address: data.address,
+            phone: data.phone,
+            email: data.email,
+            hours: data.hours,
+        }
+    });
     
-    revalidatePath('/');
     revalidatePath('/contact');
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(updatedContact);
   } catch (error) {
     console.error("Update error:", error);
-    return NextResponse.json({ error: 'Failed to update projects content' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to update contact content' }, { status: 500 });
   }
 }
