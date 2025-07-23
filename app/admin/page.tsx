@@ -16,7 +16,7 @@ import { Toaster } from "@/components/ui/toaster";
 interface Category { id: number; name: string; }
 interface ProjectItem { id: number; title: string; description: string; image: string; client?: string | null; completedDate?: string | null; categoryId: number; }
 interface VisitStats { totalVisits: number; uniqueVisitors: number; }
-interface HeroContent { id: number; title: string; subtitle: string; buttonText: string; }
+interface HeroContent { id: number; title: string; subtitle: string; buttonText: string; image: string; }
 interface AboutContent { id: number; title: string; content: string; mission: string; vision: string; values: string[]; }
 interface ServiceItem { id: number; title: string; description: string; icon: string; }
 interface ContactContent { id: number; title: string; subtitle: string; address: string; phone: string; email: string; hours: string; }
@@ -306,6 +306,14 @@ export default function Admin() {
                             <p className="text-muted-foreground">{heroContent?.buttonText}</p>
                         )}
                     </div>
+                     <div>
+                        <label className="font-semibold">Image URL</label>
+                        {editingSection === 'hero' ? (
+                            <Input value={tempHero?.image} onChange={(e) => setTempHero({...tempHero!, image: e.target.value})} />
+                        ) : (
+                            <p className="text-muted-foreground">{heroContent?.image}</p>
+                        )}
+                    </div>
                      {editingSection === 'hero' && (
                         <div className="flex gap-2">
                             <Button onClick={() => handleContentUpdate('hero', tempHero)}>Save Changes</Button>
@@ -473,7 +481,7 @@ export default function Admin() {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {Object.keys(contactContent || {}).filter(k => k !== 'id').map(key => (
+                    {Object.keys(contactContent || {}).filter(k => k !== 'id' && k !== 'title' && k !== 'subtitle').map(key => (
                         <div key={key}>
                             <label className="font-semibold capitalize">{key}</label>
                             {editingSection === 'contact' ? (

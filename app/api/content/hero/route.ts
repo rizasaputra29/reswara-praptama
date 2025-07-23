@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache'; // <-- 1. IMPORT INI
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
-  // ... (GET function tidak berubah)
   try {
     const hero = await prisma.hero.findFirst();
     return NextResponse.json(hero);
@@ -15,20 +14,26 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const data = await request.json();
+    
+    if (!data.id) {
+        return NextResponse.json({ error: 'Hero ID is required for update' }, { status: 400 });
+    }
+
     const hero = await prisma.hero.update({
-      where: { id: 1 },
+      where: { id: data.id }, // FIX: Use the ID from the request body
       data: {
         title: data.title,
         subtitle: data.subtitle,
         buttonText: data.buttonText,
+        image: data.image,
       },
     });
 
-    // 2. TAMBAHKAN BARIS INI
-    revalidatePath('/'); // Memberitahu Next.js untuk memuat ulang data di halaman utama
+    revalidatePath('/'); 
 
     return NextResponse.json(hero);
   } catch (error) {
+    console.error("Failed to update hero content:", error);
     return NextResponse.json({ error: 'Failed to update hero content' }, { status: 500 });
   }
 }
