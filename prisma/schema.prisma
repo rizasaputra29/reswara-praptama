@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Hero {
+  id         Int    @id @default(autoincrement())
+  title      String @db.Text
+  subtitle   String @db.Text
+  buttonText String
+  image      String @db.Text
+}
+
+model Service {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String @db.Text
+  icon        String
+}
+
+// prisma/schema.prisma
+
+// ... model lainnya
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  projects Project[] // Relasi: Satu Kategori punya banyak Proyek
+}
+
+model Project {
+  id            Int     @id @default(autoincrement())
+  title         String
+  description   String  @db.Text
+  image         String  @db.Text
+  client        String?
+  completedDate String?
+
+  // Hubungkan ke Kategori
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+
+model Statistic {
+  id     Int    @id @default(autoincrement())
+  number String
+  label  String
+  icon   String
+}
+
+model Partner {
+  id  Int    @id @default(autoincrement())
+  logoUrl String @db.Text
+}
+
+model About {
+  id      Int      @id @default(autoincrement())
+  title   String
+  content String   @db.Text
+  mission String   @db.Text
+  vision  String   @db.Text
+  values  String[]
+}
+
+model VisitStats {
+  id              Int @id @default(autoincrement())
+  totalVisits     Int @default(0)
+  uniqueVisitors  Int @default(0)
+}
+
+model Contact {
+  id      Int    @id @default(autoincrement())
+  title   String
+  subtitle String @db.Text
+  address String
+  phone   String
+  email   String
+  hours   String
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  
+}

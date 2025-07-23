@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Hapus atau komentari baris ini
+  // output: 'export', 
+  
   eslint: {
     ignoreDuringBuilds: true,
   },

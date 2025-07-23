@@ -18,9 +18,10 @@ export default function About() {
   const [content, setContent] = useState<AboutData | null>(null);
 
   useEffect(() => {
-    fetch('/api/content')
+    // Mengambil data dari API baru
+    fetch('/api/content/about')
       .then(res => res.json())
-      .then(data => setContent(data.about));
+      .then(data => setContent(data));
   }, []);
 
   if (!content) {

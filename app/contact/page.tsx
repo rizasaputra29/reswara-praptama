@@ -22,9 +22,10 @@ export default function Contact() {
   const [content, setContent] = useState<ContactData | null>(null);
 
   useEffect(() => {
-    fetch('/api/content')
+    // Mengambil data dari API baru
+    fetch('/api/content/contact')
       .then(res => res.json())
-      .then(data => setContent(data.contact));
+      .then(data => setContent(data));
   }, []);
 
   if (!content) {

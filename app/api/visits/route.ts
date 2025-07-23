@@ -1,47 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import prisma from '@/lib/prisma';
 
-const visitsPath = path.join(process.cwd(), 'data', 'visits.json');
+export const dynamic = 'force-dynamic';
 
+// Mengambil data statistik kunjungan
 export async function GET() {
   try {
-    const visits = fs.readFileSync(visitsPath, 'utf8');
-    return NextResponse.json(JSON.parse(visits));
+    // Ambil baris pertama (dan satu-satunya) dari tabel VisitStats
+    const stats = await prisma.visitStats.findFirst();
+    return NextResponse.json(stats);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to load visits' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to load visit stats' }, { status: 500 });
   }
 }
 
+// Menambah jumlah kunjungan
 export async function POST(request: NextRequest) {
   try {
-    const visitsData = JSON.parse(fs.readFileSync(visitsPath, 'utf8'));
-    
-    // Get visitor IP for unique visitor tracking
-    const forwarded = request.headers.get('x-forwarded-for');
-    const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown';
-    
-    // Update visit counts
-    visitsData.totalVisits += 1;
-    
-    // Simple unique visitor tracking (in a real app, use a proper database)
-    const today = new Date().toISOString().split('T')[0];
-    const uniqueKey = `${ip}-${today}`;
-    
-    if (!visitsData.uniqueVisitors) {
-      visitsData.uniqueVisitors = 0;
-    }
-    
-    // In a real implementation, you'd track unique visitors properly
-    // For now, we'll just increment occasionally
-    if (visitsData.totalVisits % 3 === 0) {
-      visitsData.uniqueVisitors += 1;
-    }
-    
-    // Write back to file
-    fs.writeFileSync(visitsPath, JSON.stringify(visitsData, null, 2));
-    
-    return NextResponse.json({ success: true });
+    // Logika untuk unique visitor bisa disempurnakan di sini jika perlu
+    // Untuk saat ini, kita hanya akan menambah total kunjungan
+    const updatedStats = await prisma.visitStats.update({
+      where: { id: 1 }, // Asumsikan data statistik ada di baris dengan id: 1
+      data: {
+        totalVisits: {
+          increment: 1,
+        },
+        // Logika untuk unique visitors bisa dibuat lebih kompleks
+        // Contoh sederhana: tambah 1 setiap 3 kunjungan
+        uniqueVisitors: {
+            increment: Math.random() < 0.33 ? 1 : 0,
+        }
+      },
+    });
+
+    return NextResponse.json({ success: true, stats: updatedStats });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update visits' }, { status: 500 });
   }
