@@ -1,43 +1,42 @@
-"use client";
-
-import { Building, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { getContactContent } from '@/lib/data';
+import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Image from 'next/image';
 
-const Footer = () => {
+const Footer = async () => {
+  const contactInfo = await getContactContent();
+
   return (
     <footer className=" text-white relative"
     style={{
         backgroundImage: 'linear-gradient(to right, #183449 0%, #47525B 25%, #0C2A46 48%, #213950 66%, #0C1824 89%)'
       }}
     >
-      {/* Rounded SVG di bagian atas footer */}
       <div className="absolute top-0 left-0 w-full z-0">
         <svg
           className="block"
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 100" // Sesuaikan tinggi viewBox sesuai kedalaman lengkungan
+          viewBox="0 0 1440 100"
           preserveAspectRatio="none"
         >
           <path
-            fill="#ffffff" // Warna latar belakang bagian di atas footer (putih)
+            fill="#ffffff"
             fillOpacity="1"
             d="M0,100 C360,0 1080,0 1440,100 L1440,0 L0,0 Z"
           ></path>
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10"> {/* Tambahkan 'relative z-10' pada konten agar berada di atas SVG */}
-        {/* Tambahkan padding-top untuk memastikan konten footer tidak tertutup oleh SVG */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pt-24"> {/* Sesuaikan 'pt-24' sesuai tinggi SVG dan desain */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pt-24">
           {/* Company Info */}
           <div className="col-span-1">
             <div className="flex items-center space-x-2 mb-4">
             <Image
-                src="/images/logo-putih.svg" // Logo when at the top (e.g., on dark background)
+                src="/images/logo-putih.svg"
                 alt="Reswara Logo Putih"
-                width={180} // Sesuaikan lebar sesuai kebutuhan desain
-                height={180} // Sesuaikan tinggi sesuai kebutuhan desain
-                priority // Optimal untuk logo di navbar
+                width={180}
+                height={180}
+                priority
               />
             </div>
             <p className="text-gray-400 text-sm mb-4">
@@ -81,21 +80,21 @@ const Footer = () => {
             <div className="space-y-3 text-gray-400">
               <div className="flex items-center space-x-3">
                 <MapPin className="h-5 w-5" />
-                <span className="text-sm">Jl. Sudirman No. 123, Jakarta, Indonesia</span>
+                <span className="text-sm">{contactInfo?.address || 'Data not available'}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5" />
-                <span className="text-sm">+62 21 1234 5678</span>
+                <span className="text-sm">{contactInfo?.phone || 'Data not available'}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5" />
-                <span className="text-sm">info@techconstruct.com</span>
+                <span className="text-sm">{contactInfo?.email || 'Data not available'}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-8 pt-8 text-center relative z-10"> {/* Pastikan z-index untuk divider juga */}
+        <div className="border-t border-slate-800 mt-8 pt-8 text-center relative z-10">
           <p className="text-gray-400 text-sm">
             © 2024 TechConstruct. All rights reserved.
           </p>

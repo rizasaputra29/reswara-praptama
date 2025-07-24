@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimatedSection from '@/components/AnimatedSection';
@@ -8,30 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { getContactContent } from '@/lib/data';
 
-interface ContactData {
-  title: string;
-  subtitle: string;
-  address: string;
-  phone: string;
-  email: string;
-  hours: string;
-}
+// Memaksa halaman ini untuk selalu mengambil data terbaru
+export const revalidate = 0;
 
-export default function Contact() {
-  const [content, setContent] = useState<ContactData | null>(null);
-
-  useEffect(() => {
-    // Mengambil data dari API baru
-    fetch('/api/content/contact')
-      .then(res => res.json())
-      .then(data => setContent(data));
-  }, []);
+export default async function Contact() {
+  const content = await getContactContent();
 
   if (!content) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-white text-xl">Could not load contact content.</div>
       </div>
     );
   }
