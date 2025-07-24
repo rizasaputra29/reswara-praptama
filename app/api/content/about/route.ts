@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache'; // <-- 1. IMPORT INI
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
-  // ... (GET function tidak berubah)
   try {
     const about = await prisma.about.findFirst();
     if (!about) {
@@ -18,8 +17,13 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const data = await request.json();
+
+    if (!data.id) {
+        return NextResponse.json({ error: 'About content ID is required' }, { status: 400 });
+    }
+
     const updatedAbout = await prisma.about.update({
-      where: { id: 1 },
+      where: { id: data.id }, // FIX: Menggunakan ID dari request
       data: {
         title: data.title,
         content: data.content,
@@ -29,12 +33,12 @@ export async function PUT(request: NextRequest) {
       },
     });
 
-    // 2. TAMBAHKAN BARIS INI
-    revalidatePath('/about'); // Memberitahu Next.js untuk memuat ulang data di halaman /about
-    revalidatePath('/'); // Halaman utama mungkin juga menampilkan data ini
+    revalidatePath('/about');
+    revalidatePath('/');
 
     return NextResponse.json(updatedAbout);
   } catch (error) {
+    console.error("Failed to update about content:", error);
     return NextResponse.json({ error: 'Failed to update about content' }, { status: 500 });
   }
 }

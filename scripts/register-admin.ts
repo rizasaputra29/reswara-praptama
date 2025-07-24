@@ -28,10 +28,11 @@ async function main() {
           data: {
             username,
             password: hashedPassword,
+            role: 'ADMIN', // Tambahkan baris ini untuk menetapkan peran
           },
         });
 
-        console.log(`✅ Admin user "${admin.username}" created successfully!`);
+        console.log(`✅ Admin user "${admin.username}" with ADMIN role created successfully!`);
       } catch (e: any) {
         if (e.code === 'P2002') {
           console.error('❌ Error: This username already exists.');

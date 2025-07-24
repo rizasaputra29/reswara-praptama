@@ -9,15 +9,9 @@ export async function GET() {
             id: 'asc'
         }
     });
-    const response = {
-        title: "Solusi Terintegrasi Dunia Teknik",
-        subtitle: "Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.",
-        items: services
-    }
-    return NextResponse.json(response);
+    return NextResponse.json(services);
   } catch (error) {
     console.error("Failed to load services content:", error);
-    // PASTIKAN ADA RETURN DI SINI
     return NextResponse.json({ error: 'Failed to load services content' }, { status: 500 });
   }
 }
@@ -26,22 +20,22 @@ export async function PUT(request: NextRequest) {
   try {
     const { items } = await request.json();
 
-    // Pastikan items adalah array sebelum melanjutkan
     if (!Array.isArray(items)) {
         return NextResponse.json({ error: 'Invalid data format: "items" must be an array.' }, { status: 400 });
     }
 
-    await prisma.$transaction([
-      prisma.service.deleteMany(),
-      prisma.service.createMany({
-        data: items.map(({ id, title, description, icon, ...rest }: { id: number; title: string; description: string; icon: string }) => ({
-          title,
-          description,
-          icon,
-          ...rest
-        })),
-      }),
-    ]);
+    // FIX: Lakukan pembaruan untuk setiap item dalam satu transaksi
+    const updateTransactions = items.map((service: { id: number; title: string; description: string; }) => 
+        prisma.service.update({
+            where: { id: service.id },
+            data: {
+                title: service.title,
+                description: service.description,
+            },
+        })
+    );
+    
+    await prisma.$transaction(updateTransactions);
     
     revalidatePath('/');
     revalidatePath('/services');
@@ -49,7 +43,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Update error:", error);
-    // PASTIKAN ADA RETURN DI SINI
     return NextResponse.json({ error: 'Failed to update services content' }, { status: 500 });
   }
 }

@@ -7,13 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-  "register-admin": "node scripts/runner.js",
-  "prisma:seed": "node scripts/seed-runner.js"
+    "register-admin": "node scripts/runner.js",
+    "prisma:seed": "node scripts/seed-runner.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@next/swc-wasm-nodejs": "13.5.1",
-    "@prisma/client": "^5.12.1",
+    "@prisma/client": "^5.22.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -77,6 +77,8 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-path": "^3.1.1",
     "prisma": "^5.12.1",
     "ts-node": "^10.9.2"
   }

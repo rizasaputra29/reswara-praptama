@@ -26,29 +26,22 @@ model Service {
   icon        String
 }
 
-// prisma/schema.prisma
-
-// ... model lainnya
-
 model Category {
   id       Int       @id @default(autoincrement())
   name     String    @unique
-  projects Project[] // Relasi: Satu Kategori punya banyak Proyek
+  projects Project[]
 }
 
 model Project {
-  id            Int     @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   title         String
-  description   String  @db.Text
-  image         String  @db.Text
+  description   String   @db.Text
+  image         String   @db.Text
   client        String?
   completedDate String?
-
-  // Hubungkan ke Kategori
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
 }
-
 
 model Statistic {
   id     Int    @id @default(autoincrement())
@@ -58,7 +51,7 @@ model Statistic {
 }
 
 model Partner {
-  id  Int    @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   logoUrl String @db.Text
 }
 
@@ -71,29 +64,26 @@ model About {
   values  String[]
 }
 
-//...
 model VisitStats {
-  id              Int @id @default(autoincrement())
-  totalVisits     Int @default(0)
-  uniqueVisitors  Int @default(0)
+  id             Int @id @default(autoincrement())
+  totalVisits    Int @default(0)
+  uniqueVisitors Int @default(0)
 }
-//...
 
 model Contact {
-  id      Int    @id @default(autoincrement())
-  title   String
+  id       Int    @id @default(autoincrement())
+  title    String
   subtitle String @db.Text
-  address String
-  phone   String
-  email   String
-  hours   String
+  address  String
+  phone    String
+  email    String
+  hours    String
 }
 
 model Admin {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
+  role      String   @default("EMPLOYEE") // Tambahkan baris ini
   createdAt DateTime @default(now())
-
-  
 }

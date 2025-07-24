@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-// ... (GET and POST functions remain the same) ...
+// GET function remains the same
 export async function GET() {
   try {
     const projects = await prisma.project.findMany({ include: { category: true }});
@@ -20,17 +20,14 @@ export async function GET() {
   }
 }
 
-
+// POST function remains the same
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-
-    // Pastikan categoryId adalah angka
     const categoryId = parseInt(data.categoryId, 10);
     if (isNaN(categoryId)) {
       return NextResponse.json({ error: 'Invalid Category ID' }, { status: 400 });
     }
-
     const newProject = await prisma.project.create({
       data: {
         title: data.title,
@@ -41,10 +38,8 @@ export async function POST(request: NextRequest) {
         categoryId: categoryId,
       },
     });
-
     revalidatePath('/');
     revalidatePath('/portfolio');
-
     return NextResponse.json(newProject);
   } catch (error) {
     console.error("Create project error:", error);
@@ -52,20 +47,51 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// PUT function is now corrected
+export async function PUT(request: NextRequest) {
+  try {
+    const data = await request.json();
+    const { id, category, ...updateData } = data; // <-- FIX: Destructure and exclude 'category'
+
+    if (!id) {
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
+    }
+
+    if (updateData.categoryId) {
+      updateData.categoryId = parseInt(updateData.categoryId, 10);
+      if (isNaN(updateData.categoryId)) {
+        return NextResponse.json({ error: 'Invalid Category ID' }, { status: 400 });
+      }
+    }
+
+    const updatedProject = await prisma.project.update({
+      where: { id: Number(id) },
+      data: updateData, // <-- FIX: Use the cleaned updateData object
+    });
+
+    revalidatePath('/');
+    revalidatePath('/portfolio');
+
+    return NextResponse.json(updatedProject);
+  } catch (error) {
+    console.error("Update project error:", error);
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 });
+  }
+}
+
+
+// DELETE function remains the same
 export async function DELETE(request: NextRequest) {
   try {
     const { id } = await request.json();
     if (!id) {
         return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
-
     await prisma.project.delete({
         where: { id: Number(id) },
     });
-
     revalidatePath('/');
     revalidatePath('/portfolio');
-
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete project error:", error);

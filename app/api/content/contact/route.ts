@@ -17,10 +17,13 @@ export async function GET() {
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     const data = await request.json();
+
+    if (!data.id) {
+        return NextResponse.json({ error: 'Contact content ID is required' }, { status: 400 });
+    }
     
-    // The contact info is a single record, usually with id: 1
     const updatedContact = await prisma.contact.update({
-        where: { id: 1 },
+        where: { id: data.id }, // FIX: Menggunakan ID dari request
         data: {
             title: data.title,
             subtitle: data.subtitle,

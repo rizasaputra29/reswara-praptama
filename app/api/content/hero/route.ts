@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const hero = await prisma.hero.update({
-      where: { id: data.id }, // FIX: Use the ID from the request body
+      where: { id: data.id }, // FIX: Menggunakan ID dari request
       data: {
         title: data.title,
         subtitle: data.subtitle,
