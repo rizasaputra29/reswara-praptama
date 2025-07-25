@@ -90,3 +90,14 @@ export async function getContactContent() {
     return null;
   }
 }
+
+export async function getAboutContent() {
+  try {
+    const about = await prisma.about.findFirst();
+    return about;
+  } catch (error) {
+    console.error("Database Error in getAboutContent:", error);
+    return null;
+  }
+}
+
