@@ -41,10 +41,10 @@ export default async function PortfolioPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Our Portfolio
+                Proyek Nyata, Bukti Nyata
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Explore our completed projects and see our expertise in action
+                Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan
               </p>
             </AnimatedSection>
           </div>
@@ -52,8 +52,8 @@ export default async function PortfolioPage() {
         </section>
 
         <ProjectsSection
-          title={content.title}
-          subtitle={content.subtitle}
+          title=""
+          subtitle=""
           categories={content.categories}
           projects={projectsForComponent}
           displayBackgroundCard={false}
