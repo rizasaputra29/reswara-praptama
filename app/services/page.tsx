@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import ServicesSection from '@/components/ServicesSection';
 import AnimatedSection from '@/components/AnimatedSection';
 import { getServicesPageContent } from '@/lib/data'; // Import the server-side data fetching function
+import WaveSeparator from '@/components/WaveSeperator';
 
 type ServiceItem = {
   icon: string;
@@ -35,7 +36,7 @@ export default async function ServicesPage() {
       <div>
         <section className="relative rounded-b-2xl text-white py-24 md:py-48"
           style={{
-            backgroundImage: 'linear-gradient(to right, #183449 0%, #47525B 25%, #0C2A46 48%, #213950 66%, #0C1824 89%)'
+            backgroundImage: 'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)'
           }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
@@ -47,6 +48,7 @@ export default async function ServicesPage() {
               </p>
             </AnimatedSection>
           </div>
+          <WaveSeparator />
         </section>
 
         {/* Pass the data directly to the component */}

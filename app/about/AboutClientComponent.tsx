@@ -1,8 +1,11 @@
+// app/about/AboutClientComponent.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
+import WaveSeparator from '@/components/WaveSeperator'; // Fixed import to correct path: WaveSeparator, not WaveSeperator
+
 
 interface AboutData {
   title: string;
@@ -42,35 +45,19 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
 
   useEffect(() => {
     const handleScroll = () => {
-      const timelineSection = document.getElementById('timeline-section');
-      if (timelineSection) {
-        const sectionRect = timelineSection.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
+      // Dapatkan tinggi dokumen yang dapat digulir
+      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+      // Dapatkan posisi gulir saat ini
+      const scrolled = window.scrollY;
 
-        // Calculate the scroll position relative to the document
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-        // Determine the start and end scroll points for the timeline animation
-        // Animation starts when the bottom of the viewport reaches the top of the timeline section
-        const animationStartScroll = timelineSection.offsetTop - viewportHeight;
-        // Animation ends when the bottom of the timeline section is at the top of the viewport
-        const animationEndScroll = timelineSection.offsetTop + sectionRect.height - viewportHeight;
-
-        let progress = 0;
-
-        if (scrollTop <= animationStartScroll) {
-          progress = 0; // Not yet scrolled to the timeline section
-        } else if (scrollTop >= animationEndScroll) {
-          progress = 1; // Scrolled past the timeline section, or bottom of section is at top of viewport
-        } else {
-          // Calculate progress within the animation range
-          progress = (scrollTop - animationStartScroll) / (animationEndScroll - animationStartScroll);
-        }
-
-        // Clamp the progress between 0 and 1
-        progress = Math.min(Math.max(progress, 0), 1);
-        setScrollProgress(progress);
+      let progress = 0;
+      if (documentHeight > 0) {
+        progress = scrolled / documentHeight;
       }
+      
+      // Pastikan nilai progres antara 0 dan 1
+      progress = Math.min(Math.max(progress, 0), 1);
+      setScrollProgress(progress);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -89,13 +76,14 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
     <div className="bg-gray-50">
       {/* Hero Section */}
       <section
-        className="relative text-white py-24 md:py-48" // Removed rounded-b-2xl as SVG will define the shape
+        className="relative text-white py-24 md:py-48"
         style={{
           backgroundImage:
             'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)',
         }}
       >
         <div className="container mx-auto px-4 text-center">
+          <AnimatedSection className='text-center'>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Mitra Rekayasa Teknik Terpercaya Anda
           </h1>
@@ -103,23 +91,11 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
             Solusi Konsultan Teknik, Perencanaan, dan Penyelidikan Profesional bersama CV. Reswara
             Praptama
           </p>
+          </AnimatedSection>
         </div>
 
         {/* SVG Wave at the bottom, similar to HeroSection */}
-        <div className="absolute bottom-0 left-0 w-full z-0">
-          <svg
-            className="block"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              fill="#ffffff"
-              fillOpacity="1"
-              d="M0,50 C360,-10 1080,110 1440,50 L1440,120 L0,120 Z"
-            ></path>
-          </svg>
-        </div>
+        <WaveSeparator />
       </section>
 
       {/* About Section */}
@@ -152,7 +128,7 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
 
       {/* Timeline Section */}
       <section id="timeline-section" className="py-24 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Perjalanan Kami</h2>
             <p className="text-gray-600 mt-4">
@@ -162,8 +138,8 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
           </div>
 
           <div className="relative">
-            {/* Vertical Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300">
+            {/* Vertical Line for Desktop */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-300 hidden md:block">
               <div
                 className="absolute left-0 top-0 w-full bg-blue-500"
                 style={{
@@ -171,31 +147,65 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
                 }}
               ></div>
             </div>
+            {/* Vertical Line for Mobile */}
+            <div className="absolute left-4 w-1 h-full bg-gray-300 md:hidden">
+                <div
+                    className="absolute left-0 top-0 w-full bg-blue-500"
+                    style={{
+                        height: `${scrollProgress * 100}%`,
+                    }}
+                ></div>
+            </div>
 
             {/* Timeline Events */}
-            <div className="space-y-12">
+            <div className="space-y-12 md:space-y-0">
               {timelineEvents.map((event, index) => (
-                <motion.div
-                  key={index}
-                  className={`relative flex items-center ${
-                    index % 2 === 0 ? 'justify-start' : 'justify-end'
-                  }`}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                >
-                  {/* Event Content */}
-                  <div
-                    className={`bg-white border border-gray-200 rounded-lg shadow-md p-6 w-full max-w-md ${
-                      index % 2 === 0 ? 'ml-12' : 'mr-12'
-                    }`}
-                  >
-                    <h3 className="text-xl font-bold text-gray-900">{event.year}</h3>
-                    <h4 className="text-lg font-semibold text-gray-800 mt-2">{event.title}</h4>
-                    <p className="text-gray-600 mt-2">{event.description}</p>
-                  </div>
-                </motion.div>
+                <div key={index} className="relative md:grid md:grid-cols-2 md:gap-x-16 items-center">
+                  {/* Konten untuk sisi kiri di desktop (indeks genap) */}
+                  {index % 2 === 0 ? (
+                    <>
+                      {/* Kolom kiri untuk konten */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.2 }}
+                        className="md:col-start-1 md:col-end-2 md:text-right"
+                      >
+                        <div
+                          className={`bg-white border border-gray-200 rounded-xl shadow-md p-6 w-full max-w-full md:max-w-md md:ml-auto ml-12`}
+                        >
+                          <h3 className="text-xl font-bold text-gray-900">{event.year}</h3>
+                          <h4 className="text-lg font-semibold text-gray-800 mt-2">{event.title}</h4>
+                          <p className="text-gray-600 mt-2">{event.description}</p>
+                        </div>
+                      </motion.div>
+                      {/* Placeholder untuk kolom kanan agar struktur grid tetap terjaga di desktop */}
+                      <div className="hidden md:block md:col-start-2 md:col-end-3 h-full"></div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Placeholder untuk kolom kiri agar struktur grid tetap terjaga di desktop */}
+                      <div className="hidden md:block md:col-start-1 md:col-end-2 h-full"></div>
+                      {/* Konten untuk sisi kanan di desktop (indeks ganjil) */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.2 }}
+                        className="md:col-start-2 md:col-end-3 md:text-left"
+                      >
+                        <div
+                          className={`bg-white border border-gray-200 rounded-xl shadow-md p-6 w-full max-w-full md:max-w-md md:mr-auto ml-12`}
+                        >
+                          <h3 className="text-xl font-bold text-gray-900">{event.year}</h3>
+                          <h4 className="text-lg font-semibold text-gray-800 mt-2">{event.title}</h4>
+                          <p className="text-gray-600 mt-2">{event.description}</p>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </div>
               ))}
             </div>
           </div>

@@ -1,6 +1,9 @@
+// components/HeroSection.tsx
 "use client"; // Komponen ini perlu 'use client' jika ada interaksi, jadi kita biarkan saja
 
 import React from 'react';
+import WaveSeparator from './WaveSeperator'; // Tambahkan import WaveSeparator
+import AnimatedSection from './AnimatedSection';
 
 // 1. Definisikan tipe untuk props
 interface HeroProps {
@@ -18,6 +21,7 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
     }}
       >
       <div className="container mx-auto px-4 text-center relative z-10">
+        <AnimatedSection className='text-center'>
         <div className="inline-block bg-white bg-blur bg-opacity-20 text-sm md:text-base px-5 py-2 rounded-full mb-6 shadow-md">
           CV. Reswara Praptama • Profesionalisme No.1
         </div>
@@ -34,23 +38,10 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
         <button className="bg-white bg-blur bg-opacity-20 hover:bg-blur text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4  focus:ring-opacity-50">
           {buttonText}
         </button>
+        </AnimatedSection>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full z-0">
-        <svg
-          className="block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-        >
-          {/* Updated path for a single, higher, and more wavy shape */}
-          <path
-            fill="#ffffff"
-            fillOpacity="1"
-            d="M0,50 C360,-10 1080,110 1440,50 L1440,120 L0,120 Z"
-          ></path>
-        </svg>
-      </div>
+      <WaveSeparator /> {/* Ganti SVG inline dengan komponen */}
     </section>
   );
 };
