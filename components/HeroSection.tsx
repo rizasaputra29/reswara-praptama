@@ -17,7 +17,7 @@ interface HeroProps {
 // 2. Terima props di dalam komponen
 const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
   return (
-    <section className="relative min-h-screen text-white py-20 md:py-48"
+    <section className="relative text-white py-24 md:py-48"
     style={{
       backgroundImage: 'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)'
     }}

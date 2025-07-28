@@ -52,6 +52,7 @@ export default async function Home() {
           client: project.client === null ? undefined : project.client,
         }))}
         isHomePage={true}
+        displayBackgroundCard={true}
       />
       <StatisticsSection
         statistics={content.statistics.items.map((stat: any) => ({

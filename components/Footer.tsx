@@ -79,7 +79,7 @@ const Footer = async () => {
 
         <div className="mt-8 pt-8 text-center border-t border-gray-200">
           <p className="text-gray-600 text-sm">
-            © 2024 TechConstruct. All rights reserved.
+            © 2025 CV Reswara Praptama. All rights reserved.
           </p>
         </div>
       </div>

@@ -1,3 +1,4 @@
+// components/Navbar.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -26,15 +27,18 @@ const Navbar = () => {
       setScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    // Ensure this runs only on the client
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
   }, []);
 
   const getLinkClasses = (href: string) => {
     const baseClasses = "relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap";
-    const activeHoverBgClasses = scrolled ? 'bg-black/10 backdrop-blur-sm' : 'bg-white/20 backdrop-blur-sm';
+    const activeHoverBgClasses = "bg-white/20 backdrop-blur-sm";
     const activeHoverTextColor = scrolled ? 'text-black' : 'text-white';
     const defaultTextColor = scrolled ? 'text-gray-600' : 'text-gray-300';
 
@@ -49,23 +53,22 @@ const Navbar = () => {
     <nav className={`fixed py-2 top-0 left-0 right-0 z-50 transition-colors duration-300 ${
       scrolled
         ? 'bg-white shadow-sm'
-        : 'backdrop-blur-sm border-b border-white/20' // Added border-b border-white/50 here
+        : 'backdrop-blur-sm border-b border-white/20'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo - Conditional rendering based on 'scrolled' state */}
-          <Link href="/" className="flex items-center">
-            {scrolled ? (
-              <Image
-                src="/images/logo-merah.svg"
-                alt="Reswara Logo Merah"
-                width={100}
-                height={100}
-                priority
-              />
-            ) : (
-              <div className='text-white text-2xl font-bold'>CV Reswara Praptama</div>
-            )}
+          <Link href="/" className="flex items-center h-full">
+            {/* Image Logo: Hidden by default, block when scrolled. */}
+            <Image
+              src="/images/logo-merah.svg"
+              alt="Reswara Logo Merah"
+              width={100}
+              height={100}
+              priority
+              className={`${scrolled ? 'block' : 'hidden'} transition-opacity duration-300`}
+            />
+            {/* Text Logo: Block by default, hidden when scrolled. */}
+            <div className={`text-2xl font-bold ${scrolled ? 'hidden' : 'block'} text-white transition-opacity duration-300`}>CV Reswara Praptama</div>
           </Link>
 
           {/* Desktop Menu */}
@@ -105,7 +108,6 @@ const Navbar = () => {
                   key={item.href}
                   href={item.href}
                   className={getLinkClasses(item.href)}
-                  onClick={() => setIsOpen(false)}
                 >
                   {item.label}
                 </Link>

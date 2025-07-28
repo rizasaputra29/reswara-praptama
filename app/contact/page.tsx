@@ -48,10 +48,13 @@ export default async function Contact() {
         <section className="py-24 bg-white ">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
-              <div className="bg-white rounded-3xl border-x border-y shadow-lg p-8 md:p-12">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                   {/* Contact Info */}
                   <div className="p-8 space-y-10">
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      Contact Information
+                    </h3>
                     <div className="flex items-start space-x-4">
                       <MapPin className="h-6 w-6 text-gray-600 mt-1" />
                       <div>

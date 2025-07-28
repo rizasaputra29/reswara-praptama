@@ -1,3 +1,4 @@
+// app/portfolio/page.tsx
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProjectsSection from '@/components/ProjectsSection';
@@ -40,10 +41,10 @@ export default async function PortfolioPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Proyek Nyata, Bukti Nyata
+                Our Portfolio
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan
+                Explore our completed projects and see our expertise in action
               </p>
             </AnimatedSection>
           </div>
@@ -51,10 +52,11 @@ export default async function PortfolioPage() {
         </section>
 
         <ProjectsSection
-          title=""
-          subtitle=""
+          title={content.title}
+          subtitle={content.subtitle}
           categories={content.categories}
           projects={projectsForComponent}
+          displayBackgroundCard={false}
         />
       </div>
       <Footer />

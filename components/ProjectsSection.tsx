@@ -22,19 +22,18 @@ interface ProjectsSectionProps {
   subtitle: string;
   categories: string[];
   projects: Project[];
-  isHomePage?: boolean; // <--- ADD THIS PROP
+  isHomePage?: boolean;
+  displayBackgroundCard?: boolean; // <--- TAMBAH PROPS INI
 }
 
-const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage }: ProjectsSectionProps) => {
+const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, displayBackgroundCard = true }: ProjectsSectionProps) => {
   const [activeCategory, setActiveCategory] = useState('Semua');
 
   const filteredProjects = activeCategory === 'Semua'
     ? projects
     : projects.filter(project => project.category === activeCategory);
 
-  // Limit displayed items to 6 if on home page
   const projectsToDisplay = isHomePage ? filteredProjects.slice(0, 6) : filteredProjects;
-  // Show button if more than 6 projects after filtering AND is on home page
   const showLoadMoreButton = (filteredProjects.length > 6) && isHomePage;
 
   const getCategoryColor = (category: string) => {
@@ -49,70 +48,81 @@ const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage }: 
     return colorMap[category] || 'bg-blue-500';
   };
 
+  const content = (
+    <>
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          {title}
+        </h2>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          {subtitle}
+        </p>
+      </div>
+
+      {/* Category Filter */}
+      <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="bg-gray-50 rounded-2xl p-2 flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                activeCategory === category
+                  ? 'bg-white text-black shadow-md'
+                  : 'text-gray-600 hover:bg-white hover:shadow-sm'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Projects Grid */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {projectsToDisplay.map((project, index) => (
+          <ProjectCard
+            key={project.title}
+            title={project.title}
+            description={project.description}
+            imageUrl={project.image}
+            category={project.category}
+            client={project.client}
+            completedDate={project.completedDate}
+            categoryColor={getCategoryColor(project.category)}
+          />
+        ))}
+      </motion.div>
+
+      {/* View All Projects Button - Conditionally rendered */}
+      {showLoadMoreButton && (
+        <div className="text-center mt-12">
+          <Link href="/portfolio" passHref>
+            <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
+              Lihat Semua Proyek
+            </Button>
+          </Link>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <section className="py-16 bg-white border-x border-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
-          <div className="bg-white border-x border-y rounded-3xl p-8 md:p-12">
-            {/* Header */}
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                {title}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                {subtitle}
-              </p>
+          {displayBackgroundCard ? ( // <--- KONDISI UNTUK MENAMPILKAN DIV
+            <div className="bg-white border-x border-y rounded-3xl p-8 md:p-12">
+              {content}
             </div>
-
-            {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              <div className="bg-gray-50 rounded-2xl p-2 flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                      activeCategory === category
-                        ? 'bg-white text-black shadow-md'
-                        : 'text-gray-600 hover:bg-white hover:shadow-sm'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Projects Grid */}
-            <motion.div
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              {projectsToDisplay.map((project, index) => (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  imageUrl={project.image}
-                  category={project.category}
-                  client={project.client}
-                  completedDate={project.completedDate}
-                  categoryColor={getCategoryColor(project.category)}
-                />
-              ))}
-            </motion.div>
-
-            {/* View All Projects Button - Conditionally rendered */}
-            {showLoadMoreButton && (
-              <div className="text-center mt-12">
-                <Link href="/portfolio" passHref>
-                  <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
-                    Lihat Semua Proyek
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+          ) : (
+            // Jika false, tampilkan konten langsung tanpa div wrapper
+            content
+          )}
         </AnimatedSection>
       </div>
     </section>
