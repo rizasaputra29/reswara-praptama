@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { getContactContent } from '@/lib/data';
+import WaveSeparator from '@/components/WaveSeperator';
 
 // Memaksa halaman ini untuk selalu mengambil data terbaru
 export const revalidate = 0;
@@ -28,7 +29,7 @@ export default async function Contact() {
         {/* Hero Section */}
         <section className="relative rounded-b-2xl text-white py-24 md:py-48"
       style={{
-        backgroundImage: 'linear-gradient(to right, #183449 0%, #47525B 25%, #0C2A46 48%, #213950 66%, #0C1824 89%)'
+        backgroundImage: 'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)'
       }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
@@ -40,6 +41,7 @@ export default async function Contact() {
               </p>
             </AnimatedSection>
           </div>
+          <WaveSeparator />
         </section>
 
         {/* Contact Section */}
