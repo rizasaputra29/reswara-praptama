@@ -67,20 +67,38 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services }) => {
         </div>
       </div>
 
-      {/* Sub-Services Grid - Displayed Dynamically */}
-      <AnimatedSection key={activeCategory?.id}>
-        {activeCategory?.subServices && activeCategory.subServices.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeCategory.subServices.map((sub) => (
-              <div key={sub.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-full">
-                {sub.image && (
-                  <div className="relative h-48 w-full">
-                    <Image
-                      src={sub.image}
-                      alt={sub.title}
-                      fill
-                      className="object-cover"
-                    />
+      {/* Featured Service Section - Content is now dynamic */}
+      <AnimatedSection delay={0.6} key={currentCategoryData.id}>
+        <div className="bg-white rounded-3xl p-8 md:p-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="relative p-8 h-full rounded-2xl border-x border-y overflow-hidden">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                {currentCategoryData.featuredTitle}
+              </h3>
+              <p className="text-gray-600 leading-relaxed mb-8">
+                {currentCategoryData.featuredDescription}
+              </p>
+            </div>
+
+            {/* Right Image */}
+            <div className="relative">
+              <div className="relative h-80 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src={currentCategoryData.imageUrl}
+                  alt={currentCategoryData.name}
+                  fill
+                  className="object-cover"
+                />
+                {/* Overlay Text */}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <h4 className="text-2xl font-bold mb-2">
+                      {currentCategoryData.imageOverlayText.line1}
+                    </h4>
+                    <h4 className="text-2xl font-bold">
+                      {currentCategoryData.imageOverlayText.line2}
+                    </h4>
                   </div>
                 )}
                 <div className="p-6">
