@@ -1,9 +1,12 @@
+// components/ProjectsSection.tsx
 "use client";
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
 import ProjectCard from './ProjectCard';
+import { Button } from '@/components/ui/button';
 
 interface Project {
   title: string;
@@ -19,14 +22,20 @@ interface ProjectsSectionProps {
   subtitle: string;
   categories: string[];
   projects: Project[];
+  isHomePage?: boolean; // <--- ADD THIS PROP
 }
 
-const ProjectsSection = ({ title, subtitle, categories, projects }: ProjectsSectionProps) => {
+const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage }: ProjectsSectionProps) => {
   const [activeCategory, setActiveCategory] = useState('Semua');
 
-  const filteredProjects = activeCategory === 'Semua' 
-    ? projects 
+  const filteredProjects = activeCategory === 'Semua'
+    ? projects
     : projects.filter(project => project.category === activeCategory);
+
+  // Limit displayed items to 6 if on home page
+  const projectsToDisplay = isHomePage ? filteredProjects.slice(0, 6) : filteredProjects;
+  // Show button if more than 6 projects after filtering AND is on home page
+  const showLoadMoreButton = (filteredProjects.length > 6) && isHomePage;
 
   const getCategoryColor = (category: string) => {
     const colorMap: { [key: string]: string } = {
@@ -75,11 +84,11 @@ const ProjectsSection = ({ title, subtitle, categories, projects }: ProjectsSect
             </div>
 
             {/* Projects Grid */}
-            <motion.div 
-              layout 
+            <motion.div
+              layout
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredProjects.map((project, index) => (
+              {projectsToDisplay.map((project, index) => (
                 <ProjectCard
                   key={project.title}
                   title={project.title}
@@ -92,6 +101,17 @@ const ProjectsSection = ({ title, subtitle, categories, projects }: ProjectsSect
                 />
               ))}
             </motion.div>
+
+            {/* View All Projects Button - Conditionally rendered */}
+            {showLoadMoreButton && (
+              <div className="text-center mt-12">
+                <Link href="/portfolio" passHref>
+                  <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
+                    Lihat Semua Proyek
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </AnimatedSection>
       </div>

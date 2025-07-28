@@ -1,3 +1,4 @@
+// app/page.tsx
 // Hapus "use client"
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -40,6 +41,7 @@ export default async function Home() {
           ...service,
           icon: service.icon as "Building" | "FileText" | "Eye" | "BookOpen" | "MapPin" | "Users",
         }))}
+        isHomePage={true}
       />
       <ProjectsSection
         title={content.projects.title}
@@ -49,6 +51,7 @@ export default async function Home() {
           ...project,
           client: project.client === null ? undefined : project.client,
         }))}
+        isHomePage={true}
       />
       <StatisticsSection
         statistics={content.statistics.items.map((stat: any) => ({

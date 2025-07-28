@@ -1,8 +1,11 @@
+// components/ServicesCategories.tsx
 "use client";
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
+import { Button } from '@/components/ui/button';
 
 // Define the types for our data
 interface SubService {
@@ -20,10 +23,10 @@ interface Service {
 }
 interface ServiceCategoriesProps {
   services: Service[];
+  isHomePage?: boolean; // <--- ADD THIS PROP
 }
 
-const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services }) => {
-  // First, check if the services data is available. If not, don't render the component.
+const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services, isHomePage }) => {
   if (!services || services.length === 0) {
     return (
         <div className="text-center py-12 text-gray-500">
@@ -32,12 +35,15 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services }) => {
     );
   }
 
-  // Now we can safely set the initial state because we know `services[0]` exists.
   const [activeCategoryId, setActiveCategoryId] = useState<number>(services[0].id);
 
   const activeCategory = services.find(
     (service) => service.id === activeCategoryId
   ) || services[0];
+
+  const subServicesToDisplay = activeCategory?.subServices || [];
+  // Show button if more than 6 sub-services AND is on home page
+  const showLearnMoreButton = (subServicesToDisplay.length > 6) && isHomePage;
 
   return (
     <div className="bg-white rounded-3xl border-x border-y p-8 md:p-12 mt-16">
@@ -69,9 +75,10 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services }) => {
 
       {/* Sub-Services Grid - Displayed Dynamically */}
       <AnimatedSection key={activeCategory?.id}>
-        {activeCategory?.subServices && activeCategory.subServices.length > 0 ? (
+        {subServicesToDisplay.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeCategory.subServices.map((sub) => (
+            {/* Limit displayed items to 6 if showing the "Learn More" button */}
+            {subServicesToDisplay.slice(0, showLearnMoreButton ? 6 : subServicesToDisplay.length).map((sub) => (
               <div key={sub.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-full">
                 {sub.image && (
                   <div className="relative h-48 w-full">
@@ -93,6 +100,17 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services }) => {
         ) : (
           <div className="text-center py-12 text-gray-500">
             <p>Detail layanan untuk kategori ini akan segera tersedia.</p>
+          </div>
+        )}
+
+        {/* Learn More Button for Services - Conditionally rendered */}
+        {showLearnMoreButton && (
+          <div className="text-center mt-12">
+            <Link href="/services" passHref>
+              <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
+                Pelajari Lebih Lanjut
+              </Button>
+            </Link>
           </div>
         )}
       </AnimatedSection>

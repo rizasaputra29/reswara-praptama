@@ -47,10 +47,10 @@ export default async function ServicesPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Our Services
+                Solusi Terintegrasi Dunia Teknik
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Comprehensive solutions for all your construction and architectural needs
+                Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional
               </p>
             </AnimatedSection>
           </div>
@@ -59,8 +59,8 @@ export default async function ServicesPage() {
 
         {/* Pass the full data directly to the component */}
         <ServicesSection
-          title={content.title}
-          subtitle={content.subtitle}
+          title=""
+          subtitle=""
           services={content.items.map((item) => ({
             ...item,
             icon: item.icon as "Building" | "FileText" | "Eye" | "BookOpen" | "MapPin" | "Users"

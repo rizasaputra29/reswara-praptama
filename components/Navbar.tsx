@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Building } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +34,7 @@ const Navbar = () => {
 
   const getLinkClasses = (href: string) => {
     const baseClasses = "relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap";
-    const activeHoverBgClasses = "bg-white/20 backdrop-blur-sm";
+    const activeHoverBgClasses = scrolled ? 'bg-black/10 backdrop-blur-sm' : 'bg-white/20 backdrop-blur-sm';
     const activeHoverTextColor = scrolled ? 'text-black' : 'text-white';
     const defaultTextColor = scrolled ? 'text-gray-600' : 'text-gray-300';
 

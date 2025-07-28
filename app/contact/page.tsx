@@ -117,7 +117,7 @@ export default async function Contact() {
                         </label>
                         <Textarea rows={6} placeholder="Tell us about your project..." />
                       </div>
-                      <Button className="w-full bg-gray-600 hover:bg-gray-700">
+                      <Button className="w-full bg-blue-600 hover:bg-blue-700">
                         Send Message
                       </Button>
                     </form>

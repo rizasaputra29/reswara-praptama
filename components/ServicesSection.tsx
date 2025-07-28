@@ -1,3 +1,4 @@
+// components/ServicesSection.tsx
 "use client";
 
 import { motion } from 'framer-motion';
@@ -43,9 +44,10 @@ interface ServicesSectionProps {
   title: string;
   subtitle: string;
   services: Service[];
+  isHomePage?: boolean; // <--- ADD THIS PROP
 }
 
-const ServicesSection = ({ title, subtitle, services }: ServicesSectionProps) => {
+const ServicesSection = ({ title, subtitle, services, isHomePage }: ServicesSectionProps) => {
   return (
     <section className="pt-24 pb-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +66,7 @@ const ServicesSection = ({ title, subtitle, services }: ServicesSectionProps) =>
             <ServiceCardsGrid services={services} />
 
             {/* FIX: Pass the 'services' data down to the ServiceCategories component */}
-            <ServiceCategories services={services} />
+            <ServiceCategories services={services} isHomePage={isHomePage} /> {/* <--- PASS THE PROP */}
         </AnimatedSection>
       </div>
     </section>

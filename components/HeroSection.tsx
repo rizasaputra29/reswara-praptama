@@ -4,6 +4,8 @@
 import React from 'react';
 import WaveSeparator from './WaveSeperator'; // Tambahkan import WaveSeparator
 import AnimatedSection from './AnimatedSection';
+import { Button } from './ui/button';
+import Link from 'next/link';
 
 // 1. Definisikan tipe untuk props
 interface HeroProps {
@@ -35,9 +37,11 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
           {subtitle}
         </p>
 
-        <button className="bg-white bg-blur bg-opacity-20 hover:bg-blur text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4  focus:ring-opacity-50">
-          {buttonText}
-        </button>
+        <Link href="/contact" passHref>
+          <Button className="bg-white bg-blur bg-opacity-20 hover:bg-blur text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-opacity-50">
+            {buttonText}
+          </Button>
+        </Link>
         </AnimatedSection>
       </div>
 
