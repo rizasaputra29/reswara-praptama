@@ -20,10 +20,21 @@ model Hero {
 }
 
 model Service {
-  id          Int    @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
-  description String @db.Text
+  description String       @db.Text
   icon        String
+  subServices SubService[] // Add this line to create the relation
+}
+
+// ADD THIS NEW MODEL for sub-services
+model SubService {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String  @db.Text
+  image       String? @db.Text
+  serviceId   Int
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model Category {

@@ -9,6 +9,7 @@ async function main() {
   console.log('Start seeding...');
 
   // --- Clear existing data ---
+  await prisma.subService.deleteMany({}); // Clear sub-services first
   await prisma.project.deleteMany({});
   await prisma.category.deleteMany({});
   await prisma.service.deleteMany({});
@@ -31,21 +32,31 @@ async function main() {
   const visitsData = JSON.parse(visitsFile);
 
   // --- Seed VisitStats ---
-  await prisma.visitStats.create({
-    data: {
-      totalVisits: visitsData.totalVisits,
-      uniqueVisitors: visitsData.uniqueVisitors,
-    },
-  });
+  await prisma.visitStats.create({ data: visitsData });
   console.log('✅ VisitStats seeded.');
 
   // --- Seed Hero ---
   await prisma.hero.create({ data: contentData.hero });
   console.log('✅ Hero seeded.');
-
-  // --- Seed Services ---
-  await prisma.service.createMany({ data: contentData.services.items });
-  console.log('✅ Services seeded.');
+  
+  // --- Seed Services and SubServices ---
+  for (const service of contentData.services.items) {
+    const { subServices, ...serviceData } = service; // Separate subServices from parent data
+    
+    const createdService = await prisma.service.create({
+      data: serviceData,
+    });
+    
+    if (subServices && subServices.length > 0) {
+      await prisma.subService.createMany({
+        data: subServices.map((sub: any) => ({
+          ...sub,
+          serviceId: createdService.id, // Link to the parent service
+        })),
+      });
+    }
+  }
+  console.log('✅ Services and SubServices seeded.');
 
   // --- Seed Categories and Projects ---
   const categories = contentData.projects.categories.filter((cat: string) => cat !== 'Semua');
@@ -59,34 +70,30 @@ async function main() {
     return acc;
   }, {} as Record<string, number>);
 
-  const projectsToCreate = contentData.projects.items.map((project: any) => ({
-    title: project.title,
-    description: project.description,
-    image: project.image,
-    client: project.client,
-    completedDate: project.completedDate,
-    categoryId: categoryMap[project.category],
-  }));
+  // FIX: Destructure the project to remove the 'category' string field
+  const projectsToCreate = contentData.projects.items.map((project: any) => {
+    const { category, ...restOfProject } = project;
+    return {
+      ...restOfProject,
+      categoryId: categoryMap[category],
+    };
+  });
 
   await prisma.project.createMany({
     data: projectsToCreate,
   });
   console.log('✅ Projects seeded.');
 
-  // --- Seed Statistics ---
+  // --- Seed Statistics, Partners, About, Contact ---
   await prisma.statistic.createMany({ data: contentData.statistics.items });
   console.log('✅ Statistics seeded.');
 
-  // --- Seed Partners ---
-  const partnerLogos = contentData.partners.logos.map((logoUrl: string) => ({ logoUrl }));
-  await prisma.partner.createMany({ data: partnerLogos });
+  await prisma.partner.createMany({ data: contentData.partners.logos.map((logoUrl: string) => ({ logoUrl })) });
   console.log('✅ Partners seeded.');
   
-  // --- Seed About ---
   await prisma.about.create({ data: contentData.about });
   console.log('✅ About seeded.');
   
-  // --- Seed Contact ---
   await prisma.contact.create({ data: contentData.contact });
   console.log('✅ Contact seeded.');
 

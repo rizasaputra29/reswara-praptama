@@ -12,32 +12,73 @@
       {
         "title": "Perencanaan & Desain Arsitektur",
         "description": "Layanan desain arsitektur profesional untuk berbagai jenis bangunan sesuai kebutuhan dan regulasi yang berlaku.",
-        "icon": "Building"
+        "icon": "FileText",
+        "subServices": [
+          {
+            "title": "Desain Arsitektur",
+            "description": "Mengembangkan konsep desain bangunan yang fungsional dan estetis.",
+            "image": "https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          },
+          {
+            "title": "Gambar Kerja (DED)",
+            "description": "Menyediakan gambar detail pelaksanaan konstruksi yang akurat dan lengkap.",
+            "image": "https://images.pexels.com/photos/220769/pexels-photo-220769.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          }
+        ]
       },
       {
         "title": "Perizinan",
         "description": "Pengurusan berbagai macam perizinan konstruksi dan pembangunan dengan proses yang cepat dan terpercaya.",
-        "icon": "FileText"
+        "icon": "Building",
+         "subServices": [
+          {
+            "title": "Bantuan Perizinan Proyek",
+            "description": "Fasilitasi seluruh proses perizinan bangunan dan lingkungan Anda, dari pengajuan awal hingga persetujuan akhir.",
+            "image": "https://images.pexels.com/photos/3771077/pexels-photo-3771077.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          }
+        ]
       },
       {
-        "title": "Pengawasan",
+        "title": "Pengujian",
         "description": "Pengawasan konstruksi profesional untuk memastikan kualitas dan keamanan proyek sesuai standar yang berlaku.",
-        "icon": "Eye"
+        "icon": "Eye",
+        "subServices": [
+          {
+            "title": "Analisis dan Pengujian Material",
+            "description": "Kami menyediakan layanan pengujian material konstruksi untuk memastikan kualitas dan keamanan struktur Anda.",
+            "image": "https://images.pexels.com/photos/3771120/pexels-photo-3771120.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          }
+        ]
       },
       {
         "title": "Studi",
         "description": "Studi kelayakan proyek konstruksi dan analisis teknis yang mendalam untuk memastikan kesuksesan proyek.",
-        "icon": "BookOpen"
+        "icon": "BookOpen",
+        "subServices": [
+           {
+            "title": "Studi Kelayakan dan Teknis",
+            "description": "Layanan studi kelayakan proyek, analisis dampak lingkungan (AMDAL), dan studi teknis lainnya.",
+            "image": "https://images.pexels.com/photos/3771124/pexels-photo-3771124.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          }
+        ]
       },
       {
-        "title": "Pengadaan Tanah",
+        "title": "Penyelidikan Tanah",
         "description": "Layanan pengadaan tanah untuk berbagai kebutuhan proyek konstruksi dan pembangunan dengan legal yang jelas.",
-        "icon": "MapPin"
+        "icon": "MapPin",
+        "subServices": [
+          {
+            "title": "Investigasi Geoteknik Mendalam",
+            "description": "Melakukan penyelidikan tanah detail dan analisis geoteknik untuk memastikan desain pondasi yang aman.",
+            "image": "https://images.pexels.com/photos/3771118/pexels-photo-3771118.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1"
+          }
+        ]
       },
       {
         "title": "Pekerja Lain",
         "description": "Layanan pendukung lainnya yang dibutuhkan untuk kelancaran proyek konstruksi Anda.",
-        "icon": "Users"
+        "icon": "Users",
+        "subServices": []
       }
     ]
   },
