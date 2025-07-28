@@ -4,7 +4,14 @@ import prisma from './prisma';
 export async function getHomePageContent() {
   try {
     const hero = await prisma.hero.findFirst();
-    const services = await prisma.service.findMany({ orderBy: { id: 'asc' } });
+    const services = await prisma.service.findMany({
+      orderBy: { id: 'asc' },
+      include: {
+        subServices: {
+          orderBy: { id: 'asc' }
+        }
+      }
+    });
     const projects = await prisma.project.findMany({ include: { category: true }, orderBy: { id: 'asc' } });
     const categories = await prisma.category.findMany({ orderBy: { id: 'asc' } });
     const statistics = await prisma.statistic.findMany({ orderBy: { id: 'asc' } });
@@ -67,6 +74,11 @@ export async function getServicesPageContent() {
   try {
     const services = await prisma.service.findMany({
       orderBy: { id: 'asc' },
+      include: {
+        subServices: {
+          orderBy: { id: 'asc' }
+        }
+      }
     });
     if (!services) return null;
     return {
@@ -100,4 +112,3 @@ export async function getAboutContent() {
     return null;
   }
 }
-

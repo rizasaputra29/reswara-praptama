@@ -1,4 +1,3 @@
-// components/ServiceCardsGrid.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Building, FileText, Eye, BookOpen, MapPin, Users, ArrowRight } from 'lucide-react';
@@ -49,7 +48,7 @@ const ServiceGrid: React.FC<ServiceCardsGridProps> = ({ services }) => {
 
       {/* Services Grid - Bottom Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        {services.slice(3, 5).map((service, index) => {
+        {services.slice(3, 6).map((service, index) => { // Updated slice to (3, 6) to include the 6th service
           const IconComponent = iconMap[service.icon];
           return (
             <AnimatedCard key={`service-bottom-${index}`}>
@@ -65,18 +64,6 @@ const ServiceGrid: React.FC<ServiceCardsGridProps> = ({ services }) => {
             </AnimatedCard>
           );
         })}
-        
-        {/* "Pelajari Lebih Lanjut" Card */}
-        <AnimatedCard key="learn-more">
-          <div className="bg-white rounded-2xl p-8 hover:bg-white hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col justify-center items-center text-center">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              Pelajari Lebih Lanjut
-            </h3>
-            <button className="flex items-center text-gray-600 font-medium hover:text-gray-900 transition-colors">
-              Lihat Semua Layanan <ArrowRight className="h-5 w-5 ml-2" />
-            </button>
-          </div>
-        </AnimatedCard>
       </div>
     </>
   );
