@@ -27,7 +27,7 @@ const StatisticsSection = ({ statistics }: StatisticsSectionProps) => {
         <AnimatedSection>
           <div className="rounded-3xl border-x border-y p-8 md:p-12"
             style={{
-              backgroundImage: 'linear-gradient(to right, #183449 0%, #47525B 25%, #0C2A46 48%, #213950 66%, #0C1824 89%)'
+              backgroundImage: 'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)'
             }}
           >
             <div className="text-center mb-16">

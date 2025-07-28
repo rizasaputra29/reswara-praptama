@@ -1,4 +1,3 @@
-// components/ServiceCategoriesFeature.tsx
 "use client";
 
 import React, { useState } from 'react';
@@ -96,7 +95,7 @@ const ServiceCategories: React.FC = () => {
         <div className="bg-white rounded-3xl p-8 md:p-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
-            <div className="relative p-8 h-full rounded-2xl border-x border-y overflow-hidden">
+            <div className="relative p-8 md:p-12 sm:p-4 h-full rounded-2xl border-x border-y overflow-hidden">
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
                 {currentCategoryData.featuredTitle}
               </h3>
@@ -106,8 +105,9 @@ const ServiceCategories: React.FC = () => {
             </div>
 
             {/* Right Image */}
-            <div className="relative">
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-lg">
+            {/* Added 'hidden' to hide on mobile and 'lg:block' to show on large screens */}
+            <div className="relative hidden lg:block">
+              <div className="relative h-80 sm:h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg">
                 <Image
                   src={currentCategoryData.imageUrl}
                   alt={currentCategoryData.name}

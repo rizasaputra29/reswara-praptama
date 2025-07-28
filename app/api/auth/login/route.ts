@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';

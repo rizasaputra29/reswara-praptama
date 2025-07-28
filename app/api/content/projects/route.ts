@@ -1,5 +1,4 @@
-// app/api/content/projects/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 

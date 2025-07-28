@@ -12,10 +12,10 @@ interface HeroProps {
 // 2. Terima props di dalam komponen
 const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
   return (
-    <section className="relative min-h-screen text-white py-28 md:py-48"
-      style={{
-        backgroundImage: 'linear-gradient(to right, #183449 0%, #47525B 25%, #0C2A46 48%, #213950 66%, #0C1824 89%)'
-      }}
+    <section className="relative min-h-screen text-white py-20 md:py-48"
+    style={{
+      backgroundImage: 'linear-gradient(110deg, #0734B6 0%, #85B9E9 24%, #2C71B2 48%, #3979B2 66%, #0B3055 89%)'
+    }}
       >
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="inline-block bg-white bg-blur bg-opacity-20 text-sm md:text-base px-5 py-2 rounded-full mb-6 shadow-md">
@@ -23,7 +23,7 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
         </div>
 
         {/* 3. Gunakan data dari props, bukan hardcoded */}
-        <h1 className="max-w-4xl mx-auto text-center text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg">
+        <h1 className="max-w-4xl mx-auto text-center text-4xl md:text-6xl font-extrabold leading-tight mb-4">
           {title}
         </h1>
 
@@ -43,10 +43,11 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
           viewBox="0 0 1440 120"
           preserveAspectRatio="none"
         >
+          {/* Updated path for a single, higher, and more wavy shape */}
           <path
             fill="#ffffff"
             fillOpacity="1"
-            d="M0,0 C360,160 1080,160 1440,0 L1440,120 L0,120 Z"
+            d="M0,50 C360,-10 1080,110 1440,50 L1440,120 L0,120 Z"
           ></path>
         </svg>
       </div>

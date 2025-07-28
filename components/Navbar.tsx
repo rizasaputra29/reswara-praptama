@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image'; // Pastikan ini sudah ada
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Building } from 'lucide-react';
@@ -49,28 +49,22 @@ const Navbar = () => {
     <nav className={`fixed py-2 top-0 left-0 right-0 z-50 transition-colors duration-300 ${
       scrolled
         ? 'bg-white shadow-sm'
-        : 'backdrop-blur-sm' // Added back 'border-b border-black' that was missing in your last paste
+        : 'backdrop-blur-sm border-b border-white/20' // Added border-b border-white/50 here
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo - Conditional rendering based on 'scrolled' state */}
-          <Link href="/" className="flex items-center"> {/* Removed space-x-2 if only one image */}
+          <Link href="/" className="flex items-center">
             {scrolled ? (
               <Image
-                src="/images/logo-merah.svg" // Logo when scrolled (e.g., on white background)
+                src="/images/logo-merah.svg"
                 alt="Reswara Logo Merah"
-                width={100} // Sesuaikan lebar sesuai kebutuhan desain
-                height={100} // Sesuaikan tinggi sesuai kebutuhan desain
-                priority // Optimal untuk logo di navbar
+                width={100}
+                height={100}
+                priority
               />
             ) : (
-              <Image
-                src="/images/logo-putih.svg" // Logo when at the top (e.g., on dark background)
-                alt="Reswara Logo Putih"
-                width={100} // Sesuaikan lebar sesuai kebutuhan desain
-                height={100} // Sesuaikan tinggi sesuai kebutuhan desain
-                priority // Optimal untuk logo di navbar
-              />
+              <div className='text-white text-2xl font-bold'>CV Reswara Praptama</div>
             )}
           </Link>
 
