@@ -2,7 +2,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Onest } from 'next/font/google';
-import TransitionProvider from '@/components/TransitionProvider'; // Import komponen TransitionProvider
+import TransitionProvider from '@/components/TransitionProvider';
+import VisitTracker from '@/components/VisitTracker';
 
 const onest = Onest({ subsets: ['latin'] });
 
@@ -19,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={onest.className}>
-        <TransitionProvider> {/* Bungkus children dengan TransitionProvider */}
+        <TransitionProvider>
+          <VisitTracker />
           {children}
         </TransitionProvider>
       </body>

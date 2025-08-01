@@ -25,7 +25,6 @@ export async function PUT(request: NextRequest) {
         title: data.title,
         subtitle: data.subtitle,
         buttonText: data.buttonText,
-        image: data.image,
       },
     });
 

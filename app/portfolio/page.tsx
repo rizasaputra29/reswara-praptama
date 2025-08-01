@@ -43,7 +43,7 @@ export default async function PortfolioPage() {
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
                 Proyek Nyata, Bukti Nyata
               </h1>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-xl font-light text-gray-100 max-w-3xl mx-auto">
                 Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan
               </p>
             </AnimatedSection>

@@ -1,6 +1,7 @@
+// app/admin/page.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,9 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Edit, Save, Plus, Trash2, Eye, Users, UserPlus } from 'lucide-react';
+import { Edit, Save, Plus, Trash2, Eye, Users, UserPlus, Upload, Loader2, Globe } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import Link from 'next/link';
 
 // --- Helper Functions ---
 function parseJwt(token: string) {
@@ -20,6 +22,9 @@ function parseJwt(token: string) {
 
 // --- Type Definitions ---
 interface SubService { id: number; title: string; description: string; image?: string | null; serviceId: number; }
+interface SubServiceDraft extends Omit<SubService, 'id'> {
+  id?: number | null;
+}
 interface ServiceItem { id: number; title: string; description: string; icon: string; subServices: SubService[]; }
 interface User { id: number; username: string; role: 'ADMIN' | 'EMPLOYEE'; }
 interface Category { id: number; name: string; }
@@ -52,6 +57,7 @@ export default function Admin() {
   const [tempHero, setTempHero] = useState<HeroContent | null>(null);
   const [tempAbout, setTempAbout] = useState<AboutContent | null>(null);
   const [tempContact, setTempContact] = useState<ContactContent | null>(null);
+  const [tempCategoryName, setTempCategoryName] = useState<string>('');
 
   // --- Dialog & Form States ---
   const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
@@ -59,10 +65,21 @@ export default function Admin() {
   const [newProject, setNewProject] = useState({ title: '', description: '', image: '', client: '', completedDate: '', categoryId: '' });
   
   const [isSubServiceDialogOpen, setSubServiceDialogOpen] = useState(false);
-  const [editingSubService, setEditingSubService] = useState<SubService | null>(null);
+  const [editingSubService, setEditingSubService] = useState<SubServiceDraft | null>(null);
   
   const [isAddEmployeeDialogOpen, setAddEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({ username: '', password: '' });
+  
+  const [isCategoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+
+  // --- Image Upload States ---
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedHeroImage, setSelectedHeroImage] = useState<File | null>(null);
+  const [selectedProjectImage, setSelectedProjectImage] = useState<File | null>(null);
+  const [selectedSubServiceImage, setSelectedSubServiceImage] = useState<File | null>(null);
+
+  const importFileRef = useRef<HTMLInputElement>(null);
 
   // --- Effects ---
   useEffect(() => {
@@ -110,6 +127,34 @@ export default function Admin() {
     }
   };
 
+  // --- Image Upload Handler ---
+  const handleImageUpload = async (file: File): Promise<string> => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Image upload failed.');
+      }
+
+      const { url } = await response.json();
+      toast({ title: "Success", description: "Image uploaded successfully." });
+      return url;
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Upload Failed", description: error.message });
+      throw error; 
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   // --- Auth Handlers ---
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,6 +185,10 @@ export default function Admin() {
   // --- Generic Content Update ---
   const handleContentUpdate = async (section: string, updatedContent: any) => {
     try {
+      if (section === 'hero' && selectedHeroImage) {
+        updatedContent.image = await handleImageUpload(selectedHeroImage);
+      }
+      
       const response = await fetch(`/api/content/${section}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -153,6 +202,7 @@ export default function Admin() {
       toast({ title: "Success", description: `${section.charAt(0).toUpperCase() + section.slice(1)} content updated.` });
       await loadDashboardData();
       setEditingSection(null);
+      setSelectedHeroImage(null);
     } catch (error: any) {
       toast({ variant: "destructive", title: "Update Failed", description: error.message });
     }
@@ -161,7 +211,6 @@ export default function Admin() {
   const handleToggleEdit = (section: string) => {
     if (editingSection === section) {
       setEditingSection(null);
-      // Reset temporary states on cancel
       setTempHero(heroContent);
       setTempAbout(aboutContent);
       setTempContact(contactContent);
@@ -175,18 +224,25 @@ export default function Admin() {
     const isEditing = !!editingProject;
     const url = '/api/content/projects';
     const method = isEditing ? 'PUT' : 'POST';
-    const body = isEditing ? editingProject : newProject;
+    let body = isEditing ? { ...editingProject } : { ...newProject };
 
     try {
       if (!body.title || !body.categoryId) {
         throw new Error("Title and Category are required.");
       }
+      
+      if (selectedProjectImage) {
+        const imageUrl = await handleImageUpload(selectedProjectImage);
+        body.image = imageUrl;
+      }
+      
       const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!response.ok) throw new Error(`Failed to ${isEditing ? 'update' : 'add'} project.`);
       
       toast({ title: "Success", description: `Project ${isEditing ? 'updated' : 'added'}.` });
       setProjectDialogOpen(false);
       setEditingProject(null);
+      setSelectedProjectImage(null);
       await loadDashboardData();
     } catch (error: any) {
       toast({ variant: "destructive", title: "Error", description: error.message });
@@ -211,23 +267,35 @@ export default function Admin() {
     if (!project) {
       setNewProject({ title: '', description: '', image: '', client: '', completedDate: '', categoryId: '' });
     }
+    setSelectedProjectImage(null);
     setProjectDialogOpen(true);
   };
   
   // --- Sub-Service Handlers ---
   const handleSubServiceSubmit = async () => {
+    if (!editingSubService?.title || !editingSubService.serviceId) {
+        toast({ variant: "destructive", title: "Error", description: "Title and Service ID are required." });
+        return;
+    }
+
     const isEditing = !!editingSubService?.id;
     const url = '/api/content/subservices';
     const method = isEditing ? 'PUT' : 'POST';
-    const body = editingSubService;
+    let body = { ...editingSubService };
     
     try {
+      if (selectedSubServiceImage) {
+        const imageUrl = await handleImageUpload(selectedSubServiceImage);
+        body.image = imageUrl;
+      }
+      
       const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!response.ok) throw new Error(`Failed to ${isEditing ? 'update' : 'add'} sub-service.`);
       
       toast({ title: "Success", description: `Sub-service ${isEditing ? 'updated' : 'added'}.` });
       setSubServiceDialogOpen(false);
       setEditingSubService(null);
+      setSelectedSubServiceImage(null);
       await loadDashboardData();
     } catch (error: any) {
       toast({ variant: "destructive", title: "Error", description: error.message });
@@ -251,11 +319,58 @@ export default function Admin() {
     if (subService) {
       setEditingSubService(subService);
     } else if (serviceId) {
-      setEditingSubService({ id: 0, title: '', description: '', image: '', serviceId });
+      setEditingSubService({ id: undefined, title: '', description: '', image: '', serviceId });
     }
+    setSelectedSubServiceImage(null);
     setSubServiceDialogOpen(true);
   };
 
+  // --- Category Handlers ---
+  const handleCategorySubmit = async () => {
+    if (!tempCategoryName.trim()) {
+        toast({ variant: "destructive", title: "Error", description: "Category name cannot be empty." });
+        return;
+    }
+
+    const isEditing = !!editingCategory;
+    const url = '/api/content/categories';
+    const method = isEditing ? 'PUT' : 'POST';
+    const body = isEditing ? { id: editingCategory?.id, name: tempCategoryName } : { name: tempCategoryName };
+
+    try {
+        const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Failed to ${isEditing ? 'update' : 'add'} category.`);
+        }
+        toast({ title: "Success", description: `Category ${isEditing ? 'updated' : 'added'}.` });
+        setCategoryDialogOpen(false);
+        setEditingCategory(null);
+        setTempCategoryName('');
+        await loadDashboardData();
+    } catch (error: any) {
+        toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  };
+  
+  const handleDeleteCategory = async (categoryId: number) => {
+    if (!confirm("Are you sure? This will also delete all associated projects.")) return;
+    try {
+        const response = await fetch('/api/content/categories', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: categoryId }) });
+        if (!response.ok) throw new Error("Failed to delete category.");
+        toast({ title: "Success", description: "Category and associated projects deleted." });
+        await loadDashboardData();
+    } catch (error: any) {
+        toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  };
+
+  const openCategoryDialog = (category: Category | null) => {
+    setEditingCategory(category);
+    setTempCategoryName(category ? category.name : '');
+    setCategoryDialogOpen(true);
+  };
+  
   // --- Employee Handlers ---
   const handleAddEmployee = async () => {
     try {
@@ -280,6 +395,56 @@ export default function Admin() {
     } catch (error: any) {
       toast({ variant: "destructive", title: "Error", description: error.message });
     }
+  };
+
+  // --- Backup/Import Handlers ---
+  const handleExport = async () => {
+    try {
+        const response = await fetch('/api/content/backup');
+        if (!response.ok) {
+            throw new Error('Failed to fetch backup data');
+        }
+        const data = await response.json();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `resawara-backup-${new Date().toISOString()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast({ title: "Success", description: "Content exported successfully." });
+    } catch (error: any) {
+        toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  };
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const content = JSON.parse(e.target?.result as string);
+        const response = await fetch('/api/content/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(content),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to import content.');
+        }
+        toast({ title: "Success", description: "Content imported successfully. Reloading dashboard..." });
+        await loadDashboardData();
+      } catch (error: any) {
+        toast({ variant: "destructive", title: "Error", description: error.message });
+      } finally {
+        event.target.value = '';
+      }
+    };
+    reader.readAsText(file);
   };
 
   // --- RENDER LOGIC --- //
@@ -341,6 +506,17 @@ export default function Admin() {
                 <div className="text-2xl font-bold">{visitStats?.uniqueVisitors ?? 'N/A'}</div>
               </CardContent>
             </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">View Website</CardTitle>
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <Link href="/" passHref>
+                        <Button className="w-full">Go to Homepage</Button>
+                    </Link>
+                </CardContent>
+            </Card>
           </section>
         )}
 
@@ -350,7 +526,7 @@ export default function Admin() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue={currentUser.role === 'ADMIN' ? 'hero' : 'projects'}>
-              <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-3 md:grid-cols-6' : 'grid-cols-2'}`}>
+              <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-3 md:grid-cols-7' : 'grid-cols-2'}`}>
                 {currentUser.role === 'ADMIN' && (
                   <>
                     <TabsTrigger value="hero">Hero</TabsTrigger>
@@ -363,6 +539,7 @@ export default function Admin() {
                   <>
                     <TabsTrigger value="contact">Contact</TabsTrigger>
                     <TabsTrigger value="users">Users</TabsTrigger>
+                    <TabsTrigger value="backup">Backup</TabsTrigger>
                   </>
                 )}
               </TabsList>
@@ -374,8 +551,8 @@ export default function Admin() {
                        <CardHeader>
                          <div className="flex justify-between items-center">
                            <CardTitle>Hero Section</CardTitle>
-                           <Button variant="ghost" size="sm" onClick={() => editingSection === 'hero' ? handleContentUpdate('hero', tempHero) : handleToggleEdit('hero')}>
-                             {editingSection === 'hero' ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                           <Button variant="ghost" size="sm" onClick={() => editingSection === 'hero' ? handleContentUpdate('hero', tempHero) : handleToggleEdit('hero')} disabled={isUploading}>
+                             {editingSection === 'hero' ? (isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />) : <Edit className="mr-2 h-4 w-4" />}
                              {editingSection === 'hero' ? 'Save' : 'Edit'}
                            </Button>
                          </div>
@@ -384,7 +561,6 @@ export default function Admin() {
                          <div><label className="font-semibold">Title</label>{editingSection === 'hero' ? (<Input value={tempHero?.title || ''} onChange={(e) => setTempHero({...tempHero!, title: e.target.value})} />) : (<p className="text-muted-foreground">{heroContent?.title}</p>)}</div>
                          <div><label className="font-semibold">Subtitle</label>{editingSection === 'hero' ? (<Textarea value={tempHero?.subtitle || ''} onChange={(e) => setTempHero({...tempHero!, subtitle: e.target.value})} />) : (<p className="text-muted-foreground">{heroContent?.subtitle}</p>)}</div>
                          <div><label className="font-semibold">Button Text</label>{editingSection === 'hero' ? (<Input value={tempHero?.buttonText || ''} onChange={(e) => setTempHero({...tempHero!, buttonText: e.target.value})} />) : (<p className="text-muted-foreground">{heroContent?.buttonText}</p>)}</div>
-                         <div><label className="font-semibold">Image URL</label>{editingSection === 'hero' ? (<Input value={tempHero?.image || ''} onChange={(e) => setTempHero({...tempHero!, image: e.target.value})} />) : (<p className="text-muted-foreground">{heroContent?.image}</p>)}</div>
                        </CardContent>
                      </Card>
                   </TabsContent>
@@ -394,8 +570,8 @@ export default function Admin() {
                        <CardHeader>
                          <div className="flex justify-between items-center">
                            <CardTitle>About Section</CardTitle>
-                           <Button variant="ghost" size="sm" onClick={() => editingSection === 'about' ? handleContentUpdate('about', tempAbout) : handleToggleEdit('about')}>
-                            {editingSection === 'about' ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                           <Button variant="ghost" size="sm" onClick={() => editingSection === 'about' ? handleContentUpdate('about', tempAbout) : handleToggleEdit('about')} disabled={isUploading}>
+                            {editingSection === 'about' ? (isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />) : <Edit className="mr-2 h-4 w-4" />}
                             {editingSection === 'about' ? 'Save' : 'Edit'}
                            </Button>
                          </div>
@@ -414,20 +590,27 @@ export default function Admin() {
               <TabsContent value="services" className="mt-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Services & Sub-Services</CardTitle>
+                    <div className="flex justify-between items-center">
+                      <CardTitle>Services & Sub-Services</CardTitle>
+                      <Button size="sm" onClick={() => openCategoryDialog(null)}><Plus className="mr-2 h-4 w-4"/> Add Category</Button>
+                    </div>
                     <CardDescription>Manage main service categories and their detailed sub-services.</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Accordion type="single" collapsible className="w-full">
                       {services.map(service => (
                         <AccordionItem value={`service-${service.id}`} key={service.id}>
-                          <AccordionTrigger className="font-semibold">{service.title}</AccordionTrigger>
-                          <AccordionContent className="pl-4">
-                            <div className="flex justify-end mb-4">
-                              <Button size="sm" onClick={() => openSubServiceDialog(null, service.id)}>
-                                <Plus className="mr-2 h-4 w-4"/> Add Sub-Service
-                              </Button>
+                          <div className="flex items-center justify-between">
+                            <AccordionTrigger className="font-semibold flex-1 pr-4">
+                              {service.title}
+                            </AccordionTrigger>
+                            <div className="flex items-center gap-2 pr-4">
+                                <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); openSubServiceDialog(null, service.id); }}>
+                                    <Plus className="h-4 w-4 text-gray-500" />
+                                </Button>
                             </div>
+                          </div>
+                          <AccordionContent className="pl-4">
                             <div className="space-y-2">
                               {service.subServices?.length > 0 ? service.subServices.map(sub => (
                                 <div key={sub.id} className="flex items-center justify-between p-3 border rounded-md bg-gray-50">
@@ -436,8 +619,12 @@ export default function Admin() {
                                     <p className="text-sm text-muted-foreground">{sub.description}</p>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    <Button variant="ghost" size="icon" onClick={() => openSubServiceDialog(sub, service.id)}><Edit className="h-4 w-4"/></Button>
-                                    <Button variant="ghost" size="icon" onClick={() => handleDeleteSubService(sub.id)}><Trash2 className="h-4 w-4 text-red-500"/></Button>
+                                    <Button variant="ghost" size="icon" onClick={() => openSubServiceDialog(sub, service.id)} disabled={isUploading}>
+                                      <Edit className="h-4 w-4"/>
+                                    </Button>
+                                    <Button variant="ghost" size="icon" onClick={() => handleDeleteSubService(sub.id)}>
+                                      <Trash2 className="h-4 w-4 text-red-500"/>
+                                    </Button>
                                   </div>
                                 </div>
                               )) : <p className="text-sm text-muted-foreground text-center py-4">No sub-services yet.</p>}
@@ -531,6 +718,33 @@ export default function Admin() {
                         </CardContent>
                     </Card>
                   </TabsContent>
+                  <TabsContent value="backup" className="mt-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Backup & Restore Content</CardTitle>
+                        <CardDescription>Export your site's data to a JSON file or import a backup file to restore content.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="flex flex-col gap-2">
+                          <Button onClick={handleExport} className="w-full">
+                            <Upload className="mr-2 h-4 w-4" /> Export All Content
+                          </Button>
+                          <div className="relative mt-4">
+                            <Input
+                              type="file"
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              onChange={handleImport}
+                              ref={importFileRef}
+                              accept="application/json"
+                            />
+                            <Button className="w-full" variant="outline" onClick={() => importFileRef.current?.click()}>
+                              <Save className="mr-2 h-4 w-4" /> Import Content
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
                 </>
               )}
             </Tabs>
@@ -548,9 +762,16 @@ export default function Admin() {
                     <Textarea placeholder="Description" 
                               value={editingProject ? editingProject.description : newProject.description} 
                               onChange={(e) => editingProject ? setEditingProject({...editingProject, description: e.target.value}) : setNewProject({...newProject, description: e.target.value})} />
-                    <Input placeholder="Image URL" 
-                           value={editingProject ? editingProject.image : newProject.image} 
-                           onChange={(e) => editingProject ? setEditingProject({...editingProject, image: e.target.value}) : setNewProject({...newProject, image: e.target.value})} />
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium">Image URL or Upload</label>
+                      <Input placeholder="Image URL"
+                             value={editingProject ? editingProject.image : newProject.image}
+                             onChange={(e) => editingProject ? setEditingProject({...editingProject, image: e.target.value}) : setNewProject({...newProject, image: e.target.value})} />
+                      <div className="flex items-center space-x-2">
+                          <Input type="file" onChange={(e) => setSelectedProjectImage(e.target.files?.[0] || null)} />
+                          {selectedProjectImage && <span className="text-sm text-gray-500">{selectedProjectImage.name}</span>}
+                      </div>
+                    </div>
                     <Input placeholder="Client" 
                            value={editingProject ? (editingProject.client || '') : newProject.client} 
                            onChange={(e) => editingProject ? setEditingProject({...editingProject, client: e.target.value}) : setNewProject({...newProject, client: e.target.value})} />
@@ -564,7 +785,10 @@ export default function Admin() {
                     </Select>
                     <div className="flex justify-end gap-2">
                         <Button variant="outline" onClick={() => setProjectDialogOpen(false)}>Cancel</Button>
-                        <Button onClick={handleProjectSubmit}>Save Changes</Button>
+                        <Button onClick={handleProjectSubmit} disabled={isUploading}>
+                          {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                          Save Changes
+                        </Button>
                     </div>
                 </div>
             </DialogContent>
@@ -575,16 +799,39 @@ export default function Admin() {
             <DialogHeader><DialogTitle>{editingSubService?.id ? 'Edit' : 'Add'} Sub-Service</DialogTitle></DialogHeader>
             {editingSubService && (
               <div className="space-y-4 py-4">
-                <Input placeholder="Title" value={editingSubService.title} onChange={(e) => setEditingSubService({...editingSubService, title: e.target.value})} />
-                <Textarea placeholder="Description" value={editingSubService.description} onChange={(e) => setEditingSubService({...editingSubService, description: e.target.value})} />
-                <Input placeholder="Image URL (optional)" value={editingSubService.image || ''} onChange={(e) => setEditingSubService({...editingSubService, image: e.target.value})} />
+                <Input placeholder="Title" value={editingSubService.title} onChange={(e) => setEditingSubService({...editingSubService as SubServiceDraft, title: e.target.value})} />
+                <Textarea placeholder="Description" value={editingSubService.description} onChange={(e) => setEditingSubService({...editingSubService as SubServiceDraft, description: e.target.value})} />
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium">Image URL or Upload</label>
+                    <Input placeholder="Image URL (optional)" value={editingSubService.image || ''} onChange={(e) => setEditingSubService({...editingSubService as SubServiceDraft, image: e.target.value})} />
+                    <div className="flex items-center space-x-2">
+                        <Input type="file" onChange={(e) => setSelectedSubServiceImage(e.target.files?.[0] || null)} />
+                        {selectedSubServiceImage && <span className="text-sm text-gray-500">{selectedSubServiceImage.name}</span>}
+                    </div>
+                </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setSubServiceDialogOpen(false)}>Cancel</Button>
-                  <Button onClick={handleSubServiceSubmit}>Save</Button>
+                  <Button onClick={handleSubServiceSubmit} disabled={isUploading}>
+                    {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Save
+                  </Button>
                 </div>
               </div>
             )}
           </DialogContent>
+        </Dialog>
+
+        <Dialog open={isCategoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
+            <DialogContent>
+                <DialogHeader><DialogTitle>{editingCategory ? 'Edit Category' : 'Add New Category'}</DialogTitle></DialogHeader>
+                <div className="space-y-4 py-4">
+                    <Input placeholder="Category Name" value={tempCategoryName} onChange={(e) => setTempCategoryName(e.target.value)} />
+                    <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setCategoryDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={handleCategorySubmit}>Save Category</Button>
+                    </div>
+                </div>
+            </DialogContent>
         </Dialog>
       </main>
     </div>

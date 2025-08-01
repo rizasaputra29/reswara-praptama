@@ -1,6 +1,6 @@
 // components/Footer.tsx
 import { getContactContent, getServicesPageContent } from '@/lib/data';
-import { Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Linkedin, PhoneIcon } from 'lucide-react';
 import Image from 'next/image';
 
 const Footer = async () => {
@@ -26,9 +26,8 @@ const Footer = async () => {
               Solusi terintegrasi untuk kebutuhan konstruksi dan arsitektur dengan standar kualitas terbaik.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
+              <PhoneIcon className="h-5 w-5 text-gray-600 hover:text-green-500 cursor-pointer transition-colors" />
+              <Instagram className="h-5 w-5 text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
               <Linkedin className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
             </div>
           </div>
@@ -37,11 +36,11 @@ const Footer = async () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2 text-gray-600">
-              <li><a href="/" className="hover:text-blue-500 transition-colors">Home</a></li>
-              <li><a href="/about" className="hover:text-blue-500 transition-colors">About</a></li>
-              <li><a href="/services" className="hover:text-blue-500 transition-colors">Services</a></li>
-              <li><a href="/portfolio" className="hover:text-blue-500 transition-colors">Portfolio</a></li>
-              <li><a href="/contact" className="hover:text-blue-500 transition-colors">Contact</a></li>
+              <li><a href="/" className="hover:text-gray-900 transition-colors">Home</a></li>
+              <li><a href="/about" className="hover:text-gray-900 transition-colors">About</a></li>
+              <li><a href="/services" className="hover:text-gray-900 transition-colors">Services</a></li>
+              <li><a href="/portfolio" className="hover:text-gray-900 transition-colors">Portfolio</a></li>
+              <li><a href="/contact" className="hover:text-gray-900 transition-colors">Contact</a></li>
             </ul>
           </div>
 
@@ -51,7 +50,7 @@ const Footer = async () => {
             <ul className="space-y-2 text-gray-600">
               {servicesContent?.items.slice(0, 5).map((service) => (
                 <li key={service.id}>
-                  <span className="hover:text-blue-500 transition-colors">{service.title}</span>
+                  <span className="hover:text-gray-900 transition-colors">{service.title}</span>
                 </li>
               ))}
             </ul>
