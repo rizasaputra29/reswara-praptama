@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic';
 // Mengambil data statistik kunjungan
 export async function GET() {
   try {
-    // Ambil baris pertama (dan satu-satunya) dari tabel VisitStats
     const stats = await prisma.visitStats.findFirst();
     return NextResponse.json(stats);
   } catch (error) {
@@ -17,19 +16,20 @@ export async function GET() {
 // Menambah jumlah kunjungan
 export async function POST(request: NextRequest) {
   try {
-    // Logika untuk unique visitor bisa disempurnakan di sini jika perlu
-    // Untuk saat ini, kita hanya akan menambah total kunjungan
-    const updatedStats = await prisma.visitStats.update({
-      where: { id: 1 }, // Asumsikan data statistik ada di baris dengan id: 1
-      data: {
+    const updatedStats = await prisma.visitStats.upsert({
+      where: { id: 1 },
+      update: {
         totalVisits: {
           increment: 1,
         },
-        // Logika untuk unique visitors bisa dibuat lebih kompleks
-        // Contoh sederhana: tambah 1 setiap 3 kunjungan
         uniqueVisitors: {
             increment: Math.random() < 0.33 ? 1 : 0,
         }
+      },
+      create: {
+        id: 1,
+        totalVisits: 1,
+        uniqueVisitors: 1
       },
     });
 

@@ -1,7 +1,7 @@
 // components/ProjectsSection.tsx
 "use client";
 
-import { useState } from 'react';
+import React, { useState } from 'react'; // Pastikan React diimpor
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import AnimatedSection from './AnimatedSection';
@@ -23,7 +23,7 @@ interface ProjectsSectionProps {
   categories: string[];
   projects: Project[];
   isHomePage?: boolean;
-  displayBackgroundCard?: boolean; // <--- TAMBAH PROPS INI
+  displayBackgroundCard?: boolean;
 }
 
 const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, displayBackgroundCard = true }: ProjectsSectionProps) => {
@@ -38,14 +38,14 @@ const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, di
 
   const getCategoryColor = (category: string) => {
     const colorMap: { [key: string]: string } = {
-      'Perencanaan & Desain': 'bg-blue-500',
-      'Pengawasan': 'bg-green-500',
-      'Perizinan': 'bg-yellow-500',
-      'Studi': 'bg-purple-500',
-      'Pengadaan Tanah': 'bg-red-500',
-      'Pekerja Lain': 'bg-gray-500'
+      // 'Perencanaan & Desain': 'bg-blue-500',
+      // 'Pengawasan': 'bg-green-500',
+      // 'Perizinan': 'bg-yellow-500',
+      // 'Studi': 'bg-purple-500',
+      // 'Pengadaan Tanah': 'bg-red-500',
+      // 'Pekerja Lain': 'bg-gray-500'
     };
-    return colorMap[category] || 'bg-blue-500';
+    return colorMap[category] || 'bg-black/50 backdrop-blur-sm';
   };
 
   const content = (
@@ -79,48 +79,54 @@ const ProjectsSection = ({ title, subtitle, categories, projects, isHomePage, di
         </div>
       </div>
 
-      {/* Projects Grid */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        {projectsToDisplay.map((project, index) => (
-          <ProjectCard
-            key={project.title}
-            title={project.title}
-            description={project.description}
-            imageUrl={project.image}
-            category={project.category}
-            client={project.client}
-            completedDate={project.completedDate}
-            categoryColor={getCategoryColor(project.category)}
-          />
-        ))}
-      </motion.div>
+      {/* Projects Grid dan View All Projects Button */}
+      <div className="relative"> {/* Kontainer relative untuk grid dan gradien */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {projectsToDisplay.map((project, index) => (
+            <ProjectCard
+              key={project.title}
+              title={project.title}
+              description={project.description}
+              imageUrl={project.image}
+              category={project.category}
+              client={project.client}
+              completedDate={project.completedDate}
+              categoryColor={getCategoryColor(project.category)}
+            />
+          ))}
+        </motion.div>
 
-      {/* View All Projects Button - Conditionally rendered */}
-      {showLoadMoreButton && (
-        <div className="text-center mt-12">
-          <Link href="/portfolio" passHref>
-            <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
-              Lihat Semua Proyek
-            </Button>
-          </Link>
-        </div>
-      )}
+        {/* View All Projects Button, di atas gradien */}
+        {showLoadMoreButton && (
+          <div className="absolute inset-x-0 bottom-0 pt-16 pb-6 flex justify-center items-end z-10">
+            <Link href="/portfolio" passHref>
+              <Button className="px-8 py-3 text-lg font-semibold rounded-full shadow-lg transition-transform duration-300 hover:scale-105">
+                Lihat Semua Proyek
+              </Button>
+            </Link>
+          </div>
+        )}
+        
+        {/* Overlay gradien untuk efek fade, dari bawah ke atas, lebih tinggi */}
+        {filteredProjects.length > 6 && isHomePage && (
+          <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none"></div>
+        )}
+      </div>
     </>
   );
 
   return (
-    <section className="py-16 bg-white border-x border-black shadow-md">
+    <section className="pb-24 pt-16 bg-white border-x border-black shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection>
-          {displayBackgroundCard ? ( // <--- KONDISI UNTUK MENAMPILKAN DIV
+          {displayBackgroundCard ? (
             <div className="bg-white border-x border-y rounded-3xl p-8 md:p-12">
               {content}
             </div>
           ) : (
-            // Jika false, tampilkan konten langsung tanpa div wrapper
             content
           )}
         </AnimatedSection>

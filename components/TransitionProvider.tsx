@@ -20,7 +20,7 @@ const TransitionProvider: React.FC<TransitionProviderProps> = ({ children }) => 
       transition: {
         type: "tween",
         ease: "easeOut",
-        duration: 0.3, // Durasi lebih cepat untuk nuansa elegan
+        duration: 0, // Durasi lebih cepat untuk nuansa elegan
       }
     },
     animate: {
@@ -29,7 +29,7 @@ const TransitionProvider: React.FC<TransitionProviderProps> = ({ children }) => 
       transition: {
         type: "tween",
         ease: "easeOut", // Easing yang mulus
-        duration: 0.4, // Durasi sedikit lebih lama untuk saat masuk
+        duration: 0, // Durasi sedikit lebih lama untuk saat masuk
       }
     },
     exit: {
@@ -38,7 +38,7 @@ const TransitionProvider: React.FC<TransitionProviderProps> = ({ children }) => 
       transition: {
         type: "tween",
         ease: "easeIn", // Easing yang mulus saat keluar
-        duration: 0.3, // Durasi lebih cepat untuk saat keluar
+        duration: 0, // Durasi lebih cepat untuk saat keluar
       }
     },
   };

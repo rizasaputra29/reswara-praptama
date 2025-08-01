@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const getLinkClasses = (href: string) => {
     const baseClasses = "relative px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap";
-    const activeHoverBgClasses = "bg-white/20 backdrop-blur-sm";
+    const activeHoverBgClasses = scrolled ? "bg-black/5 backdrop-blur-sm" : "bg-white/20 backdrop-blur-sm";
     const activeHoverTextColor = scrolled ? 'text-black' : 'text-white';
     const defaultTextColor = scrolled ? 'text-gray-600' : 'text-gray-300';
 

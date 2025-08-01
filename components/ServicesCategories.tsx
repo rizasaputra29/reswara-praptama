@@ -4,10 +4,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+
 import AnimatedSection from './AnimatedSection';
 import { Button } from '@/components/ui/button';
 
-// Define the types for our data
+// --- Type Definitions ---
 interface SubService {
   id: number;
   title: string;
@@ -23,15 +25,59 @@ interface Service {
 }
 interface ServiceCategoriesProps {
   services: Service[];
-  isHomePage?: boolean; // <--- ADD THIS PROP
+  isHomePage?: boolean;
+}
+
+// --- Sub-Component: DynamicHoverServiceCard for displaying sub-services with hover effect ---
+function DynamicHoverServiceCard({ image, title, description }: { image: string | undefined | null; title: string; description: string; }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  if (!image) {
+    return null;
+  }
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 cursor-pointer group hover:shadow-xl"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative h-48 w-full">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        {/* Overlay dengan gradient untuk teks yang lebih mudah dibaca */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100"></div>
+      </div>
+      
+      {/* Konten yang muncul saat hover */}
+      <motion.div
+        initial={{ y: '100%', opacity: 0 }}
+        animate={{ y: isHovered ? 0 : '100%', opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        className="absolute bottom-0 p-6 text-white w-full"
+      >
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <p className="text-sm opacity-90">{description}</p>
+      </motion.div>
+      
+      {/* Konten default (tanpa hover) */}
+      <div className="absolute bottom-0 p-6 text-white w-full transition-opacity duration-300 group-hover:opacity-0">
+        <h3 className="text-xl font-semibold">{title}</h3>
+      </div>
+    </div>
+  );
 }
 
 const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services, isHomePage }) => {
   if (!services || services.length === 0) {
     return (
-        <div className="text-center py-12 text-gray-500">
-            <p>No services are available at the moment.</p>
-        </div>
+      <div className="text-center py-12 text-gray-500">
+        <p>No services are available at the moment.</p>
+      </div>
     );
   }
 
@@ -42,7 +88,6 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services, isHomeP
   ) || services[0];
 
   const subServicesToDisplay = activeCategory?.subServices || [];
-  // Show button if more than 6 sub-services AND is on home page
   const showLearnMoreButton = (subServicesToDisplay.length > 6) && isHomePage;
 
   return (
@@ -73,28 +118,17 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services, isHomeP
         </div>
       </div>
 
-      {/* Sub-Services Grid - Displayed Dynamically */}
       <AnimatedSection key={activeCategory?.id}>
         {subServicesToDisplay.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Limit displayed items to 6 if showing the "Learn More" button */}
-            {subServicesToDisplay.slice(0, showLearnMoreButton ? 6 : subServicesToDisplay.length).map((sub) => (
-              <div key={sub.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-full">
-                {sub.image && (
-                  <div className="relative h-48 w-full">
-                    <Image
-                      src={sub.image}
-                      alt={sub.title}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{sub.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{sub.description}</p>
-                </div>
-              </div>
+          // Grid yang responsif dan fleksibel
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {subServicesToDisplay.map((sub) => (
+              <DynamicHoverServiceCard
+                key={sub.id}
+                image={sub.image}
+                title={sub.title}
+                description={sub.description}
+              />
             ))}
           </div>
         ) : (
@@ -103,7 +137,6 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ services, isHomeP
           </div>
         )}
 
-        {/* Learn More Button for Services - Conditionally rendered */}
         {showLearnMoreButton && (
           <div className="text-center mt-12">
             <Link href="/services" passHref>

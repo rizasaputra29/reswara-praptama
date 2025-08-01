@@ -38,9 +38,9 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
         </p>
 
         <Link href="/contact" passHref>
-          <Button className="bg-white bg-blur bg-opacity-20 hover:bg-blur text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-opacity-50">
+          <button className="bg-white bg-blur bg-opacity-20 hover:bg-blur text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-opacity-50">
             {buttonText}
-          </Button>
+          </button>
         </Link>
         </AnimatedSection>
       </div>
