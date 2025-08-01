@@ -592,7 +592,6 @@ export default function Admin() {
                   <CardHeader>
                     <div className="flex justify-between items-center">
                       <CardTitle>Services & Sub-Services</CardTitle>
-                      <Button size="sm" onClick={() => openCategoryDialog(null)}><Plus className="mr-2 h-4 w-4"/> Add Category</Button>
                     </div>
                     <CardDescription>Manage main service categories and their detailed sub-services.</CardDescription>
                   </CardHeader>
