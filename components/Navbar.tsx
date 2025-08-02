@@ -18,6 +18,7 @@ const Navbar = () => {
     { href: '/services', label: 'Services' },
     { href: '/portfolio', label: 'Portfolio' },
     { href: '/contact', label: 'Contact' },
+    { href: '/admin', label: 'Admin' },
   ];
 
   const isActive = (href: string) => pathname === href;
