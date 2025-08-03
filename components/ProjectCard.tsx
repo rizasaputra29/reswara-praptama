@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { User, Calendar } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -26,14 +26,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      whileHover={{ 
-        y: -8, 
-        transition: { duration: 0.3 } 
-      }}
+      whileHover={{ scale: 1.05 }}
       className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
     >
       {/* Image Container */}
@@ -65,12 +58,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {/* Client and Date Info */}
         <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <User className="w-4 h-4" />
-            <span>Client: {client}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" />
-            <span>Completed: {completedDate}</span>
+            <MapPin className="w-4 h-4" />
+            <span>Kota: {client}</span>
           </div>
         </div>
       </div>

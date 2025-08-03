@@ -1283,18 +1283,12 @@ export default function Admin() {
                         </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Client</label>
-                        <Input placeholder="Client name" 
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Kota</label>
+                        <Input placeholder="Location name" 
                                value={editingProject ? (editingProject.client || '') : newProject.client} 
                                onChange={(e) => editingProject ? setEditingProject({...editingProject, client: e.target.value}) : setNewProject({...newProject, client: e.target.value})} />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Completed Date</label>
-                        <Input placeholder="Completion date" 
-                               value={editingProject ? (editingProject.completedDate || '') : newProject.completedDate} 
-                               onChange={(e) => editingProject ? setEditingProject({...editingProject, completedDate: e.target.value}) : setNewProject({...newProject, completedDate: e.target.value})} />
                       </div>
                     </div>
                     <div className="flex justify-end gap-2 pt-4">
