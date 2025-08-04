@@ -18,6 +18,7 @@ export async function GET() {
       const partners = await tx.partner.findMany();
       const about = await tx.about.findMany();
       const contact = await tx.contact.findMany();
+      const categories = await tx.category.findMany();
 
       return {
         hero,
@@ -27,6 +28,7 @@ export async function GET() {
         partners,
         about,
         contact,
+        categories,
       };
     });
 

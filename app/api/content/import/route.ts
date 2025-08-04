@@ -24,6 +24,9 @@ export async function POST(request: NextRequest) {
       if (data.hero) {
         await tx.hero.createMany({ data: data.hero });
       }
+      if (data.categories) {
+        await tx.category.createMany({ data: data.categories });
+      }
       if (data.services) {
         for (const service of data.services) {
           const { subServices, ...serviceData } = service;

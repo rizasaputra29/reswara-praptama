@@ -35,7 +35,7 @@ const PartnersSection = ({ title, subtitle, logos }: PartnersSectionProps) => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="flex items-center justify-center p-6 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-md transition-all duration-300"
                 >
-                  <div className="relative w-24 h-12 grayscale hover:grayscale-0 transition-all duration-300">
+                  <div className="relative w-24 h-24 grayscale hover:grayscale-0 transition-all duration-300">
                     <Image
                       src={logo}
                       alt={`Partner ${index + 1}`}

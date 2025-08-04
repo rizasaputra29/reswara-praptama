@@ -32,8 +32,21 @@ export async function GET() {
       prisma.category.findMany({ orderBy: { id: 'asc' } })
     ]);
 
+    // Ensure visits data exists
+    let visitsData = visits;
+    if (!visitsData) {
+      // Create initial visit stats if they don't exist
+      visitsData = await prisma.visitStats.create({
+        data: {
+          id: 1,
+          totalVisits: 0,
+          uniqueVisitors: 0
+        }
+      });
+    }
+
     return NextResponse.json({
-      visits,
+      visits: visitsData,
       hero,
       about,
       services,
