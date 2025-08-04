@@ -1,3 +1,4 @@
+// app/api/visits/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
     // Get visitor's IP address from a robust header check
     const forwarded = request.headers.get("x-forwarded-for");
     const ip = forwarded ? forwarded.split(/, /)[0] : request.headers.get('x-real-ip') || 'unknown';
-    
+
     // Calculate the time 24 hours ago
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 

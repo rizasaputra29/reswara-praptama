@@ -1,0 +1,106 @@
+{
+  "hero": {
+    "title": "Mitra Rekayasa Teknik Terpercaya Anda",
+    "subtitle": "Solusi Konsultan Teknik, Perencanaan, dan Penyelidikan Profesional bersama CV. Reswara Praptama",
+    "buttonText": "Hubungi Kami",
+    "image": "/images/hero-image.jpg"
+  },
+  "services": {
+    "items": [
+      {
+        "title": "Perencanaan & Desain",
+        "description": "Layanan perencanaan dan desain teknis untuk berbagai jenis proyek konstruksi.",
+        "icon": "Building",
+        "subServices": [
+          {
+            "title": "Desain Arsitektur",
+            "description": "Pengembangan konsep desain arsitektur yang fungsional dan estetis.",
+            "image": "https://images.unsplash.com/photo-1572111524489-42e5aed9115c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
+        ]
+      },
+      {
+        "title": "Pengawasan",
+        "description": "Pengawasan proyek untuk memastikan kualitas dan kesesuaian dengan spesifikasi.",
+        "icon": "FileText",
+        "subServices": []
+      },
+      {
+        "title": "Perizinan",
+        "description": "Bantuan pengurusan perizinan terkait proyek konstruksi.",
+        "icon": "Eye",
+        "subServices": []
+      },
+      {
+        "title": "Studi",
+        "description": "Studi kelayakan dan analisis teknis untuk mendukung pengambilan keputusan.",
+        "icon": "BookOpen",
+        "subServices": []
+      },
+      {
+        "title": "Pengadaan Tanah",
+        "description": "Layanan pengadaan tanah untuk keperluan proyek pembangunan.",
+        "icon": "MapPin",
+        "subServices": []
+      },
+      {
+        "title": "Pekerja Lain",
+        "description": "Penyediaan tenaga kerja ahli untuk berbagai kebutuhan proyek.",
+        "icon": "Users",
+        "subServices": []
+      }
+    ]
+  },
+  "projects": {
+    "categories": ["Perencanaan & Desain", "Pengawasan", "Perizinan", "Studi", "Pengadaan Tanah", "Pekerja Lain"],
+    "items": [
+      {
+        "title": "Proyek Pembangunan Gedung",
+        "description": "Pembangunan gedung perkantoran modern di pusat kota.",
+        "image": "https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "client": "PT. Maju Jaya",
+        "completedDate": "2023",
+        "category": "Perencanaan & Desain"
+      }
+    ]
+  },
+  "statistics": {
+    "items": [
+      {
+        "number": "50+",
+        "label": "Proyek Selesai",
+        "icon": "Building"
+      },
+      {
+        "number": "30+",
+        "label": "Klien Puas",
+        "icon": "Users"
+      },
+      {
+        "number": "10+",
+        "label": "Penghargaan",
+        "icon": "Award"
+      }
+    ]
+  },
+  "partners": {
+    "logos": [
+      "/images/logo-placeholder.png"
+    ]
+  },
+  "about": {
+    "title": "Tentang Kami",
+    "content": "CV. Reswara Praptama adalah perusahaan konsultan teknik sipil yang berdedikasi untuk memberikan solusi terbaik dalam perencanaan, pengawasan, dan penyelidikan tanah.",
+    "mission": "Menjadi mitra terpercaya dalam setiap proyek pembangunan dengan mengedepankan kualitas, inovasi, dan kepuasan klien.",
+    "vision": "Menjadi perusahaan konsultan teknik sipil terdepan di Indonesia yang dikenal karena profesionalisme dan integritas.",
+    "values": ["Integritas", "Kualitas", "Inovasi", "Kerja Sama Tim"]
+  },
+  "contact": {
+    "title": "Hubungi Kami",
+    "subtitle": "Kami siap membantu Anda dalam setiap tahap proyek. Hubungi kami untuk konsultasi lebih lanjut.",
+    "address": "Jl. Pahlawan No. 123, Bekasi, Indonesia",
+    "phone": "+62 21 1234 5678",
+    "email": "info@reswara.com",
+    "hours": "Senin - Jumat, 08:00 - 17:00"
+  }
+}
