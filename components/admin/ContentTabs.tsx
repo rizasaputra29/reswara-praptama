@@ -1,4 +1,3 @@
-// src/components/admin/ContentTabs.tsx
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User } from '@/lib/types';
@@ -9,7 +8,7 @@ import { ProjectsSection } from './dashboard/ProjectsSection';
 import { PartnersSection } from './dashboard/PartnersSection';
 import { ContactSection } from './dashboard/ContactSection';
 import { UsersSection } from './dashboard/UsersSection';
-import { BackupSection } from './dashboard/BackupSection';
+import { BackupSection } from './dashboard/BackupSection'; // <-- Import yang hilang
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ContentTabsProps {

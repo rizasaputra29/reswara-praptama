@@ -8,7 +8,7 @@ const Footer = async () => {
   const servicesContent = await getServicesPageContent();
 
   return (
-    <footer className="bg-white text-gray-900 relative py-12 border-t border-gray-200">
+    <footer className="bg-white text-gray-900 relative p-12 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8">
           {/* Company Info */}
@@ -61,7 +61,7 @@ const Footer = async () => {
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-3 text-gray-600">
               <div className="flex items-center space-x-3">
-                <MapPin className="h-6 w-6 text-gray-600" />
+                <MapPin className="h-5 w-5 text-gray-600" />
                 <span className="text-sm">{contactInfo?.address || 'Data not available'}</span>
               </div>
               <div className="flex items-center space-x-3">

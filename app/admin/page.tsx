@@ -12,7 +12,8 @@ import { useAdminData } from '@/hooks/useAdminData';
 import { useContentManagement } from '@/hooks/useContentManagement';
 import { useDialogs } from '@/hooks/useDialogs';
 import { DashboardStats } from '@/components/admin/dashboard/DashboardStats';
-import { HeroContent, AboutContent, ContactContent, User } from '@/lib/types';
+import { HeroContent, AboutContent, ContactContent } from '@/lib/types';
+import { useToast } from "@/hooks/use-toast"; // <-- Tambahkan import useToast
 
 import { AddEmployeeDialog } from '@/components/admin/dialogs/AddEmployeeDialog';
 import { CategoryDialog } from '@/components/admin/dialogs/CategoryDialog';
@@ -22,6 +23,8 @@ import { SubServiceDialog } from '@/components/admin/dialogs/SubServiceDialog';
 
 export default function Admin() {
   const { data, employees, partners, isLoading, loadData } = useAdminData();
+  const { toast } = useToast(); // <-- Panggil hook useToast di sini
+
   const handleAuthSuccess = useCallback(() => {
     loadData();
   }, [loadData]);
@@ -38,8 +41,6 @@ export default function Admin() {
   const [isAddEmployeeDialogOpen, setAddEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({ username: '', password: '' });
   const [isEmployeeSubmitting, setIsEmployeeSubmitting] = useState(false);
-  
-  const importFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (data) {
@@ -66,10 +67,11 @@ export default function Admin() {
       
       setEditingSection(null);
       loadData();
-    } catch (error) {
-      // Handle error with toast, as needed
+      toast({ title: "Success", description: `${section.charAt(0).toUpperCase() + section.slice(1)} content updated.` });
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Update Failed", description: error.message });
     }
-  }, [loadData, dialogs.selectedProjectImage, contentManagement]);
+  }, [loadData, dialogs.selectedProjectImage, contentManagement, toast]);
 
   const handleToggleEdit = useCallback((section: string) => {
     if (editingSection === section) {
@@ -90,12 +92,13 @@ export default function Admin() {
       setAddEmployeeDialogOpen(false);
       setNewEmployee({ username: '', password: '' });
       await loadData();
+      toast({ title: "Success", description: "New employee created." });
     } catch (error: any) {
-      // Handle error with toast
+      toast({ variant: "destructive", title: "Error", description: error.message });
     } finally {
       setIsEmployeeSubmitting(false);
     }
-  }, [newEmployee, loadData]);
+  }, [newEmployee, loadData, toast]);
 
   const handleDeleteEmployee = useCallback(async (id: number) => {
     if (!confirm("Are you sure?")) return;
@@ -103,18 +106,63 @@ export default function Admin() {
       const response = await fetch('/api/employees', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id }) });
       if (!response.ok) throw new Error("Failed to delete employee.");
       await loadData();
+      toast({ title: "Success", description: "Employee deleted." });
     } catch (error: any) {
-      // Handle error with toast
+      toast({ variant: "destructive", title: "Error", description: error.message });
     }
-  }, [loadData]);
+  }, [loadData, toast]);
 
+  // --- Backup/Import Handlers ---
   const handleExport = useCallback(async () => {
-    // Logic from the original file
-  }, []);
+    try {
+      const response = await fetch('/api/content/backup');
+      if (!response.ok) {
+          throw new Error('Failed to fetch backup data');
+      }
+      const data = await response.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `resawara-backup-${new Date().toISOString()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast({ title: "Success", description: "Content exported successfully." });
+    } catch (error: any) {
+      toast({ variant: "destructive", title: "Error", description: error.message });
+    }
+  }, [toast]);
 
   const handleImport = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Logic from the original file
-  }, [loadData]);
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const content = JSON.parse(e.target?.result as string);
+        const response = await fetch('/api/content/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(content),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to import content.');
+        }
+        toast({ title: "Success", description: "Content imported successfully. Reloading dashboard..." });
+        await loadData(); // <-- Perbaikan: Gunakan loadData
+      } catch (error: any) {
+        toast({ variant: "destructive", title: "Error", description: error.message });
+      } finally {
+        if (event.target) {
+            event.target.value = '';
+        }
+      }
+    };
+    reader.readAsText(file);
+  }, [loadData, toast]);
 
   if (isLoading) {
     return (
@@ -205,7 +253,6 @@ export default function Admin() {
           onOpenChange={dialogs.setProjectDialogOpen}
           editingProject={dialogs.editingProject}
           newProject={dialogs.newProject}
-          // Fix: Remove the setNewProject prop
           selectedImage={dialogs.selectedProjectImage}
           setSelectedImage={dialogs.setSelectedProjectImage}
           categories={data.categories}
