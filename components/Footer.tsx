@@ -61,7 +61,7 @@ const Footer = async () => {
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-3 text-gray-600">
               <div className="flex items-center space-x-3">
-                <MapPin className="h-14 w-14 text-gray-600" />
+                <MapPin className="h-6 w-6 text-gray-600" />
                 <span className="text-sm">{contactInfo?.address || 'Data not available'}</span>
               </div>
               <div className="flex items-center space-x-3">
