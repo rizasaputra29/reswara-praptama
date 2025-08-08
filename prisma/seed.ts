@@ -41,12 +41,14 @@ async function main() {
   console.log('✅ Hero seeded.');
   
   // --- Seed Services and SubServices ---
+  const createdServices = [];
   for (const service of contentData.services.items) {
     const { subServices, ...serviceData } = service; // Separate subServices from parent data
     
     const createdService = await prisma.service.create({
       data: serviceData,
     });
+    createdServices.push(createdService);
     
     if (subServices && subServices.length > 0) {
       await prisma.subService.createMany({
@@ -59,31 +61,39 @@ async function main() {
   }
   console.log('✅ Services and SubServices seeded.');
 
-  // --- Seed Categories and Projects ---
-  const categories = contentData.projects.categories.filter((cat: string) => cat !== 'Semua');
-  const categoryRecords = await Promise.all(
-    categories.map((name: string) => prisma.category.create({ data: { name } }))
-  );
-  console.log('✅ Categories seeded.');
+  // --- Seed Categories from Services ---
+  const categoryData = createdServices.map(service => ({ name: service.title }));
+  await prisma.category.createMany({
+    data: categoryData,
+  });
+  const categoryRecords = await prisma.category.findMany();
+  console.log('✅ Categories seeded from services.');
 
   const categoryMap = categoryRecords.reduce((acc, category) => {
     acc[category.name] = category.id;
     return acc;
   }, {} as Record<string, number>);
 
-  // FIX: Destructure the project to remove the 'category' string field
+  // FIX: Associate projects with categories derived from services
   const projectsToCreate = contentData.projects.items.map((project: any) => {
     const { category, ...restOfProject } = project;
+    const categoryId = categoryMap[category];
+    if (!categoryId) {
+        console.warn(`Warning: Category "${category}" for project "${project.title}" not found. Skipping project.`);
+        return null;
+    }
     return {
       ...restOfProject,
-      categoryId: categoryMap[category],
+      categoryId: categoryId,
     };
-  });
+  }).filter(Boolean); // Filter out nulls for projects with no category
 
-  await prisma.project.createMany({
-    data: projectsToCreate,
-  });
-  console.log('✅ Projects seeded.');
+  if(projectsToCreate.length > 0) {
+    await prisma.project.createMany({
+        data: projectsToCreate as any,
+    });
+    console.log('✅ Projects seeded.');
+  }
 
   // --- Seed Statistics, Partners, About, Contact ---
   await prisma.statistic.createMany({ data: contentData.statistics.items });
@@ -99,14 +109,14 @@ async function main() {
   console.log('✅ Contact seeded.');
 
   // --- Seed PageContent ---
-await prisma.pageContent.create({
-  data: {
-    pageName: 'services',
-    title: 'Solusi Terintegrasi Dunia Teknik',
-    subtitle: 'Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.',
-  },
-});
-console.log('✅ PageContent for services seeded.');
+  await prisma.pageContent.create({
+    data: {
+      pageName: 'services',
+      title: 'Solusi Terintegrasi Dunia Teknik',
+      subtitle: 'Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.',
+    },
+  });
+  console.log('✅ PageContent for services seeded.');
 
 
   console.log('Seeding finished successfully!');

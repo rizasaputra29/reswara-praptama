@@ -100,7 +100,37 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 </div>
               </div>
               <AccordionContent className="pl-4 pb-4">
-                {/* ... (rest of the accordion content remains the same) ... */}
+                <div className="space-y-3">
+                  {service.subServices.length > 0 ? (
+                    service.subServices.map(sub => (
+                      <div key={sub.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
+                            {sub.image ? (
+                              <Image src={sub.image} alt={sub.title} width={48} height={48} className="object-cover rounded-md" />
+                            ) : (
+                              <ImageIcon className="w-5 h-5 text-gray-400" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-800">{sub.title}</p>
+                            <p className="text-sm text-gray-500">{sub.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => openSubServiceDialog(sub, service.id)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDeleteSubService(sub.id)}>
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-500 text-center py-4">No sub-services yet.</p>
+                  )}
+                </div>
               </AccordionContent>
             </AccordionItem>
           ))}

@@ -190,6 +190,12 @@ export default function Admin() {
       </div>
     );
   }
+  
+  const enhancedDialogs = {
+    ...dialogs,
+    handleDeleteSubService: contentManagement.handleDeleteSubService,
+    handleDeletePartner: contentManagement.handleDeletePartner,
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -243,7 +249,7 @@ export default function Admin() {
             handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
             openTimelineDialog: dialogs.openTimelineDialog,
           }}
-          dialogs={dialogs}
+          dialogs={enhancedDialogs}
         />
         
         {/* Render all dialogs */}
