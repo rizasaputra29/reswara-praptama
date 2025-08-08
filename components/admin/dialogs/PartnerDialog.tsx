@@ -22,14 +22,26 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
   isOpen, onOpenChange, editingPartner, newPartner, setNewPartner, selectedImage, setSelectedImage, onSubmit, isUploading
 }) => {
   const isEditing = !!editingPartner;
+  const [formData, setFormData] = React.useState(
+    isEditing ? { ...editingPartner } : { ...newPartner }
+  );
 
-  const handleSubmit = async () => {
-    const data = isEditing ? editingPartner : newPartner;
-    await onSubmit(data, isEditing, selectedImage);
-    onOpenChange(false);
+  React.useEffect(() => {
+    if (isEditing && editingPartner) {
+      setFormData({ ...editingPartner });
+    } else if (!isEditing) {
+      setFormData({ ...newPartner });
+    }
+  }, [editingPartner, newPartner, isEditing]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, logoUrl: e.target.value });
   };
 
-  const partnerData = isEditing ? editingPartner : newPartner;
+  const handleSubmit = async () => {
+    await onSubmit(formData, isEditing, selectedImage);
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -41,9 +53,10 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Logo URL</label>
             <Input 
+              name="logoUrl"
               placeholder="Partner logo URL" 
-              value={partnerData?.logoUrl || ''} 
-              onChange={(e) => isEditing ? editingPartner && onOpenChange(true) : setNewPartner({...newPartner, logoUrl: e.target.value})}
+              value={formData.logoUrl || ''} 
+              onChange={handleChange}
             />
           </div>
           <div>
