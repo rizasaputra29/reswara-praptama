@@ -24,7 +24,6 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid data format: "items" must be an array.' }, { status: 400 });
     }
 
-    // FIX: Lakukan pembaruan untuk setiap item dalam satu transaksi
     const updateTransactions = items.map((service: { id: number; title: string; description: string; }) => 
         prisma.service.update({
             where: { id: service.id },

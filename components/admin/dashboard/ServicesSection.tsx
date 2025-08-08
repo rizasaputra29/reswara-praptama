@@ -6,21 +6,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Edit, Plus, Trash2, Users, ImageIcon, Save } from 'lucide-react'; // Import Save icon
+import { Edit, Plus, Trash2, Users, ImageIcon, Save } from 'lucide-react';
 import Image from 'next/image';
 import { ServiceItem, SubService } from '@/lib/types';
 
 interface ServicesSectionProps {
   services: ServiceItem[];
-  servicesPageContent: { title: string; subtitle: string }; // Add this
-  tempServicesContent: { title: string; subtitle: string } | null; // Add this
-  setTempServicesContent: (content: { title: string; subtitle: string }) => void; // Add this
-  editingSection: string | null; // Add this
-  handleToggleEdit: (section: string) => void; // Add this
-  handleContentUpdate: (section: string, content: any) => void; // Add this
+  servicesPageContent: { title: string; subtitle: string };
+  tempServicesContent: { title: string; subtitle: string } | null;
+  setTempServicesContent: (content: { title: string; subtitle: string }) => void;
+  editingSection: string | null;
+  handleToggleEdit: (section: string) => void;
+  handleContentUpdate: (section: string, content: any) => void;
   openSubServiceDialog: (subService: SubService | null, serviceId?: number) => void;
   handleDeleteSubService: (id: number) => Promise<void>;
   isUploading: boolean;
+  // Menambahkan props baru
+  tempServices: ServiceItem[] | null;
+  setTempServices: (services: ServiceItem[] | null) => void;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
@@ -34,8 +37,27 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   openSubServiceDialog,
   handleDeleteSubService,
   isUploading,
+  tempServices,
+  setTempServices,
 }) => {
-  const isEditing = editingSection === 'services-page';
+  const isEditingHeader = editingSection === 'services-page';
+  const isEditingServices = editingSection === 'services';
+
+  const handleServiceChange = (id: number, field: string, value: string) => {
+    if (tempServices) {
+      setTempServices(
+        tempServices.map((service) =>
+          service.id === id ? { ...service, [field]: value } : service
+        )
+      );
+    }
+  };
+  
+  const handleSaveServices = () => {
+    if (tempServices) {
+      handleContentUpdate('services', tempServices);
+    }
+  };
 
   return (
     <Card className="border-0 shadow-md">
@@ -45,13 +67,22 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             <CardTitle className="text-xl">Services Page Content</CardTitle>
             <CardDescription>Manage the main page header and the list of services.</CardDescription>
           </div>
-          <Button
-            variant={isEditing ? 'default' : 'outline'}
-            onClick={() => isEditing ? handleContentUpdate('page-content', { pageName: 'services', ...tempServicesContent }) : handleToggleEdit('services-page')}
-          >
-            {isEditing ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
-            {isEditing ? 'Save Header' : 'Edit Header'}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant={isEditingHeader ? 'default' : 'outline'}
+              onClick={() => isEditingHeader ? handleContentUpdate('page-content', { pageName: 'services', ...tempServicesContent }) : handleToggleEdit('services-page')}
+            >
+              {isEditingHeader ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
+              {isEditingHeader ? 'Save Header' : 'Edit Header'}
+            </Button>
+            <Button
+              variant={isEditingServices ? 'default' : 'outline'}
+              onClick={() => isEditingServices ? handleSaveServices() : handleToggleEdit('services')}
+            >
+              {isEditingServices ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
+              {isEditingServices ? 'Save Services' : 'Edit Services'}
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -59,7 +90,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <div className="space-y-4 p-4 border rounded-lg bg-gray-50">
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Page Title</label>
-                {isEditing ? (
+                {isEditingHeader ? (
                     <Input
                     value={tempServicesContent?.title || ''}
                     onChange={(e) => setTempServicesContent({ ...tempServicesContent!, title: e.target.value })}
@@ -70,7 +101,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </div>
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Page Subtitle</label>
-                {isEditing ? (
+                {isEditingHeader ? (
                     <Textarea
                     value={tempServicesContent?.subtitle || ''}
                     onChange={(e) => setTempServicesContent({ ...tempServicesContent!, subtitle: e.target.value })}
@@ -89,7 +120,16 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 <AccordionTrigger className="font-semibold flex-1 pr-4 hover:no-underline">
                   <div className="flex items-center space-x-3">
                     <Users className="w-4 h-4 text-gray-600" />
-                    <span>{service.title}</span>
+                    {isEditingServices ? (
+                      <Input
+                        value={(tempServices?.find(s => s.id === service.id)?.title || '')}
+                        onChange={(e) => handleServiceChange(service.id, 'title', e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        onFocus={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <span>{service.title}</span>
+                    )}
                   </div>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 pr-4">
@@ -100,37 +140,48 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 </div>
               </div>
               <AccordionContent className="pl-4 pb-4">
-                <div className="space-y-3">
-                  {service.subServices.length > 0 ? (
-                    service.subServices.map(sub => (
-                      <div key={sub.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
-                            {sub.image ? (
-                              <Image src={sub.image} alt={sub.title} width={48} height={48} className="object-cover rounded-md" />
-                            ) : (
-                              <ImageIcon className="w-5 h-5 text-gray-400" />
-                            )}
+                {isEditingServices && (
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Service Description</label>
+                    <Textarea
+                      value={(tempServices?.find(s => s.id === service.id)?.description || '')}
+                      onChange={(e) => handleServiceChange(service.id, 'description', e.target.value)}
+                    />
+                  </div>
+                )}
+                {service.subServices && service.subServices.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    {service.subServices.map((subService) => (
+                      <div key={subService.id} className="relative flex items-center p-3 border border-gray-200 rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow">
+                        {subService.image && (
+                          <div className="relative w-32 h-20 mr-4 flex-shrink-0 overflow-hidden rounded-md">
+                            <Image src={subService.image} alt={subService.title} fill className="object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
+                            <div className="absolute bottom-0 left-0 right-0 p-2">
+                              <h4 className="font-semibold text-white text-sm truncate">{subService.title}</h4>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium text-gray-800">{sub.title}</p>
-                            <p className="text-sm text-gray-500">{sub.description}</p>
-                          </div>
+                        )}
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900">{subService.title}</h4>
+                          <p className="text-sm text-gray-600 line-clamp-2">{subService.description}</p>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Button variant="ghost" size="sm" onClick={() => openSubServiceDialog(sub, service.id)}>
-                            <Edit className="h-4 w-4" />
+                        <div className="flex items-center gap-1 ml-4">
+                          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); openSubServiceDialog(subService); }}>
+                            <Edit className="h-4 w-4"/>
                           </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDeleteSubService(sub.id)}>
-                            <Trash2 className="h-4 w-4 text-red-500" />
+                          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleDeleteSubService(subService.id); }}>
+                            <Trash2 className="h-4 w-4 text-red-500"/>
                           </Button>
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-sm text-gray-500 text-center py-4">No sub-services yet.</p>
-                  )}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-gray-500">
+                    <p>No sub-services available yet.</p>
+                  </div>
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}

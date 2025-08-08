@@ -12,7 +12,7 @@ import { useAdminData } from '@/hooks/useAdminData';
 import { useContentManagement } from '@/hooks/useContentManagement';
 import { useDialogs } from '@/hooks/useDialogs';
 import { DashboardStats } from '@/components/admin/dashboard/DashboardStats';
-import { HeroContent, AboutContent, ContactContent, TimelineEvent, ServicesPageContent } from '@/lib/types';
+import { HeroContent, AboutContent, ContactContent, ServicesPageContent, Category, ServiceItem } from '@/lib/types';
 import { useToast } from "@/hooks/use-toast";
 
 // Import all dialog components
@@ -40,8 +40,8 @@ export default function Admin() {
   const [tempHero, setTempHero] = useState<HeroContent | null>(null);
   const [tempAbout, setTempAbout] = useState<AboutContent | null>(null);
   const [tempContact, setTempContact] = useState<ContactContent | null>(null);
-  // Add state for services page content
   const [tempServicesContent, setTempServicesContent] = useState<ServicesPageContent | null>(null);
+  const [tempServices, setTempServices] = useState<ServiceItem[] | null>(null);
 
   const [isAddEmployeeDialogOpen, setAddEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({ username: '', password: '' });
@@ -52,19 +52,28 @@ export default function Admin() {
       setTempHero(data.hero);
       setTempAbout(data.about);
       setTempContact(data.contact);
-      // Set initial state for services page content
       setTempServicesContent(data.servicesPage);
+      setTempServices(data.services);
     }
   }, [data]);
 
   const handleContentUpdate = useCallback(async (section: string, updatedContent: any) => {
     try {
-      // Use a different endpoint for page-content
-      const apiPath = section === 'services-page' ? 'page-content' : section;
+      let apiPath;
+      let payload = updatedContent;
+      if (section === 'services-page') {
+        apiPath = 'page-content';
+      } else if (section === 'services') {
+        apiPath = 'services';
+        payload = { items: updatedContent };
+      } else {
+        apiPath = section;
+      }
+
       const response = await fetch(`/api/content/${apiPath}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedContent)
+        body: JSON.stringify(payload)
       });
       if (!response.ok) {
         throw new Error(`Failed to update ${section}`);
@@ -81,11 +90,11 @@ export default function Admin() {
   const handleToggleEdit = useCallback((section: string) => {
     if (editingSection === section) {
       setEditingSection(null);
-      // Reset temporary states on cancel
       setTempHero(data?.hero || null);
       setTempAbout(data?.about || null);
       setTempContact(data?.contact || null);
       setTempServicesContent(data?.servicesPage || null);
+      setTempServices(data?.services || null);
     } else {
       setEditingSection(section);
     }
@@ -163,6 +172,11 @@ export default function Admin() {
     reader.readAsText(file);
   }, [loadData, toast]);
 
+  const serviceCategories = (data?.services || []).map(service => ({
+      id: service.id,
+      name: service.title,
+  }));
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -190,12 +204,6 @@ export default function Admin() {
       </div>
     );
   }
-  
-  const enhancedDialogs = {
-    ...dialogs,
-    handleDeleteSubService: contentManagement.handleDeleteSubService,
-    handleDeletePartner: contentManagement.handleDeletePartner,
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -215,7 +223,7 @@ export default function Admin() {
             heroContent: data.hero,
             aboutContent: data.about,
             services: data.services,
-            servicesPageContent: data.servicesPage, // Pass services page content
+            servicesPageContent: data.servicesPage,
             projects: data.projects,
             partners: partners,
             contactContent: data.contact,
@@ -224,17 +232,15 @@ export default function Admin() {
             timelineEvents: timelineEvents,
           }}
           state={{
-            editingSection, setEditingSection,
+            editingSection,
             isUploading: contentManagement.isUploading,
-            tempHero, setTempHero,
-            tempAbout, setTempAbout,
-            tempContact, setTempContact,
-            tempServicesContent, setTempServicesContent, // Pass services page state
+            tempHero,
+            tempAbout,
+            tempContact,
+            tempServicesContent,
+            tempServices,
             selectedHeroImage: dialogs.selectedProjectImage,
-            setSelectedHeroImage: dialogs.setSelectedProjectImage,
-            setAddEmployeeDialogOpen,
             tempCategoryName: dialogs.tempCategoryName,
-            openCategoryDialog: dialogs.openCategoryDialog,
           }}
           handlers={{
             handleContentUpdate, 
@@ -248,11 +254,23 @@ export default function Admin() {
             openProjectDialog: dialogs.openProjectDialog,
             handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
             openTimelineDialog: dialogs.openTimelineDialog,
+            openSubServiceDialog: dialogs.openSubServiceDialog,
+            handleDeleteSubService: contentManagement.handleDeleteSubService,
+            openPartnerDialog: dialogs.openPartnerDialog,
+            handleDeletePartner: contentManagement.handleDeletePartner,
+            setTempHero,
+            setTempAbout,
+            setTempContact,
+            setTempServicesContent,
+            setTempServices,
+            setSelectedHeroImage: dialogs.setSelectedProjectImage,
+            setAddEmployeeDialogOpen,
+            setTempCategoryName: dialogs.setTempCategoryName,
+            openCategoryDialog: dialogs.openCategoryDialog,
           }}
-          dialogs={enhancedDialogs}
+          dialogs={dialogs}
         />
         
-        {/* Render all dialogs */}
         <ProjectDialog
           isOpen={dialogs.isProjectDialogOpen}
           onOpenChange={dialogs.setProjectDialogOpen}
@@ -260,7 +278,7 @@ export default function Admin() {
           newProject={dialogs.newProject}
           selectedImage={dialogs.selectedProjectImage}
           setSelectedImage={dialogs.setSelectedProjectImage}
-          categories={data.categories}
+          categories={serviceCategories as Category[]}
           onSubmit={contentManagement.handleProjectSubmit}
           isUploading={contentManagement.isUploading}
         />

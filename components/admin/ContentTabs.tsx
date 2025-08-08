@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User } from '@/lib/types';
+import { User, ServiceItem } from '@/lib/types';
 import { HeroSection } from './dashboard/HeroSection';
 import { AboutSection } from './dashboard/AboutSection';
 import { ServicesSection } from './dashboard/ServicesSection';
@@ -11,11 +11,23 @@ import { UsersSection } from './dashboard/UsersSection';
 import { BackupSection } from './dashboard/BackupSection';
 import { TimelineSection } from './dashboard/TimelineSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useDialogs } from '@/hooks/useDialogs';
+import { HeroContent, AboutContent, ContactContent, ServicesPageContent, Category } from '@/lib/types';
 
 interface ContentTabsProps {
   currentUser: User;
   data: any;
-  state: any;
+  state: {
+    editingSection: string | null;
+    isUploading: boolean;
+    tempHero: HeroContent | null;
+    tempAbout: AboutContent | null;
+    tempContact: ContactContent | null;
+    tempServicesContent: ServicesPageContent | null;
+    tempServices: ServiceItem[] | null;
+    selectedHeroImage: any;
+    tempCategoryName: string;
+  };
   handlers: {
     handleContentUpdate: (section: string, content: any) => Promise<void>;
     handleToggleEdit: (section: string) => void;
@@ -28,8 +40,21 @@ interface ContentTabsProps {
     openProjectDialog: (project: any) => void;
     handleDeleteTimelineEvent: (id: number) => Promise<void>;
     openTimelineDialog: (event: any) => void;
+    openSubServiceDialog: (subService: any, serviceId?: number) => void;
+    handleDeleteSubService: (id: number) => Promise<void>;
+    openPartnerDialog: (partner: any) => void;
+    handleDeletePartner: (id: number) => Promise<void>;
+    setTempHero: (content: any) => void;
+    setTempAbout: (content: any) => void;
+    setTempContact: (content: any) => void;
+    setTempServicesContent: (content: any) => void;
+    setTempServices: (services: ServiceItem[] | null) => void;
+    setSelectedHeroImage: (file: File | null) => void;
+    setAddEmployeeDialogOpen: (open: boolean) => void;
+    setTempCategoryName: (name: string) => void;
+    openCategoryDialog: (category: any) => void;
   };
-  dialogs: any;
+  dialogs: ReturnType<typeof useDialogs>;
 }
 
 export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, state, handlers, dialogs }) => {
@@ -38,21 +63,15 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
   } = data;
 
   const {
-    editingSection, isUploading, tempHero, tempAbout, tempContact, tempServicesContent, selectedHeroImage, setSelectedHeroImage,
-    setAddEmployeeDialogOpen, setTempServicesContent
+    editingSection, isUploading, tempHero, tempAbout, tempContact, tempServicesContent, tempServices, selectedHeroImage, tempCategoryName,
   } = state;
 
   const {
     handleContentUpdate, handleToggleEdit, handleAddEmployee, handleDeleteEmployee, handleExport, handleImport,
-    handleDeleteProject,
-    openProjectDialog,
-    handleDeleteTimelineEvent,
-    openTimelineDialog
+    handleDeleteProject, openProjectDialog, handleDeleteTimelineEvent, openTimelineDialog, openSubServiceDialog,
+    handleDeleteSubService, openPartnerDialog, handleDeletePartner, setTempHero, setTempAbout, setTempContact,
+    setTempServicesContent, setTempServices, setSelectedHeroImage, setAddEmployeeDialogOpen, setTempCategoryName, openCategoryDialog
   } = handlers;
-
-  const {
-    openSubServiceDialog, handleDeleteSubService, openPartnerDialog, handleDeletePartner,
-  } = dialogs;
 
   return (
     <Card className="shadow-xl border-0">
@@ -93,8 +112,8 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
                   selectedHeroImage={selectedHeroImage}
                   handleContentUpdate={handleContentUpdate}
                   handleToggleEdit={handleToggleEdit}
-                  setTempHero={state.setTempHero}
-                  setSelectedHeroImage={state.setSelectedHeroImage}
+                  setTempHero={setTempHero}
+                  setSelectedHeroImage={setSelectedHeroImage}
                 />
               </TabsContent>
               <TabsContent value="about" className="mt-6">
@@ -104,7 +123,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
                   tempAbout={tempAbout}
                   handleContentUpdate={handleContentUpdate}
                   handleToggleEdit={handleToggleEdit}
-                  setTempAbout={state.setTempAbout}
+                  setTempAbout={setTempAbout}
                 />
               </TabsContent>
               <TabsContent value="timeline" className="mt-6">
@@ -129,6 +148,8 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
               openSubServiceDialog={openSubServiceDialog}
               handleDeleteSubService={handleDeleteSubService}
               isUploading={isUploading}
+              tempServices={tempServices}
+              setTempServices={setTempServices}
             />
           </TabsContent>
 
@@ -158,7 +179,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
                   tempContact={tempContact}
                   handleContentUpdate={handleContentUpdate}
                   handleToggleEdit={handleToggleEdit}
-                  setTempContact={state.setTempContact}
+                  setTempContact={setTempContact}
                 />
               </TabsContent>
               <TabsContent value="users" className="mt-6">
