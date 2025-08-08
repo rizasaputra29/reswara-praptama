@@ -1,7 +1,7 @@
 // src/app/admin/page.tsx
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 import { AdminLogin } from '@/components/admin/AdminLogin';
@@ -12,22 +12,26 @@ import { useAdminData } from '@/hooks/useAdminData';
 import { useContentManagement } from '@/hooks/useContentManagement';
 import { useDialogs } from '@/hooks/useDialogs';
 import { DashboardStats } from '@/components/admin/dashboard/DashboardStats';
-import { HeroContent, AboutContent, ContactContent } from '@/lib/types';
-import { useToast } from "@/hooks/use-toast"; // <-- Tambahkan import useToast
+import { HeroContent, AboutContent, ContactContent, TimelineEvent } from '@/lib/types';
+import { useToast } from "@/hooks/use-toast";
 
+// Import all dialog components
 import { AddEmployeeDialog } from '@/components/admin/dialogs/AddEmployeeDialog';
 import { CategoryDialog } from '@/components/admin/dialogs/CategoryDialog';
 import { PartnerDialog } from '@/components/admin/dialogs/PartnerDialog';
 import { ProjectDialog } from '@/components/admin/dialogs/ProjectDialog';
 import { SubServiceDialog } from '@/components/admin/dialogs/SubServiceDialog';
+import { TimelineDialog } from '@/components/admin/dialogs/TimelineDialog';
 
 export default function Admin() {
-  const { data, employees, partners, isLoading, loadData } = useAdminData();
-  const { toast } = useToast(); // <-- Panggil hook useToast di sini
+  // Use the updated hook to get timelineEvents
+  const { data, employees, partners, timelineEvents, isLoading, loadData } = useAdminData();
+  const { toast } = useToast();
 
   const handleAuthSuccess = useCallback(() => {
     loadData();
   }, [loadData]);
+
   const { currentUser, username, setUsername, password, setPassword, handleLogin, handleLogout } = useAuth(handleAuthSuccess);
 
   const contentManagement = useContentManagement(loadData);
@@ -52,10 +56,6 @@ export default function Admin() {
 
   const handleContentUpdate = useCallback(async (section: string, updatedContent: any) => {
     try {
-      if (section === 'hero' && dialogs.selectedProjectImage) {
-        updatedContent.image = await contentManagement.handleImageUpload(dialogs.selectedProjectImage);
-      }
-      
       const response = await fetch(`/api/content/${section}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -66,12 +66,12 @@ export default function Admin() {
       }
       
       setEditingSection(null);
-      loadData();
+      await loadData();
       toast({ title: "Success", description: `${section.charAt(0).toUpperCase() + section.slice(1)} content updated.` });
     } catch (error: any) {
       toast({ variant: "destructive", title: "Update Failed", description: error.message });
     }
-  }, [loadData, dialogs.selectedProjectImage, contentManagement, toast]);
+  }, [loadData, toast]);
 
   const handleToggleEdit = useCallback((section: string) => {
     if (editingSection === section) {
@@ -112,13 +112,10 @@ export default function Admin() {
     }
   }, [loadData, toast]);
 
-  // --- Backup/Import Handlers ---
   const handleExport = useCallback(async () => {
     try {
       const response = await fetch('/api/content/backup');
-      if (!response.ok) {
-          throw new Error('Failed to fetch backup data');
-      }
+      if (!response.ok) throw new Error('Failed to fetch backup data');
       const data = await response.json();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -138,7 +135,6 @@ export default function Admin() {
   const handleImport = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
@@ -148,17 +144,13 @@ export default function Admin() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(content),
         });
-        if (!response.ok) {
-          throw new Error('Failed to import content.');
-        }
+        if (!response.ok) throw new Error('Failed to import content.');
         toast({ title: "Success", description: "Content imported successfully. Reloading dashboard..." });
-        await loadData(); // <-- Perbaikan: Gunakan loadData
+        await loadData();
       } catch (error: any) {
         toast({ variant: "destructive", title: "Error", description: error.message });
       } finally {
-        if (event.target) {
-            event.target.value = '';
-        }
+        if (event.target) event.target.value = '';
       }
     };
     reader.readAsText(file);
@@ -167,10 +159,7 @@ export default function Admin() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -190,10 +179,7 @@ export default function Admin() {
   if (!data || !currentUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading dashboard data...</p>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -221,6 +207,7 @@ export default function Admin() {
             contactContent: data.contact,
             categories: data.categories,
             employees: employees,
+            timelineEvents: timelineEvents, // Pass timeline data to tabs
           }}
           state={{
             editingSection, setEditingSection,
@@ -244,10 +231,14 @@ export default function Admin() {
             handleDeleteCategory: contentManagement.handleDeleteCategory,
             handleDeleteProject: contentManagement.handleDeleteProject,
             openProjectDialog: dialogs.openProjectDialog,
+            // Pass timeline handlers
+            handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
+            openTimelineDialog: dialogs.openTimelineDialog,
           }}
           dialogs={dialogs}
         />
         
+        {/* Render all dialogs */}
         <ProjectDialog
           isOpen={dialogs.isProjectDialogOpen}
           onOpenChange={dialogs.setProjectDialogOpen}
@@ -301,6 +292,15 @@ export default function Admin() {
           tempCategoryName={dialogs.tempCategoryName}
           setTempCategoryName={dialogs.setTempCategoryName}
           onSubmit={contentManagement.handleCategorySubmit}
+        />
+
+        <TimelineDialog
+          isOpen={dialogs.isTimelineDialogOpen}
+          onOpenChange={dialogs.setTimelineDialogOpen}
+          editingEvent={dialogs.editingTimelineEvent}
+          setEditingEvent={dialogs.setEditingTimelineEvent}
+          onSubmit={() => contentManagement.handleTimelineSubmit(dialogs.editingTimelineEvent!)}
+          isSubmitting={contentManagement.isUploading}
         />
       </main>
     </div>

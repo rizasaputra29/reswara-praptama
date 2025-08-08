@@ -105,10 +105,16 @@ export async function getContactContent() {
 
 export async function getAboutContent() {
   try {
+    // Fetch both about content and timeline events
     const about = await prisma.about.findFirst();
-    return about;
+    const timelineEvents = await prisma.timelineEvent.findMany({
+      orderBy: { year: 'asc' }
+    });
+    return { about, timelineEvents }; // Return both
   } catch (error) {
     console.error("Database Error in getAboutContent:", error);
     return null;
   }
 }
+
+

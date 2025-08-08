@@ -1,6 +1,6 @@
 // src/lib/api.ts
 
-import { DashboardData, Employee, PartnerItem } from '@/lib/types';
+import { DashboardData, Employee, PartnerItem, TimelineEvent } from '@/lib/types'; // Import TimelineEvent
 
 export const parseJwt = (token: string) => {
   try {
@@ -10,11 +10,12 @@ export const parseJwt = (token: string) => {
   }
 };
 
-export const fetchDashboardData = async (): Promise<{ dashboard: DashboardData; employees: Employee[]; partners: PartnerItem[] }> => {
-  const [dashResponse, empResponse, partnersResponse] = await Promise.all([
+export const fetchDashboardData = async (): Promise<{ dashboard: DashboardData; employees: Employee[]; partners: PartnerItem[]; timelineEvents: TimelineEvent[] }> => {
+  const [dashResponse, empResponse, partnersResponse, timelineResponse] = await Promise.all([
     fetch('/api/dashboard'),
     fetch('/api/employees'),
     fetch('/api/content/partners'),
+    fetch('/api/content/timeline'), // Add fetch for timeline
   ]);
 
   if (!dashResponse.ok) throw new Error('Failed to fetch dashboard data');
@@ -26,7 +27,10 @@ export const fetchDashboardData = async (): Promise<{ dashboard: DashboardData; 
   if (!partnersResponse.ok) throw new Error('Failed to fetch partners');
   const partners = await partnersResponse.json();
 
-  return { dashboard, employees, partners };
+  if (!timelineResponse.ok) throw new Error('Failed to fetch timeline events'); // Add error handling
+  const timelineEvents = await timelineResponse.json(); // Get timeline data
+
+  return { dashboard, employees, partners, timelineEvents }; // Return timelineEvents
 };
 
 export const uploadImage = async (file: File): Promise<string> => {

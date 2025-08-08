@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { uploadImage as apiUploadImage } from '@/lib/api';
-import { ProjectItem, SubService, SubServiceDraft, PartnerItem, Category } from '@/lib/types';
+import { ProjectItem, SubService, SubServiceDraft, PartnerItem, Category, TimelineEvent } from '@/lib/types';
 
 export const useContentManagement = (reload: () => void) => {
   const { toast } = useToast();
@@ -169,6 +169,39 @@ export const useContentManagement = (reload: () => void) => {
     }
   };
 
+  // Add the timeline event handlers
+  const handleTimelineSubmit = async (eventData: Partial<TimelineEvent>) => {
+    const isEditing = !!eventData.id;
+    const url = '/api/content/timeline';
+    const method = isEditing ? 'PUT' : 'POST';
+
+    try {
+      if (!eventData.year || !eventData.title || !eventData.description) {
+        throw new Error('Year, Title, and Description are required.');
+      }
+      const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(eventData) });
+      if (!response.ok) throw new Error(`Failed to ${isEditing ? 'update' : 'add'} event.`);
+      
+      toast({ title: 'Success', description: `Timeline event ${isEditing ? 'updated' : 'added'}.` });
+      reload();
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Error', description: error.message });
+    }
+  };
+
+  const handleDeleteTimelineEvent = async (eventId: number) => {
+    if (!confirm('Are you sure?')) return;
+    try {
+      const response = await fetch('/api/content/timeline', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: eventId }) });
+      if (!response.ok) throw new Error('Failed to delete timeline event.');
+      
+      toast({ title: 'Success', description: 'Timeline event deleted.' });
+      reload();
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Error', description: error.message });
+    }
+  };
+
   return {
     isUploading,
     handleImageUpload,
@@ -180,5 +213,8 @@ export const useContentManagement = (reload: () => void) => {
     handleDeleteCategory,
     handlePartnerSubmit,
     handleDeletePartner,
+    // Return the new handlers
+    handleTimelineSubmit,
+    handleDeleteTimelineEvent,
   };
 };

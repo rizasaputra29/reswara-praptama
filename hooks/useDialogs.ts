@@ -1,9 +1,10 @@
 // src/hooks/useDialogs.ts
 
 import { useState } from 'react';
-import { ProjectItem, PartnerItem, SubService, Category, SubServiceDraft } from '@/lib/types';
+import { ProjectItem, PartnerItem, SubService, Category, SubServiceDraft, TimelineEvent } from '@/lib/types';
 
 export const useDialogs = () => {
+  // Existing dialog states
   const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectItem | null>(null);
   const [newProject, setNewProject] = useState({ title: '', description: '', image: '', client: '', completedDate: '', categoryId: '' });
@@ -22,6 +23,12 @@ export const useDialogs = () => {
   const [newPartner, setNewPartner] = useState({ logoUrl: '' });
   const [selectedPartnerImage, setSelectedPartnerImage] = useState<File | null>(null);
 
+  // Add state for the Timeline dialog
+  const [isTimelineDialogOpen, setTimelineDialogOpen] = useState(false);
+  const [editingTimelineEvent, setEditingTimelineEvent] = useState<Partial<TimelineEvent> | null>(null);
+
+
+  // Existing dialog open functions
   const openProjectDialog = (project: ProjectItem | null) => {
     setEditingProject(project);
     if (project) {
@@ -63,10 +70,17 @@ export const useDialogs = () => {
     setPartnerDialogOpen(true);
   };
 
+  // Add function to open the Timeline dialog
+  const openTimelineDialog = (event: Partial<TimelineEvent> | null) => {
+    setEditingTimelineEvent(event || { year: '', title: '', description: '' });
+    setTimelineDialogOpen(true);
+  };
+
   return {
     isProjectDialogOpen, setProjectDialogOpen, editingProject, setEditingProject, newProject, setNewProject, selectedProjectImage, setSelectedProjectImage, openProjectDialog,
     isSubServiceDialogOpen, setSubServiceDialogOpen, editingSubService, setEditingSubService, selectedSubServiceImage, setSelectedSubServiceImage, openSubServiceDialog,
     isCategoryDialogOpen, setCategoryDialogOpen, editingCategory, setEditingCategory, tempCategoryName, setTempCategoryName, openCategoryDialog,
     isPartnerDialogOpen, setPartnerDialogOpen, editingPartner, setEditingPartner, newPartner, setNewPartner, selectedPartnerImage, setSelectedPartnerImage, openPartnerDialog,
+    isTimelineDialogOpen, setTimelineDialogOpen, editingTimelineEvent, setEditingTimelineEvent, openTimelineDialog,
   };
 };

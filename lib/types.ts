@@ -92,4 +92,12 @@ export interface SubService {
     projects: ProjectItem[];
     contact: ContactContent;
     categories: Category[];
-  }
+    timelineEvents: TimelineEvent[]; // ADD THIS LINE
+}
+
+  export interface TimelineEvent {
+  id: number;
+  year: string;
+  title: string;
+  description: string;
+}

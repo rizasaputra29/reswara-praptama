@@ -4,9 +4,10 @@
 import { useEffect, useState } from 'react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { motion } from 'framer-motion';
-import WaveSeparator from '@/components/WaveSeperator'; // Fixed import to correct path: WaveSeparator, not WaveSeperator
+import WaveSeparator from '@/components/WaveSeperator';
+import { TimelineEvent } from '@/lib/types'; // Import the TimelineEvent type
 
-
+// Define the interface for the 'about' content
 interface AboutData {
   title: string;
   content: string;
@@ -15,47 +16,23 @@ interface AboutData {
   values: string[];
 }
 
+// Update the props interface to include timelineEvents
 interface AboutClientComponentProps {
   content: AboutData | null;
+  timelineEvents: TimelineEvent[];
 }
 
-const timelineEvents = [
-  {
-    year: '2019',
-    title: 'Awal Berdiri',
-    description:
-      'CV. Reswara Praptama didirikan di Jawa Tengah sebagai perusahaan yang bergerak di bidang jasa konsultan teknik sipil, khususnya perencanaan infrastruktur dan penyelidikan tanah untuk proyek-proyek pembangunan di sektor publik dan swasta.',
-  },
-  {
-    year: '2023',
-    title: 'Ekspansi & Penguatan Kompetensi',
-    description:
-      'CV. Reswara Praptama memperluas jangkauan layanan ke seluruh Indonesia, termasuk jasa studi kelayakan dan pengadaan tanah.',
-  },
-  {
-    year: '2025',
-    title: 'Digitalisasi dan Integrasi Layanan',
-    description:
-      'CV. Reswara Praptama mulai mengadopsi pendekatan berbasis data dan teknologi dalam proses perencanaan serta penyelidikan tanah, meningkatkan efisiensi dan akurasi demi mendukung pembangunan berkelanjutan.',
-  },
-];
-
-export default function AboutClientComponent({ content }: AboutClientComponentProps) {
+export default function AboutClientComponent({ content, timelineEvents }: AboutClientComponentProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Dapatkan tinggi dokumen yang dapat digulir
       const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-      // Dapatkan posisi gulir saat ini
       const scrolled = window.scrollY;
-
       let progress = 0;
       if (documentHeight > 0) {
         progress = scrolled / documentHeight;
       }
-      
-      // Pastikan nilai progres antara 0 dan 1
       progress = Math.min(Math.max(progress, 0), 1);
       setScrollProgress(progress);
     };
@@ -93,8 +70,6 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
           </p>
           </AnimatedSection>
         </div>
-
-        {/* SVG Wave at the bottom, similar to HeroSection */}
         <WaveSeparator />
       </section>
 
@@ -107,7 +82,6 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Vision Card */}
             <AnimatedSection delay={0.2}>
               <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4 text-center">Visi</h3>
@@ -115,7 +89,6 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
               </div>
             </AnimatedSection>
 
-            {/* Mission Card */}
             <AnimatedSection delay={0.4}>
               <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-4 text-center">Misi</h3>
@@ -161,10 +134,8 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
             <div className="space-y-12 md:space-y-0">
               {timelineEvents.map((event, index) => (
                 <div key={index} className="relative md:grid md:grid-cols-2 md:gap-x-16 items-center">
-                  {/* Konten untuk sisi kiri di desktop (indeks genap) */}
                   {index % 2 === 0 ? (
                     <>
-                      {/* Kolom kiri untuk konten */}
                       <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -180,14 +151,11 @@ export default function AboutClientComponent({ content }: AboutClientComponentPr
                           <p className="text-gray-600 mt-2">{event.description}</p>
                         </div>
                       </motion.div>
-                      {/* Placeholder untuk kolom kanan agar struktur grid tetap terjaga di desktop */}
                       <div className="hidden md:block md:col-start-2 md:col-end-3 h-full"></div>
                     </>
                   ) : (
                     <>
-                      {/* Placeholder untuk kolom kiri agar struktur grid tetap terjaga di desktop */}
                       <div className="hidden md:block md:col-start-1 md:col-end-2 h-full"></div>
-                      {/* Konten untuk sisi kanan di desktop (indeks ganjil) */}
                       <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
