@@ -9,7 +9,7 @@ async function main() {
   console.log('Start seeding...');
 
   // --- Clear existing data ---
-  await prisma.subService.deleteMany({}); // Clear sub-services first
+  await prisma.subService.deleteMany({});
   await prisma.project.deleteMany({});
   await prisma.category.deleteMany({});
   await prisma.service.deleteMany({});
@@ -42,7 +42,7 @@ async function main() {
   
   // --- Seed Services and SubServices ---
   for (const service of contentData.services.items) {
-    const { subServices, ...serviceData } = service; // Separate subServices from parent data
+    const { subServices, ...serviceData } = service;
     
     const createdService = await prisma.service.create({
       data: serviceData,
@@ -52,7 +52,7 @@ async function main() {
       await prisma.subService.createMany({
         data: subServices.map((sub: any) => ({
           ...sub,
-          serviceId: createdService.id, // Link to the parent service
+          serviceId: createdService.id,
         })),
       });
     }
@@ -66,7 +66,6 @@ async function main() {
   );
   console.log('✅ Categories seeded.');
 
-  // FIX: Add explicit types for the reduce parameters
   const categoryMap = categoryRecords.reduce((acc: Record<string, number>, category: { name: string; id: number }) => {
     acc[category.name] = category.id;
     return acc;
