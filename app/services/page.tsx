@@ -25,6 +25,9 @@ interface ServicesPageContent {
   items: ServiceItem[];
 };
 
+// 1. TAMBAHKAN BARIS INI untuk memastikan halaman selalu mengambil data terbaru
+export const revalidate = 0;
+
 export default async function ServicesPage() {
   const content = await getServicesPageContent() as ServicesPageContent | null;
 
@@ -46,11 +49,12 @@ export default async function ServicesPage() {
           }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection className="text-center">
+              {/* 2. GANTI TEKS HARDCODE dengan data dari database */}
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Solusi Terintegrasi Dunia Teknik
+                {content.title}
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional
+                {content.subtitle}
               </p>
             </AnimatedSection>
           </div>

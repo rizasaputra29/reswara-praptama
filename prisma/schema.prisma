@@ -27,6 +27,13 @@ model Service {
   subServices SubService[] // Add this line to create the relation
 }
 
+model PageContent {
+  id        Int     @id @default(autoincrement())
+  pageName  String  @unique // "services", "portfolio", etc.
+  title     String  @db.Text
+  subtitle  String  @db.Text
+}
+
 // ADD THIS NEW MODEL for sub-services
 model SubService {
   id          Int     @id @default(autoincrement())
@@ -114,3 +121,4 @@ model TimelineEvent {
   description String   @db.Text
   createdAt   DateTime @default(now())
 }
+

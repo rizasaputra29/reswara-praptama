@@ -76,14 +76,21 @@ export async function getServicesPageContent() {
       orderBy: { id: 'asc' },
       include: {
         subServices: {
-          orderBy: { id: 'asc' }
-        }
-      }
+          orderBy: { id: 'asc' },
+        },
+      },
     });
-    if (!services) return null;
+
+    // Fetch the title and subtitle from the new model
+    const pageContent = await prisma.pageContent.findUnique({
+      where: { pageName: 'services' },
+    });
+
+    if (!services || !pageContent) return null;
+
     return {
-      title: "Solusi Terintegrasi Dunia Teknik",
-      subtitle: "Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.",
+      title: pageContent.title,
+      subtitle: pageContent.subtitle,
       items: services,
     };
   } catch (error) {

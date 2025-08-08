@@ -12,7 +12,7 @@ import { useAdminData } from '@/hooks/useAdminData';
 import { useContentManagement } from '@/hooks/useContentManagement';
 import { useDialogs } from '@/hooks/useDialogs';
 import { DashboardStats } from '@/components/admin/dashboard/DashboardStats';
-import { HeroContent, AboutContent, ContactContent, TimelineEvent } from '@/lib/types';
+import { HeroContent, AboutContent, ContactContent, TimelineEvent, ServicesPageContent } from '@/lib/types';
 import { useToast } from "@/hooks/use-toast";
 
 // Import all dialog components
@@ -24,7 +24,6 @@ import { SubServiceDialog } from '@/components/admin/dialogs/SubServiceDialog';
 import { TimelineDialog } from '@/components/admin/dialogs/TimelineDialog';
 
 export default function Admin() {
-  // Use the updated hook to get timelineEvents
   const { data, employees, partners, timelineEvents, isLoading, loadData } = useAdminData();
   const { toast } = useToast();
 
@@ -41,6 +40,8 @@ export default function Admin() {
   const [tempHero, setTempHero] = useState<HeroContent | null>(null);
   const [tempAbout, setTempAbout] = useState<AboutContent | null>(null);
   const [tempContact, setTempContact] = useState<ContactContent | null>(null);
+  // Add state for services page content
+  const [tempServicesContent, setTempServicesContent] = useState<ServicesPageContent | null>(null);
 
   const [isAddEmployeeDialogOpen, setAddEmployeeDialogOpen] = useState(false);
   const [newEmployee, setNewEmployee] = useState({ username: '', password: '' });
@@ -51,12 +52,16 @@ export default function Admin() {
       setTempHero(data.hero);
       setTempAbout(data.about);
       setTempContact(data.contact);
+      // Set initial state for services page content
+      setTempServicesContent(data.servicesPage);
     }
   }, [data]);
 
   const handleContentUpdate = useCallback(async (section: string, updatedContent: any) => {
     try {
-      const response = await fetch(`/api/content/${section}`, {
+      // Use a different endpoint for page-content
+      const apiPath = section === 'services-page' ? 'page-content' : section;
+      const response = await fetch(`/api/content/${apiPath}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedContent)
@@ -76,9 +81,11 @@ export default function Admin() {
   const handleToggleEdit = useCallback((section: string) => {
     if (editingSection === section) {
       setEditingSection(null);
+      // Reset temporary states on cancel
       setTempHero(data?.hero || null);
       setTempAbout(data?.about || null);
       setTempContact(data?.contact || null);
+      setTempServicesContent(data?.servicesPage || null);
     } else {
       setEditingSection(section);
     }
@@ -202,12 +209,13 @@ export default function Admin() {
             heroContent: data.hero,
             aboutContent: data.about,
             services: data.services,
+            servicesPageContent: data.servicesPage, // Pass services page content
             projects: data.projects,
             partners: partners,
             contactContent: data.contact,
             categories: data.categories,
             employees: employees,
-            timelineEvents: timelineEvents, // Pass timeline data to tabs
+            timelineEvents: timelineEvents,
           }}
           state={{
             editingSection, setEditingSection,
@@ -215,6 +223,7 @@ export default function Admin() {
             tempHero, setTempHero,
             tempAbout, setTempAbout,
             tempContact, setTempContact,
+            tempServicesContent, setTempServicesContent, // Pass services page state
             selectedHeroImage: dialogs.selectedProjectImage,
             setSelectedHeroImage: dialogs.setSelectedProjectImage,
             setAddEmployeeDialogOpen,
@@ -231,7 +240,6 @@ export default function Admin() {
             handleDeleteCategory: contentManagement.handleDeleteCategory,
             handleDeleteProject: contentManagement.handleDeleteProject,
             openProjectDialog: dialogs.openProjectDialog,
-            // Pass timeline handlers
             handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
             openTimelineDialog: dialogs.openTimelineDialog,
           }}

@@ -9,7 +9,7 @@ import { PartnersSection } from './dashboard/PartnersSection';
 import { ContactSection } from './dashboard/ContactSection';
 import { UsersSection } from './dashboard/UsersSection';
 import { BackupSection } from './dashboard/BackupSection';
-import { TimelineSection } from './dashboard/TimelineSection'; // Import the new section component
+import { TimelineSection } from './dashboard/TimelineSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface ContentTabsProps {
@@ -26,7 +26,6 @@ interface ContentTabsProps {
     handleDeleteCategory: (id: number) => Promise<void>;
     handleDeleteProject: (id: number) => Promise<void>;
     openProjectDialog: (project: any) => void;
-    // Add the new handler types to fix the error
     handleDeleteTimelineEvent: (id: number) => Promise<void>;
     openTimelineDialog: (event: any) => void;
   };
@@ -35,19 +34,18 @@ interface ContentTabsProps {
 
 export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, state, handlers, dialogs }) => {
   const {
-    heroContent, aboutContent, services, projects, partners, contactContent, categories, employees, timelineEvents
+    heroContent, aboutContent, services, servicesPageContent, projects, partners, contactContent, categories, employees, timelineEvents
   } = data;
 
   const {
-    editingSection, isUploading, tempHero, tempAbout, tempContact, selectedHeroImage, setSelectedHeroImage,
-    setAddEmployeeDialogOpen
+    editingSection, isUploading, tempHero, tempAbout, tempContact, tempServicesContent, selectedHeroImage, setSelectedHeroImage,
+    setAddEmployeeDialogOpen, setTempServicesContent
   } = state;
 
   const {
     handleContentUpdate, handleToggleEdit, handleAddEmployee, handleDeleteEmployee, handleExport, handleImport,
     handleDeleteProject,
     openProjectDialog,
-    // Destructure the new handlers
     handleDeleteTimelineEvent,
     openTimelineDialog
   } = handlers;
@@ -64,13 +62,12 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
       </CardHeader>
       <CardContent>
         <Tabs defaultValue={currentUser.role === 'ADMIN' ? 'hero' : 'projects'}>
-          {/* Adjust grid columns to account for the new Timeline tab */}
           <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-3'} bg-gray-100`}>
             {currentUser.role === 'ADMIN' && (
               <>
                 <TabsTrigger value="hero">Hero</TabsTrigger>
                 <TabsTrigger value="about">About</TabsTrigger>
-                <TabsTrigger value="timeline">Timeline</TabsTrigger> {/* Add Timeline tab */}
+                <TabsTrigger value="timeline">Timeline</TabsTrigger>
               </>
             )}
             <TabsTrigger value="services">Services</TabsTrigger>
@@ -110,7 +107,6 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
                   setTempAbout={state.setTempAbout}
                 />
               </TabsContent>
-              {/* Add the content for the new Timeline tab */}
               <TabsContent value="timeline" className="mt-6">
                 <TimelineSection
                   timelineEvents={timelineEvents}
@@ -124,6 +120,12 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
           <TabsContent value="services" className="mt-6">
             <ServicesSection
               services={services}
+              servicesPageContent={servicesPageContent}
+              tempServicesContent={tempServicesContent}
+              setTempServicesContent={setTempServicesContent}
+              editingSection={editingSection}
+              handleToggleEdit={handleToggleEdit}
+              handleContentUpdate={handleContentUpdate}
               openSubServiceDialog={openSubServiceDialog}
               handleDeleteSubService={handleDeleteSubService}
               isUploading={isUploading}

@@ -13,7 +13,8 @@ export async function GET() {
       services,
       projects,
       contact,
-      categories
+      categories,
+      servicesPageContent // Added this line
     ] = await Promise.all([
       prisma.visitStats.findFirst(),
       prisma.hero.findFirst(),
@@ -29,7 +30,9 @@ export async function GET() {
       }),
       prisma.project.findMany({ include: { category: true }, orderBy: { id: 'asc' } }),
       prisma.contact.findFirst(),
-      prisma.category.findMany({ orderBy: { id: 'asc' } })
+      prisma.category.findMany({ orderBy: { id: 'asc' } }),
+      // Added this query to fetch the new page content
+      prisma.pageContent.findUnique({ where: { pageName: 'services' } })
     ]);
 
     // Ensure visits data exists
@@ -52,7 +55,8 @@ export async function GET() {
       services,
       projects,
       contact,
-      categories
+      categories,
+      servicesPage: servicesPageContent // Added this to the response
     });
 
   } catch (error) {

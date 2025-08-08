@@ -1,0 +1,114 @@
+{
+  "hero": {
+    "title": "Mitra Konstruksi & Arsitektur Terpercaya Anda",
+    "subtitle": "Menyediakan solusi terintegrasi mulai dari perizinan hingga penyelesaian proyek dengan standar kualitas dan profesionalisme tertinggi.",
+    "buttonText": "Hubungi Kami",
+    "image": "/images/hero-placeholder.jpg"
+  },
+  "services": {
+    "items": [
+      {
+        "title": "Perencanaan & Desain",
+        "description": "Layanan perencanaan arsitektur dan struktural yang inovatif dan efisien.",
+        "icon": "Building",
+        "subServices": [
+          {
+            "title": "Desain Arsitektur",
+            "description": "Konsep desain bangunan yang fungsional dan estetis.",
+            "image": "/images/services/architecture.jpg"
+          },
+          {
+            "title": "Desain Struktur",
+            "description": "Perencanaan struktur yang kokoh dan aman sesuai standar.",
+            "image": "/images/services/structure.jpg"
+          }
+        ]
+      },
+      {
+        "title": "Pengawasan",
+        "description": "Memastikan proyek berjalan sesuai rencana, waktu, dan anggaran.",
+        "icon": "Eye",
+        "subServices": []
+      },
+      {
+        "title": "Perizinan",
+        "description": "Pengurusan IMB, SLF, dan perizinan terkait lainnya dengan cepat.",
+        "icon": "FileText",
+        "subServices": []
+      },
+      {
+        "title": "Studi",
+        "description": "Analisis mendalam untuk kelayakan dan optimalisasi proyek.",
+        "icon": "BookOpen",
+        "subServices": []
+      },
+      {
+        "title": "Pengadaan Tanah",
+        "description": "Jasa pembebasan dan pengadaan lahan untuk kebutuhan proyek.",
+        "icon": "MapPin",
+        "subServices": []
+      },
+      {
+        "title": "Pekerja Lain",
+        "description": "Solusi tenaga kerja terampil untuk berbagai kebutuhan konstruksi.",
+        "icon": "Users",
+        "subServices": []
+      }
+    ]
+  },
+  "projects": {
+    "categories": [
+      "Perencanaan & Desain",
+      "Pengawasan",
+      "Studi"
+    ],
+    "items": [
+      {
+        "title": "Proyek Pembangunan Gedung A",
+        "description": "Pembangunan gedung perkantoran modern dengan 5 lantai di pusat kota.",
+        "image": "/images/projects/project1.jpg",
+        "client": "PT Sejahtera",
+        "completedDate": "2023",
+        "category": "Perencanaan & Desain"
+      },
+      {
+        "title": "Pengawasan Jembatan Merah Putih",
+        "description": "Pengawasan kualitas dan progres pembangunan jembatan antar provinsi.",
+        "image": "/images/projects/project2.jpg",
+        "client": "Dinas PU",
+        "completedDate": "2024",
+        "category": "Pengawasan"
+      }
+    ]
+  },
+  "statistics": {
+    "items": [
+      { "number": "150+", "label": "Proyek Selesai", "icon": "Building" },
+      { "number": "120+", "label": "Klien Puas", "icon": "Users" },
+      { "number": "10+", "label": "Tahun Pengalaman", "icon": "Award" }
+    ]
+  },
+  "partners": {
+    "logos": [
+      "/images/partners/logo1.png",
+      "/images/partners/logo2.png",
+      "/images/partners/logo3.png",
+      "/images/partners/logo4.png"
+    ]
+  },
+  "about": {
+    "title": "Tentang CV Reswara Praptama",
+    "content": "Kami adalah perusahaan konsultan teknik yang berdedikasi untuk memberikan layanan terbaik dalam perencanaan, pengawasan, dan manajemen proyek.",
+    "mission": "Memberikan solusi rekayasa teknik yang inovatif, efisien, dan berkelanjutan untuk memenuhi kebutuhan klien.",
+    "vision": "Menjadi perusahaan konsultan teknik terdepan di Indonesia yang dikenal karena integritas dan kualitas.",
+    "values": ["Profesionalisme", "Integritas", "Kualitas", "Inovasi"]
+  },
+  "contact": {
+    "title": "Hubungi Kami",
+    "subtitle": "Siap untuk memulai proyek Anda? Tim kami siap membantu.",
+    "address": "Jl. Cendrawasih IV Blok A7 No. 2, Cikarang Utara, Bekasi",
+    "phone": "(021) 2908-3617",
+    "email": "reswaracorp@gmail.com",
+    "hours": "Senin - Jumat: 08:00 - 17:00"
+  }
+}

@@ -19,6 +19,7 @@ async function main() {
   await prisma.about.deleteMany({});
   await prisma.contact.deleteMany({});
   await prisma.visitStats.deleteMany({});
+  await prisma.pageContent.deleteMany({});
   console.log('Cleared previous data.');
 
   // --- Load data from JSON files ---
@@ -96,6 +97,16 @@ async function main() {
   
   await prisma.contact.create({ data: contentData.contact });
   console.log('✅ Contact seeded.');
+
+  // --- Seed PageContent ---
+await prisma.pageContent.create({
+  data: {
+    pageName: 'services',
+    title: 'Solusi Terintegrasi Dunia Teknik',
+    subtitle: 'Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.',
+  },
+});
+console.log('✅ PageContent for services seeded.');
 
 
   console.log('Seeding finished successfully!');
