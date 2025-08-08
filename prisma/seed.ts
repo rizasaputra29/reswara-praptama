@@ -41,14 +41,12 @@ async function main() {
   console.log('✅ Hero seeded.');
   
   // --- Seed Services and SubServices ---
-  const createdServices = [];
   for (const service of contentData.services.items) {
     const { subServices, ...serviceData } = service; // Separate subServices from parent data
     
     const createdService = await prisma.service.create({
       data: serviceData,
     });
-    createdServices.push(createdService);
     
     if (subServices && subServices.length > 0) {
       await prisma.subService.createMany({
@@ -61,39 +59,31 @@ async function main() {
   }
   console.log('✅ Services and SubServices seeded.');
 
-  // --- Seed Categories from Services ---
-  const categoryData = createdServices.map(service => ({ name: service.title }));
-  await prisma.category.createMany({
-    data: categoryData,
-  });
-  const categoryRecords = await prisma.category.findMany();
-  console.log('✅ Categories seeded from services.');
+  // --- Seed Categories and Projects ---
+  const categories = contentData.projects.categories.filter((cat: string) => cat !== 'Semua');
+  const categoryRecords = await Promise.all(
+    categories.map((name: string) => prisma.category.create({ data: { name } }))
+  );
+  console.log('✅ Categories seeded.');
 
-  const categoryMap = categoryRecords.reduce((acc, category) => {
+  // FIX: Add explicit types for the reduce parameters
+  const categoryMap = categoryRecords.reduce((acc: Record<string, number>, category: { name: string; id: number }) => {
     acc[category.name] = category.id;
     return acc;
   }, {} as Record<string, number>);
 
-  // FIX: Associate projects with categories derived from services
   const projectsToCreate = contentData.projects.items.map((project: any) => {
     const { category, ...restOfProject } = project;
-    const categoryId = categoryMap[category];
-    if (!categoryId) {
-        console.warn(`Warning: Category "${category}" for project "${project.title}" not found. Skipping project.`);
-        return null;
-    }
     return {
       ...restOfProject,
-      categoryId: categoryId,
+      categoryId: categoryMap[category],
     };
-  }).filter(Boolean); // Filter out nulls for projects with no category
+  });
 
-  if(projectsToCreate.length > 0) {
-    await prisma.project.createMany({
-        data: projectsToCreate as any,
-    });
-    console.log('✅ Projects seeded.');
-  }
+  await prisma.project.createMany({
+    data: projectsToCreate,
+  });
+  console.log('✅ Projects seeded.');
 
   // --- Seed Statistics, Partners, About, Contact ---
   await prisma.statistic.createMany({ data: contentData.statistics.items });
@@ -117,7 +107,6 @@ async function main() {
     },
   });
   console.log('✅ PageContent for services seeded.');
-
 
   console.log('Seeding finished successfully!');
 }
