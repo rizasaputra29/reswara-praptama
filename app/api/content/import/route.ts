@@ -1,3 +1,4 @@
+// app/api/content/import/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
@@ -19,6 +20,9 @@ export async function POST(request: NextRequest) {
       await tx.hero.deleteMany({});
       await tx.about.deleteMany({});
       await tx.contact.deleteMany({});
+      await tx.timelineEvent.deleteMany({});
+      await tx.pageContent.deleteMany({});
+
 
       // Import new data
       if (data.hero) {
@@ -86,6 +90,12 @@ export async function POST(request: NextRequest) {
       }
       if (data.contact) {
         await tx.contact.createMany({ data: data.contact });
+      }
+      if (data.timelineEvents) {
+        await tx.timelineEvent.createMany({ data: data.timelineEvents });
+      }
+      if (data.pageContent) {
+        await tx.pageContent.createMany({ data: data.pageContent });
       }
     });
 

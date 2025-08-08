@@ -19,6 +19,8 @@ export async function GET() {
       const about = await tx.about.findMany();
       const contact = await tx.contact.findMany();
       const categories = await tx.category.findMany();
+      const timelineEvents = await tx.timelineEvent.findMany();
+      const pageContent = await tx.pageContent.findMany();
 
       return {
         hero,
@@ -29,6 +31,8 @@ export async function GET() {
         about,
         contact,
         categories,
+        timelineEvents,
+        pageContent,
       };
     });
 
