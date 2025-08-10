@@ -73,17 +73,17 @@ export default function ContactClientComponent({ contactContent }: ContactClient
       }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mt-9 mb-3">
               {contactContent.title}
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-white max-w-3xl mx-auto">
               {contactContent.subtitle}
             </p>
           </AnimatedSection>
         </div>
         
         {/* Contact Section */}
-        <section className="py-14">
+        <section className="py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-2">
             <AnimatedSection>
               <div>

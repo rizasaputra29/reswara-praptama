@@ -5,32 +5,24 @@ import { useEffect } from 'react';
 
 const VisitTracker = () => {
   useEffect(() => {
-    // Track visit only once per session
-    const hasTrackedThisSession = sessionStorage.getItem('visitTracked');
-
-    if (hasTrackedThisSession) {
-      return;
-    }
-
-    const trackVisit = async () => {
-      try {
-        await fetch('/api/visits', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-
-        // Mark as tracked for this session
-        sessionStorage.setItem('visitTracked', 'true');
-      } catch (error) {
-        console.error("Failed to track visit:", error);
-      }
-    };
-
-    // Add a small delay to ensure the page has loaded
-    const timer = setTimeout(trackVisit, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+    // This is a direct, simplified call to the API.
+    fetch('/api/visits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("Visit tracked successfully!");
+          // Store in session storage on successful call
+          sessionStorage.setItem('visitTracked', 'true');
+        } else {
+          console.error("Failed to track visit. Server responded with an error.");
+        }
+      })
+      .catch(error => {
+        console.error("Failed to track visit. Network error:", error);
+      });
+  }, []); // Run only once when the component mounts
 
   return null;
 };
