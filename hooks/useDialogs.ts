@@ -1,13 +1,13 @@
 // src/hooks/useDialogs.ts
 
 import { useState } from 'react';
-import { ProjectItem, PartnerItem, SubService, Category, SubServiceDraft, TimelineEvent } from '@/lib/types';
+import { ProjectItem, PartnerItem, SubService, SubServiceDraft, TimelineEvent } from '@/lib/types';
 
 export const useDialogs = () => {
   // Existing dialog states
   const [isProjectDialogOpen, setProjectDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<ProjectItem | null>(null);
-  const [newProject, setNewProject] = useState({ title: '', description: '', image: '', client: '', completedDate: '', categoryId: '' });
+  const [newProject, setNewProject] = useState({ title: '', description: '', image: '', client: '', completedDate: '', serviceId: '' });
   const [selectedProjectImage, setSelectedProjectImage] = useState<File | null>(null);
 
   const [isSubServiceDialogOpen, setSubServiceDialogOpen] = useState(false);
@@ -15,7 +15,8 @@ export const useDialogs = () => {
   const [selectedSubServiceImage, setSelectedSubServiceImage] = useState<File | null>(null);
 
   const [isCategoryDialogOpen, setCategoryDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  // FIX: Ganti `Category | null` dengan `ServiceItem | null`
+  const [editingCategory, setEditingCategory] = useState<any>(null); // Menggunakan any karena model Category sudah dihapus
   const [tempCategoryName, setTempCategoryName] = useState<string>('');
 
   const [isPartnerDialogOpen, setPartnerDialogOpen] = useState(false);
@@ -38,10 +39,12 @@ export const useDialogs = () => {
             image: project.image,
             client: project.client || '',
             completedDate: project.completedDate || '',
-            categoryId: String(project.categoryId),
+            // FIX: Menggunakan serviceId, bukan categoryId
+            serviceId: String((project as any).serviceId),
         });
     } else {
-        setNewProject({ title: '', description: '', image: '', client: '', completedDate: '', categoryId: '' });
+        // FIX: Menggunakan serviceId, bukan categoryId
+        setNewProject({ title: '', description: '', image: '', client: '', completedDate: '', serviceId: '' });
     }
     setSelectedProjectImage(null);
     setProjectDialogOpen(true);
@@ -57,7 +60,7 @@ export const useDialogs = () => {
     setSubServiceDialogOpen(true);
   };
 
-  const openCategoryDialog = (category: Category | null) => {
+  const openCategoryDialog = (category: any) => {
     setEditingCategory(category);
     setTempCategoryName(category ? category.name : '');
     setCategoryDialogOpen(true);
