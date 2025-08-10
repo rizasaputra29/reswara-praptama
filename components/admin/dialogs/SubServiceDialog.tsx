@@ -1,6 +1,6 @@
 // src/components/admin/dialogs/SubServiceDialog.tsx
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,6 +31,8 @@ export const SubServiceDialog: React.FC<SubServiceDialogProps> = ({
   };
 
   if (!editingSubService) return null;
+
+  const isSaveDisabled = !editingSubService.title || !editingSubService.description;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -74,7 +76,7 @@ export const SubServiceDialog: React.FC<SubServiceDialogProps> = ({
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={isUploading}>
+            <Button onClick={handleSubmit} disabled={isUploading || isSaveDisabled}>
               {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               Save
             </Button>

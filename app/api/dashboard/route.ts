@@ -13,7 +13,6 @@ export async function GET() {
       services,
       projects,
       contact,
-      categories,
       servicesPageContent
     ] = await Promise.all([
       prisma.visitStats.findFirst(),
@@ -29,7 +28,6 @@ export async function GET() {
       }),
       prisma.project.findMany({ include: { service: true }, orderBy: { id: 'asc' } }),
       prisma.contact.findFirst(),
-      prisma.service.findMany({ orderBy: { id: 'asc' } }),
       prisma.pageContent.findUnique({ where: { pageName: 'services' } })
     ]);
 
@@ -51,7 +49,7 @@ export async function GET() {
       services,
       projects,
       contact,
-      categories: categories.map(c => ({ id: c.id, name: c.title })),
+      // FIX: Hapus `categories` atau perbarui untuk menggunakan `ServiceItem[]`
       servicesPage: servicesPageContent
     });
 

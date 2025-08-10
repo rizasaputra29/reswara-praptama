@@ -31,6 +31,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   setTempHero,
   setSelectedHeroImage,
 }) => {
+  const isSaveDisabled = !tempHero?.title || !tempHero?.subtitle || !tempHero?.buttonText;
+
   return (
     <Card className="border-0 shadow-md">
       <CardHeader>
@@ -42,7 +44,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <Button 
             variant={editingSection === 'hero' ? 'default' : 'outline'}
             onClick={() => editingSection === 'hero' ? handleContentUpdate('hero', tempHero) : handleToggleEdit('hero')} 
-            disabled={isUploading}
+            disabled={isUploading || (editingSection === 'hero' && isSaveDisabled)}
             className="flex items-center space-x-2"
           >
             {editingSection === 'hero' ? (

@@ -1,3 +1,4 @@
+// app/api/content/contact/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
@@ -18,12 +19,12 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   try {
     const data = await request.json();
 
-    if (!data.id) {
-        return NextResponse.json({ error: 'Contact content ID is required' }, { status: 400 });
+    if (!data.id || !data.title || !data.subtitle || !data.address || !data.phone || !data.email || !data.hours) {
+        return NextResponse.json({ error: 'All contact fields are required' }, { status: 400 });
     }
     
     const updatedContact = await prisma.contact.update({
-        where: { id: data.id }, // FIX: Menggunakan ID dari request
+        where: { id: data.id },
         data: {
             title: data.title,
             subtitle: data.subtitle,

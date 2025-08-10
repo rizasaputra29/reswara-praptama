@@ -71,6 +71,8 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
     await onSubmit(formData, isEditing, selectedImage);
     onOpenChange(false);
   };
+  
+  const isSaveDisabled = !formData.title || !formData.serviceId || !formData.description || (!formData.image && !selectedImage)
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -140,7 +142,7 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={isUploading}>
+            <Button onClick={handleSubmit} disabled={isUploading || isSaveDisabled}>
               {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               Save Changes
             </Button>

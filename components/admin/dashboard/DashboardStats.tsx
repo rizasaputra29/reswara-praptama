@@ -13,10 +13,9 @@ interface DashboardStatsProps {
 }
 
 export const DashboardStats: React.FC<DashboardStatsProps> = ({ currentUser, visitStats, projectsCount }) => {
-  if (currentUser.role !== 'ADMIN') {
-    return null;
-  }
-
+  // FIX: Hapus baris if (currentUser.role !== 'ADMIN') { return null; }
+  // agar semua peran dapat melihat stats
+  
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <Card className="text-white border-0">

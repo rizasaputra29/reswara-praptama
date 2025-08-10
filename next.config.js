@@ -10,9 +10,9 @@ const nextConfig = {
     unoptimized: true 
   },
   
-  // Add experimental features to help with module resolution
+  // FIX: Ganti `serverComponentsExternalPackages` dengan `serverExternalPackages`
   experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma']
+    serverExternalPackages: ['@prisma/client', 'prisma']
   },
   
   // Ensure proper webpack configuration for Prisma

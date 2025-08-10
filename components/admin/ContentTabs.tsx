@@ -78,15 +78,15 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
       </CardHeader>
       <CardContent>
         <Tabs defaultValue={currentUser.role === 'ADMIN' ? 'hero' : 'projects'}>
-          <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-3'} bg-gray-100`}>
+          <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-2'} bg-gray-100`}>
             {currentUser.role === 'ADMIN' && (
               <>
                 <TabsTrigger value="hero">Hero</TabsTrigger>
                 <TabsTrigger value="about">About</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
+                <TabsTrigger value="services">Services</TabsTrigger>
               </>
             )}
-            <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="partners">Partners</TabsTrigger>
             {currentUser.role === 'ADMIN' && (
@@ -130,25 +130,24 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
                   handleDeleteTimelineEvent={handleDeleteTimelineEvent}
                 />
               </TabsContent>
+              <TabsContent value="services" className="mt-6">
+                <ServicesSection
+                  services={services}
+                  servicesPageContent={servicesPageContent}
+                  tempServicesContent={tempServicesContent}
+                  setTempServicesContent={setTempServicesContent}
+                  editingSection={editingSection}
+                  handleToggleEdit={handleToggleEdit}
+                  handleContentUpdate={handleContentUpdate}
+                  openSubServiceDialog={openSubServiceDialog}
+                  handleDeleteSubService={handleDeleteSubService}
+                  isUploading={isUploading}
+                  tempServices={tempServices}
+                  setTempServices={setTempServices}
+                />
+              </TabsContent>
             </>
           )}
-
-          <TabsContent value="services" className="mt-6">
-            <ServicesSection
-              services={services}
-              servicesPageContent={servicesPageContent}
-              tempServicesContent={tempServicesContent}
-              setTempServicesContent={setTempServicesContent}
-              editingSection={editingSection}
-              handleToggleEdit={handleToggleEdit}
-              handleContentUpdate={handleContentUpdate}
-              openSubServiceDialog={openSubServiceDialog}
-              handleDeleteSubService={handleDeleteSubService}
-              isUploading={isUploading}
-              tempServices={tempServices}
-              setTempServices={setTempServices}
-            />
-          </TabsContent>
 
           <TabsContent value="projects" className="mt-6">
             <ProjectsSection

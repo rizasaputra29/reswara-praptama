@@ -1,5 +1,4 @@
 // app/page.tsx
-// Hapus "use client"
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HeroSection from '@/components/HeroSection';
@@ -9,7 +8,6 @@ import StatisticsSection from '@/components/StatisticsSection';
 import PartnersSection from '@/components/PartnersSection';
 import { getHomePageContent } from '@/lib/data';
 
-// 1. TAMBAHKAN BARIS INI untuk memaksa halaman selalu dinamis
 export const revalidate = 0;
 
 export default async function Home() {
@@ -23,11 +21,15 @@ export default async function Home() {
     );
   }
 
+  const projectCount = content.projects.items.length;
+  const partnerCount = content.partners.logos.length;
+  // FIX: Ambil subservicesCount yang baru dari `content`
+  const subservicesCount = content.subservicesCount;
+
   return (
     <main>
       <Navbar />
       
-      {/* 2. KIRIM DATA ke HeroSection sebagai props */}
       <HeroSection 
         title={content.hero.title}
         subtitle={content.hero.subtitle}
@@ -46,7 +48,7 @@ export default async function Home() {
       <ProjectsSection
         title={content.projects.title}
         subtitle={content.projects.subtitle}
-        categories={content.projects.categories.map((cat: string | number) => String(cat))}
+        categories={content.projects.categories}
         projects={content.projects.items.map((project: any) => ({
           ...project,
           client: project.client === null ? undefined : project.client,
@@ -54,12 +56,13 @@ export default async function Home() {
         isHomePage={true}
         displayBackgroundCard={true}
       />
+      
       <StatisticsSection
-        statistics={content.statistics.items.map((stat: any) => ({
-          ...stat,
-          icon: stat.icon as "Building" | "Users" | "Award",
-        }))}
+        projectsCount={projectCount}
+        partnersCount={partnerCount}
+        subservicesCount={subservicesCount}
       />
+      
       <PartnersSection
         title={content.partners.title}
         subtitle={content.partners.subtitle}

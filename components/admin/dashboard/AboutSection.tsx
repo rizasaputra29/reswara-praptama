@@ -25,6 +25,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   handleToggleEdit,
   setTempAbout,
 }) => {
+  const isSaveDisabled = !tempAbout?.title || !tempAbout?.content || !tempAbout?.mission || !tempAbout?.vision;
+
   return (
     <Card className="border-0 shadow-md">
       <CardHeader>
@@ -37,6 +39,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             variant={editingSection === 'about' ? 'default' : 'outline'}
             onClick={() => editingSection === 'about' ? handleContentUpdate('about', tempAbout) : handleToggleEdit('about')} 
             className="flex items-center space-x-2"
+            disabled={editingSection === 'about' && isSaveDisabled}
           >
             {editingSection === 'about' ? <Save className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
             <span>{editingSection === 'about' ? 'Save Changes' : 'Edit Content'}</span>

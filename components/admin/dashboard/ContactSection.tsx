@@ -30,6 +30,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     { key: 'email', label: 'Email' },
     { key: 'hours', label: 'Hours' },
   ];
+  
+  const isSaveDisabled = !tempContact?.address || !tempContact?.phone || !tempContact?.email || !tempContact?.hours;
 
   return (
     <Card className="border-0 shadow-md">
@@ -43,6 +45,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             variant={editingSection === 'contact' ? 'default' : 'outline'}
             onClick={() => editingSection === 'contact' ? handleContentUpdate('contact', tempContact) : handleToggleEdit('contact')}
             className="flex items-center space-x-2"
+            disabled={editingSection === 'contact' && isSaveDisabled}
           >
             {editingSection === 'contact' ? <Save className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
             <span>{editingSection === 'contact' ? 'Save Changes' : 'Edit Content'}</span>

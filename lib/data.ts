@@ -16,6 +16,8 @@ export async function getHomePageContent() {
     const categories = await prisma.service.findMany({ orderBy: { id: 'asc' } });
     const statistics = await prisma.statistic.findMany({ orderBy: { id: 'asc' } });
     const partners = await prisma.partner.findMany({ orderBy: { id: 'asc' } });
+    // FIX: Tambahkan query untuk menghitung total sub-layanan
+    const subservicesCount = await prisma.subService.count();
 
     const validProjects = projects ? projects.filter(p => p.service) : [];
     const projectsData = {
@@ -44,7 +46,8 @@ export async function getHomePageContent() {
       services: servicesData, 
       projects: projectsData, 
       statistics: statisticsData, 
-      partners: partnersData 
+      partners: partnersData,
+      subservicesCount,
     };
 
   } catch (error) {

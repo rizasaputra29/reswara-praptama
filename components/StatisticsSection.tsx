@@ -1,3 +1,4 @@
+// components/StatisticsSection.tsx
 "use client";
 
 import { motion } from 'framer-motion';
@@ -5,22 +6,26 @@ import { Building, Users, Award } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 
 const iconMap = {
-  Building,
-  Users,
-  Award
-};
+  Building: Building,
+  Users: Users,
+  Award: Award
+} as const;
 
-interface Statistic {
-  number: string;
-  label: string;
-  icon: keyof typeof iconMap;
-}
+type IconName = keyof typeof iconMap;
 
 interface StatisticsSectionProps {
-  statistics: Statistic[];
+  projectsCount: number;
+  partnersCount: number;
+  subservicesCount: number;
 }
 
-const StatisticsSection = ({ statistics }: StatisticsSectionProps) => {
+const StatisticsSection = ({ projectsCount, partnersCount, subservicesCount }: StatisticsSectionProps) => {
+  const statistics: { number: string; label: string; icon: IconName }[] = [
+    { number: `${projectsCount}+`, label: "Proyek Selesai", icon: "Building" },
+    { number: `${partnersCount}+`, label: "Klien Puas", icon: "Users" },
+    { number: `${subservicesCount}+`, label: "Sub-Layanan Disediakan", icon: "Award" },
+  ];
+  
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +65,7 @@ const StatisticsSection = ({ statistics }: StatisticsSectionProps) => {
                     >
                       {stat.number}
                     </motion.div>
-                    <p className="text-xl text-gray-300">{stat.label}</p>
+                    <p className="text-xl text-white">{stat.label}</p>
                   </motion.div>
                 );
               })}

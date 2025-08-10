@@ -21,7 +21,6 @@ interface ServicesSectionProps {
   openSubServiceDialog: (subService: SubService | null, serviceId?: number) => void;
   handleDeleteSubService: (id: number) => Promise<void>;
   isUploading: boolean;
-  // Menambahkan props baru
   tempServices: ServiceItem[] | null;
   setTempServices: (services: ServiceItem[] | null) => void;
 }
@@ -42,6 +41,8 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
 }) => {
   const isEditingHeader = editingSection === 'services-page';
   const isEditingServices = editingSection === 'services';
+
+  const isHeaderSaveDisabled = !tempServicesContent?.title || !tempServicesContent?.subtitle;
 
   const handleServiceChange = (id: number, field: string, value: string) => {
     if (tempServices) {
@@ -71,6 +72,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             <Button
               variant={isEditingHeader ? 'default' : 'outline'}
               onClick={() => isEditingHeader ? handleContentUpdate('page-content', { pageName: 'services', ...tempServicesContent }) : handleToggleEdit('services-page')}
+              disabled={isEditingHeader && isHeaderSaveDisabled}
             >
               {isEditingHeader ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
               {isEditingHeader ? 'Save Header' : 'Edit Header'}
@@ -86,7 +88,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Editing fields for page header */}
         <div className="space-y-4 p-4 border rounded-lg bg-gray-50">
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Page Title</label>
@@ -112,7 +113,6 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </div>
         </div>
 
-        {/* Accordion for individual services */}
         <Accordion type="single" collapsible className="w-full">
           {services.map(service => (
             <AccordionItem value={`service-${service.id}`} key={service.id} className="border border-gray-200 rounded-lg mb-4 px-4">
