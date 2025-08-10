@@ -9,7 +9,10 @@ const onest = Onest({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Reswara Praptama - Construction & Architectural Services',
-  description: 'Comprehensive construction and architectural services from permits to project completion'
+  description: 'Comprehensive construction and architectural services from permits to project completion',
+  icons: {
+    icon: '/images/logo-merah.svg', // Add this line
+  }
 };
 
 export default function RootLayout({

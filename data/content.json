@@ -1,0 +1,218 @@
+{
+    "hero": {
+      "title": "Solusi Rekayasa Teknik Terpercaya untuk Proyek Anda",
+      "subtitle": "Kami menyediakan jasa konsultasi, perencanaan, dan pengawasan proyek di bidang teknik sipil dan arsitektur.",
+      "buttonText": "Pelajari Lebih Lanjut",
+      "image": "https://images.unsplash.com/photo-1621905251918-be42036c8477?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    },
+    "services": {
+      "title": "Solusi Terintegrasi Dunia Teknik",
+      "subtitle": "Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional.",
+      "items": [
+        {
+          "title": "Perencanaan & Desain",
+          "description": "Layanan komprehensif untuk perencanaan dan desain proyek, mulai dari konsep hingga dokumen teknis lengkap.",
+          "icon": "FileText",
+          "subServices": [
+            {
+              "title": "Perencanaan",
+              "description": "Studi kelayakan, analisis tapak, dan konsep desain awal."
+            },
+            {
+              "title": "Desain Teknis",
+              "description": "Pengembangan desain arsitektur, struktural, mekanikal, dan elektrikal."
+            }
+          ]
+        },
+        {
+          "title": "Studi & Pengawasan",
+          "description": "Pengawasan proyek yang ketat untuk memastikan pelaksanaan sesuai rencana dan standar kualitas yang ditetapkan.",
+          "icon": "Eye",
+          "subServices": [
+            {
+              "title": "Supervisi Konstruksi",
+              "description": "Pengawasan harian di lapangan untuk memastikan kualitas dan jadwal."
+            },
+            {
+              "title": "Audit Proyek",
+              "description": "Evaluasi independen terhadap progres dan kepatuhan proyek."
+            }
+          ]
+        },
+        {
+          "title": "Perizinan & Legalitas",
+          "description": "Pendampingan penuh dalam proses perizinan untuk menjamin kelancaran dan kepatuhan proyek terhadap regulasi yang berlaku.",
+          "icon": "BookOpen",
+          "subServices": [
+            {
+              "title": "Izin Mendirikan Bangunan (IMB)",
+              "description": "Pengurusan semua dokumen dan perizinan IMB."
+            },
+            {
+              "title": "Surat Keterangan Rencana Kota (SKRK)",
+              "description": "Pengurusan surat keterangan untuk peruntukan lahan."
+            }
+          ]
+        },
+        {
+          "title": "Studi & Investigasi",
+          "description": "Kami menyediakan layanan studi dan investigasi untuk memastikan proyek Anda dibangun di atas dasar yang kokoh.",
+          "icon": "BookOpen",
+          "subServices": [
+            {
+              "title": "Studi Kelayakan",
+              "description": "Analisis mendalam mengenai potensi dan risiko proyek."
+            },
+            {
+              "title": "Investigasi Geoteknik",
+              "description": "Penyelidikan kondisi tanah untuk fondasi yang aman."
+            }
+          ]
+        },
+        {
+          "title": "Manajemen Konstruksi",
+          "description": "Layanan manajemen profesional untuk mengelola proyek dari awal hingga selesai, memastikan efisiensi dan hasil terbaik.",
+          "icon": "Building",
+          "subServices": [
+            {
+              "title": "Manajemen Proyek",
+              "description": "Koordinasi jadwal, anggaran, dan sumber daya proyek."
+            },
+            {
+              "title": "Konsultasi Teknis",
+              "description": "Pemberian saran ahli untuk tantangan teknis proyek."
+            }
+          ]
+        },
+        {
+          "title": "Jasa Arsitektur",
+          "description": "Desain arsitektur inovatif dan fungsional yang memenuhi kebutuhan estetika dan kepraktisan, dari residensial hingga komersial.",
+          "icon": "MapPin",
+          "subServices": [
+            {
+              "title": "Desain Bangunan",
+              "description": "Perancangan bangunan baru dan renovasi."
+            },
+            {
+              "title": "Interior Design",
+              "description": "Perancangan interior yang estetik dan fungsional."
+            }
+          ]
+        }
+      ]
+    },
+    "projects": {
+      "title": "Proyek Unggulan",
+      "subtitle": "Lihat portofolio kami yang beragam untuk melihat kualitas pekerjaan kami.",
+      "categories": ["Semua", "Perencanaan & Desain", "Manajemen Konstruksi", "Jasa Arsitektur"],
+      "items": [
+        {
+          "title": "Reswara Office Park",
+          "description": "Pembangunan kompleks perkantoran modern dengan desain minimalis dan efisiensi energi.",
+          "image": "https://images.unsplash.com/photo-1541349692484-9040c5da8826?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "client": "Surabaya",
+          "completedDate": "2023",
+          "category": "Perencanaan & Desain"
+        },
+        {
+          "title": "Grand Residential",
+          "description": "Perancangan dan pengawasan proyek perumahan mewah dengan fasilitas lengkap dan terintegrasi.",
+          "image": "https://images.unsplash.com/photo-1516455590571-18256e56166a?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "client": "Jakarta",
+          "completedDate": "2024",
+          "category": "Manajemen Konstruksi"
+        },
+        {
+          "title": "Commercial Hub",
+          "description": "Pengelolaan konstruksi pusat perbelanjaan dan area komersial di pusat kota dengan aksesibilitas tinggi.",
+          "image": "https://images.unsplash.com/photo-1622359491741-2b0e64c1c98e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "client": "Bandung",
+          "completedDate": "2023",
+          "category": "Manajemen Konstruksi"
+        },
+        {
+          "title": "Modern House",
+          "description": "Jasa desain arsitektur untuk hunian modern yang mengedepankan fungsionalitas dan estetika.",
+          "image": "https://images.unsplash.com/photo-1582268480309-8088035b863d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "client": "Denpasar",
+          "completedDate": "2024",
+          "category": "Jasa Arsitektur"
+        }
+      ]
+    },
+    "statistics": {
+      "items": [
+        {
+          "number": "50+",
+          "label": "Project Selesai",
+          "icon": "Building"
+        },
+        {
+          "number": "100+",
+          "label": "Klien Puas",
+          "icon": "Users"
+        },
+        {
+          "number": "10",
+          "label": "Tahun Pengalaman",
+          "icon": "Award"
+        }
+      ]
+    },
+    "partners": {
+      "title": "Klien Kami",
+      "subtitle": "Kami bangga menjadi mitra terpercaya bagi perusahaan dan organisasi terkemuka di berbagai sektor.",
+      "logos": [
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-1_qg3c8f.png",
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-2_a9t2g4.png",
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-3_hsmv8x.png",
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-4_pkhv0q.png",
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-5_t42f9b.png",
+        "https://res.cloudinary.com/dnhy90t9p/image/upload/v1721588636/resawara/partner-6_s2a4e2.png"
+      ]
+    },
+    "about": {
+      "title": "Tentang Kami",
+      "content": "CV Reswara Praptama adalah perusahaan konsultan rekayasa teknik yang menyediakan solusi terintegrasi untuk berbagai kebutuhan proyek di bidang konstruksi dan arsitektur.",
+      "mission": "Memberikan solusi rekayasa teknik yang inovatif, efisien, dan berkelanjutan untuk mewujudkan proyek-proyek berkualitas tinggi.",
+      "vision": "Menjadi perusahaan konsultan rekayasa teknik terdepan yang dipercaya oleh klien dan diakui keunggulannya di tingkat nasional.",
+      "values": ["Profesionalisme", "Integritas", "Inovasi", "Kolaborasi", "Kualitas"]
+    },
+    "contact": {
+      "title": "Hubungi Kami",
+      "subtitle": "Kami siap membantu Anda. Jangan ragu untuk menghubungi kami melalui informasi di bawah ini.",
+      "address": "Jl. Raya Candi No. 123, Semarang",
+      "phone": "+62 812-3456-7890",
+      "email": "info@reswarapraptama.com",
+      "hours": "Senin - Jumat: 08:00 - 17:00"
+    },
+    "timelineEvents": [
+      {
+        "year": "2015",
+        "title": "Perusahaan Didirikan",
+        "description": "CV Reswara Praptama didirikan di Semarang, memulai perjalanan sebagai konsultan sipil."
+      },
+      {
+        "year": "2018",
+        "title": "Ekspansi ke Desain Arsitektur",
+        "description": "Memperluas layanan dengan membuka divisi desain arsitektur, menangani proyek residensial dan komersial."
+      },
+      {
+        "year": "2021",
+        "title": "Sertifikasi ISO 9001",
+        "description": "Meraih sertifikasi manajemen mutu ISO 9001, menegaskan komitmen terhadap standar kualitas internasional."
+      },
+      {
+        "year": "2023",
+        "title": "Membuka Cabang Baru",
+        "description": "Membuka kantor cabang di Jakarta untuk melayani pasar yang lebih luas di Indonesia."
+      }
+    ],
+    "pageContent": [
+      {
+        "pageName": "services",
+        "title": "Solusi Terintegrasi Dunia Teknik",
+        "subtitle": "Menyediakan jasa perizinan hingga konstruksi untuk kebutuhan proyek Anda dengan standar kualitas terbaik dan profesional."
+      }
+    ]
+  }
