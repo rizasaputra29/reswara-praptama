@@ -11,14 +11,15 @@ export async function GET() {
       const services = await tx.service.findMany({
         include: { subServices: true },
       });
+      // FIX: Ubah `include: { category: true }` menjadi `include: { service: true }`
       const projects = await tx.project.findMany({
-        include: { category: true },
+        include: { service: true },
       });
       const statistics = await tx.statistic.findMany();
       const partners = await tx.partner.findMany();
       const about = await tx.about.findMany();
       const contact = await tx.contact.findMany();
-      const categories = await tx.category.findMany();
+      // FIX: Hapus `const categories = await tx.category.findMany();`
       const timelineEvents = await tx.timelineEvent.findMany();
       const pageContent = await tx.pageContent.findMany();
 
@@ -30,7 +31,7 @@ export async function GET() {
         partners,
         about,
         contact,
-        categories,
+        // FIX: Hapus `categories` dari objek yang dikembalikan
         timelineEvents,
         pageContent,
       };

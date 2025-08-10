@@ -21,20 +21,20 @@ model Hero {
 
 model Service {
   id          Int          @id @default(autoincrement())
-  title       String
+  title       String       
   description String       @db.Text
   icon        String
-  subServices SubService[] // Add this line to create the relation
+  subServices SubService[]
+  projects    Project[] // Tambahkan baris ini untuk menghubungkan Service dengan Project
 }
 
 model PageContent {
   id        Int     @id @default(autoincrement())
-  pageName  String  @unique // "services", "portfolio", etc.
+  pageName  String  @unique 
   title     String  @db.Text
   subtitle  String  @db.Text
 }
 
-// ADD THIS NEW MODEL for sub-services
 model SubService {
   id          Int     @id @default(autoincrement())
   title       String
@@ -44,11 +44,7 @@ model SubService {
   service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
-model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  projects Project[]
-}
+// Hapus model Category.
 
 model Project {
   id            Int      @id @default(autoincrement())
@@ -57,8 +53,10 @@ model Project {
   image         String   @db.Text
   client        String?
   completedDate String?
-  categoryId    Int
-  category      Category @relation(fields: [categoryId], references: [id])
+  
+  // Ganti `categoryId` dengan `serviceId` untuk mereferensikan Service
+  serviceId     Int
+  service       Service  @relation(fields: [serviceId], references: [id])
 }
 
 model Statistic {
@@ -82,14 +80,12 @@ model About {
   values  String[]
 }
 
-// Model untuk menyimpan statistik kunjungan
 model VisitStats {
   id              Int      @id @default(autoincrement())
   totalVisits     Int      @default(0)
   uniqueVisitors  Int      @default(0)
 }
 
-// Model baru untuk melacak pengunjung unik
 model UniqueVisitor {
   id          Int      @id @default(autoincrement())
   ip          String   @unique
@@ -110,7 +106,7 @@ model Admin {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
-  role      String   @default("EMPLOYEE") // Tambahkan baris ini
+  role      String   @default("EMPLOYEE")
   createdAt DateTime @default(now())
 }
 
@@ -121,4 +117,3 @@ model TimelineEvent {
   description String   @db.Text
   createdAt   DateTime @default(now())
 }
-

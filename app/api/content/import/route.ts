@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       await tx.subService.deleteMany({});
       await tx.project.deleteMany({});
       await tx.service.deleteMany({});
-      await tx.category.deleteMany({});
+      // FIX: Hapus baris ini: `await tx.category.deleteMany({});`
       await tx.statistic.deleteMany({});
       await tx.partner.deleteMany({});
       await tx.hero.deleteMany({});
@@ -28,9 +28,8 @@ export async function POST(request: NextRequest) {
       if (data.hero) {
         await tx.hero.createMany({ data: data.hero });
       }
-      if (data.categories) {
-        await tx.category.createMany({ data: data.categories });
-      }
+      // FIX: Hapus kode yang berhubungan dengan `data.categories`
+      
       if (data.services) {
         for (const service of data.services) {
           const { subServices, ...serviceData } = service;
@@ -46,35 +45,24 @@ export async function POST(request: NextRequest) {
         }
       }
       if (data.projects) {
-        const uniqueCategories = Array.from(new Set(data.projects.map((p: any) => p.category?.name)));
-        const existingCategories = await tx.category.findMany();
-        
-        const categoriesToCreate = uniqueCategories
-          .filter((uc): uc is string => typeof uc === 'string' && !existingCategories.some((ec) => ec.name === uc))
-          .map((name) => ({ name }));
-
-        if (categoriesToCreate.length > 0) {
-          await tx.category.createMany({ data: categoriesToCreate });
-        }
-
-        const updatedCategories = await tx.category.findMany();
-        const categoryMap = updatedCategories.reduce((acc, cat) => {
-          acc[cat.name] = cat.id;
+        const seededServices = await tx.service.findMany();
+        const serviceMap = seededServices.reduce((acc, service) => {
+          acc[service.title] = service.id;
           return acc;
         }, {} as Record<string, number>);
 
         await tx.project.createMany({
           data: data.projects.map((project: any) => {
             const { category, ...projectDataWithoutCategory } = project;
-            const categoryName = category?.name;
-            if (typeof categoryName !== 'string' || !categoryMap[categoryName]) {
-              console.error(`Skipping project due to invalid category: ${project.title}`);
+            const categoryName = category?.name || category; // FIX: Menyesuaikan jika `category` adalah string atau objek
+            if (typeof categoryName !== 'string' || !serviceMap[categoryName]) {
+              console.error(`Skipping project due to invalid service category: ${project.title}`);
               return null;
             }
             
             return {
               ...projectDataWithoutCategory,
-              categoryId: categoryMap[categoryName],
+              serviceId: serviceMap[categoryName],
             };
           }).filter(Boolean),
         });

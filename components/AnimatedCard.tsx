@@ -1,3 +1,4 @@
+// components/AnimatedCard.tsx
 "use client";
 
 import { motion } from 'framer-motion';
@@ -19,7 +20,7 @@ const AnimatedCard = ({ children, className = "", delay = 0 }: AnimatedCardProps
         y: -8, 
         transition: { duration: 0.3 } 
       }}
-      className={`cursor-pointer ${className}`}
+      className={`cursor-pointer will-change-transform ${className}`}
     >
       {children}
     </motion.div>

@@ -1,6 +1,6 @@
 // src/components/admin/dialogs/PartnerDialog.tsx
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
@@ -48,6 +48,9 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl">{isEditing ? 'Edit' : 'Add'} Partner</DialogTitle>
+          <DialogDescription>
+            {isEditing ? 'Make changes to this partner entry.' : 'Add a new partner logo and information.'}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div>

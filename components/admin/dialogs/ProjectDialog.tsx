@@ -1,20 +1,20 @@
+// components/admin/dialogs/ProjectDialog.tsx
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
-import { ProjectItem, Category } from '@/lib/types';
+import { ProjectItem, ServiceItem } from '@/lib/types';
 
-// Define a type for the form data to ensure consistency and avoid 'any'
 interface ProjectFormData {
   title: string;
   description: string;
   image: string;
   client: string;
   completedDate: string;
-  categoryId: string;
+  serviceId: string;
 }
 
 interface ProjectDialogProps {
@@ -22,37 +22,34 @@ interface ProjectDialogProps {
   onOpenChange: (open: boolean) => void;
   editingProject: ProjectItem | null;
   newProject: ProjectFormData;
-  // Removed setNewProject as it's no longer needed inside this component
   selectedImage: File | null;
   setSelectedImage: (file: File | null) => void;
-  categories: Category[];
+  services: ServiceItem[];
   onSubmit: (projectData: any, isEditing: boolean, selectedImage: File | null) => Promise<void>;
   isUploading: boolean;
 }
 
 export const ProjectDialog: React.FC<ProjectDialogProps> = ({
-  isOpen, onOpenChange, editingProject, newProject, selectedImage, setSelectedImage, categories, onSubmit, isUploading
+  isOpen, onOpenChange, editingProject, newProject, selectedImage, setSelectedImage, services, onSubmit, isUploading
 }) => {
   const isEditing = !!editingProject;
   
-  // Use a single state object for the form to simplify logic
   const [formData, setFormData] = React.useState<ProjectFormData>(
     isEditing 
       ? { 
           ...editingProject!, 
-          categoryId: String(editingProject!.categoryId),
+          serviceId: String((editingProject as any).serviceId),
           client: editingProject?.client || '',
           completedDate: editingProject?.completedDate || ''
         } 
       : newProject
   );
 
-  // Use a useEffect to handle updates if the parent's `editingProject` or `newProject` props change
   React.useEffect(() => {
     if (isEditing && editingProject) {
       setFormData({ 
         ...editingProject, 
-        categoryId: String(editingProject.categoryId),
+        serviceId: String((editingProject as any).serviceId),
         client: editingProject?.client || '',
         completedDate: editingProject?.completedDate || ''
       });
@@ -63,13 +60,11 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    // Explicitly type the previous state as ProjectFormData
     setFormData((prev: ProjectFormData) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (value: string) => {
-    // Explicitly type the previous state as ProjectFormData
-    setFormData((prev: ProjectFormData) => ({ ...prev, categoryId: value }));
+    setFormData((prev: ProjectFormData) => ({ ...prev, serviceId: value }));
   };
 
   const handleSubmit = async () => {
@@ -82,6 +77,9 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl">{isEditing ? 'Edit' : 'Add'} Project</DialogTitle>
+          <DialogDescription>
+            {isEditing ? 'Make changes to this project.' : 'Add a new project to your portfolio.'}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -95,14 +93,14 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Service Category</label>
               <Select
-                value={formData.categoryId || ''}
+                value={formData.serviceId || ''}
                 onValueChange={handleSelectChange}
               >
-                <SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Select a service category" /></SelectTrigger>
                 <SelectContent>
-                  {categories.map(cat => <SelectItem key={cat.id} value={String(cat.id)}>{cat.name}</SelectItem>)}
+                  {services.map(service => <SelectItem key={service.id} value={String(service.id)}>{service.title}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

@@ -1,3 +1,4 @@
+// app/api/dashboard/route.ts
 import { NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 
@@ -5,7 +6,6 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    // Run all database queries simultaneously (in parallel)
     const [
       visits,
       hero,
@@ -14,31 +14,27 @@ export async function GET() {
       projects,
       contact,
       categories,
-      servicesPageContent // Added this line
+      servicesPageContent
     ] = await Promise.all([
       prisma.visitStats.findFirst(),
       prisma.hero.findFirst(),
       prisma.about.findFirst(),
       prisma.service.findMany({
         orderBy: { id: 'asc' },
-        // Include the related sub-services for each service
         include: {
           subServices: {
             orderBy: { id: 'asc' }
           }
         }
       }),
-      prisma.project.findMany({ include: { category: true }, orderBy: { id: 'asc' } }),
+      prisma.project.findMany({ include: { service: true }, orderBy: { id: 'asc' } }),
       prisma.contact.findFirst(),
-      prisma.category.findMany({ orderBy: { id: 'asc' } }),
-      // Added this query to fetch the new page content
+      prisma.service.findMany({ orderBy: { id: 'asc' } }),
       prisma.pageContent.findUnique({ where: { pageName: 'services' } })
     ]);
 
-    // Ensure visits data exists
     let visitsData = visits;
     if (!visitsData) {
-      // Create initial visit stats if they don't exist
       visitsData = await prisma.visitStats.create({
         data: {
           id: 1,
@@ -55,8 +51,8 @@ export async function GET() {
       services,
       projects,
       contact,
-      categories,
-      servicesPage: servicesPageContent // Added this to the response
+      categories: categories.map(c => ({ id: c.id, name: c.title })),
+      servicesPage: servicesPageContent
     });
 
   } catch (error) {

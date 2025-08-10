@@ -26,10 +26,7 @@ export interface User {
   role: 'ADMIN' | 'EMPLOYEE';
 }
 
-export interface Category {
-  id: number;
-  name: string;
-}
+// Hapus interface Category
 
 export interface ProjectItem {
   id: number;
@@ -38,7 +35,7 @@ export interface ProjectItem {
   image: string;
   client?: string | null;
   completedDate?: string | null;
-  categoryId: number;
+  serviceId: number;
 }
 
 export interface PartnerItem {
@@ -84,7 +81,6 @@ export interface Employee {
   createdAt: string;
 }
 
-// Define the type for the new services page content
 export interface ServicesPageContent {
   title: string;
   subtitle: string;
@@ -97,9 +93,9 @@ export interface DashboardData {
   services: ServiceItem[];
   projects: ProjectItem[];
   contact: ContactContent;
-  categories: Category[];
+  categories: ServiceItem[];
   timelineEvents: TimelineEvent[];
-  servicesPage: ServicesPageContent; // Add this property
+  servicesPage: ServicesPageContent;
 }
 
 export interface TimelineEvent {

@@ -5,6 +5,7 @@ import ProjectsSection from '@/components/ProjectsSection';
 import AnimatedSection from '@/components/AnimatedSection';
 import { getPortfolioPageContent } from '@/lib/data';
 import WaveSeparator from '@/components/WaveSeperator';
+// Hapus impor Category
 
 export const revalidate = 0; // Force dynamic rendering
 
@@ -19,14 +20,12 @@ export default async function PortfolioPage() {
     );
   }
 
-  // Penting: Ubah struktur data 'projects' agar sesuai dengan komponen
   const projectsForComponent = content.items.map(item => ({
       ...item,
       image: item.image || '',
       description: item.description || '',
       client: item.client === null ? undefined : item.client,
       completedDate: item.completedDate === null ? undefined : item.completedDate,
-      // 'category' sudah menjadi string dari lib/data.ts
   }));
 
 

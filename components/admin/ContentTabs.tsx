@@ -1,3 +1,4 @@
+// src/components/admin/ContentTabs.tsx
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User, ServiceItem } from '@/lib/types';
@@ -12,7 +13,7 @@ import { BackupSection } from './dashboard/BackupSection';
 import { TimelineSection } from './dashboard/TimelineSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDialogs } from '@/hooks/useDialogs';
-import { HeroContent, AboutContent, ContactContent, ServicesPageContent, Category } from '@/lib/types';
+import { HeroContent, AboutContent, ContactContent, ServicesPageContent } from '@/lib/types';
 
 interface ContentTabsProps {
   currentUser: User;
@@ -26,7 +27,6 @@ interface ContentTabsProps {
     tempServicesContent: ServicesPageContent | null;
     tempServices: ServiceItem[] | null;
     selectedHeroImage: any;
-    tempCategoryName: string;
   };
   handlers: {
     handleContentUpdate: (section: string, content: any) => Promise<void>;
@@ -35,7 +35,6 @@ interface ContentTabsProps {
     handleDeleteEmployee: (id: number) => Promise<void>;
     handleExport: () => Promise<void>;
     handleImport: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-    handleDeleteCategory: (id: number) => Promise<void>;
     handleDeleteProject: (id: number) => Promise<void>;
     openProjectDialog: (project: any) => void;
     handleDeleteTimelineEvent: (id: number) => Promise<void>;
@@ -51,26 +50,24 @@ interface ContentTabsProps {
     setTempServices: (services: ServiceItem[] | null) => void;
     setSelectedHeroImage: (file: File | null) => void;
     setAddEmployeeDialogOpen: (open: boolean) => void;
-    setTempCategoryName: (name: string) => void;
-    openCategoryDialog: (category: any) => void;
   };
   dialogs: ReturnType<typeof useDialogs>;
 }
 
 export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, state, handlers, dialogs }) => {
   const {
-    heroContent, aboutContent, services, servicesPageContent, projects, partners, contactContent, categories, employees, timelineEvents
+    heroContent, aboutContent, services, servicesPageContent, projects, partners, contactContent, employees, timelineEvents
   } = data;
 
   const {
-    editingSection, isUploading, tempHero, tempAbout, tempContact, tempServicesContent, tempServices, selectedHeroImage, tempCategoryName,
+    editingSection, isUploading, tempHero, tempAbout, tempContact, tempServicesContent, tempServices, selectedHeroImage,
   } = state;
 
   const {
     handleContentUpdate, handleToggleEdit, handleAddEmployee, handleDeleteEmployee, handleExport, handleImport,
     handleDeleteProject, openProjectDialog, handleDeleteTimelineEvent, openTimelineDialog, openSubServiceDialog,
     handleDeleteSubService, openPartnerDialog, handleDeletePartner, setTempHero, setTempAbout, setTempContact,
-    setTempServicesContent, setTempServices, setSelectedHeroImage, setAddEmployeeDialogOpen, setTempCategoryName, openCategoryDialog
+    setTempServicesContent, setTempServices, setSelectedHeroImage, setAddEmployeeDialogOpen,
   } = handlers;
 
   return (
@@ -156,7 +153,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
           <TabsContent value="projects" className="mt-6">
             <ProjectsSection
               projects={projects}
-              categories={categories}
+              services={services}
               openProjectDialog={openProjectDialog}
               handleDeleteProject={handleDeleteProject}
             />

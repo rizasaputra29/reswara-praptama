@@ -8,10 +8,9 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Start seeding...');
 
-  // --- Clear existing data ---
-  await prisma.subService.deleteMany({});
+  // --- Clear existing data (update for new schema) ---
   await prisma.project.deleteMany({});
-  await prisma.category.deleteMany({});
+  await prisma.subService.deleteMany({});
   await prisma.service.deleteMany({});
   await prisma.statistic.deleteMany({});
   await prisma.partner.deleteMany({});
@@ -38,7 +37,11 @@ async function main() {
     const { subServices, ...serviceData } = service;
     
     const createdService = await prisma.service.create({
-      data: serviceData,
+      data: {
+        title: serviceData.title,
+        description: serviceData.description,
+        icon: serviceData.icon,
+      },
     });
     
     if (subServices && subServices.length > 0) {
@@ -50,25 +53,19 @@ async function main() {
       });
     }
   }
+  const seededServices = await prisma.service.findMany();
+  const serviceMap = seededServices.reduce((acc: Record<string, number>, service) => {
+    acc[service.title] = service.id;
+    return acc;
+  }, {});
   console.log('✅ Services and SubServices seeded.');
 
-  // --- Seed Categories and Projects ---
-  const categories = contentData.projects.categories.filter((cat: string) => cat !== 'Semua');
-  const categoryRecords = await Promise.all(
-    categories.map((name: string) => prisma.category.create({ data: { name } }))
-  );
-  console.log('✅ Categories seeded.');
-
-  const categoryMap = categoryRecords.reduce((acc: Record<string, number>, category: { name: string; id: number }) => {
-    acc[category.name] = category.id;
-    return acc;
-  }, {} as Record<string, number>);
-
+  // --- Seed Projects ---
   const projectsToCreate = contentData.projects.items.map((project: any) => {
     const { category, ...restOfProject } = project;
     return {
       ...restOfProject,
-      categoryId: categoryMap[category],
+      serviceId: serviceMap[category], // Gunakan serviceId dari peta
     };
   });
 

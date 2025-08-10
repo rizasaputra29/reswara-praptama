@@ -1,17 +1,17 @@
+// app/api/content/projects/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-// GET function remains the same
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany({ include: { category: true }});
-    const categories = await prisma.category.findMany();
+    const projects = await prisma.project.findMany({ include: { service: true } });
+    const services = await prisma.service.findMany();
     const response = {
         title: "Proyek Nyata, Bukti Nyata",
         subtitle: "Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan.",
-        categories: ["Semua", ...categories.map(c => c.name)],
-        items: projects.map(p => ({ ...p, category: p.category.name })),
+        categories: ["Semua", ...services.map(s => s.title)],
+        items: projects.map(p => ({ ...p, category: p.service.title })),
     }
     return NextResponse.json(response);
   } catch (error) {
@@ -19,13 +19,12 @@ export async function GET() {
   }
 }
 
-// POST function remains the same
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const categoryId = parseInt(data.categoryId, 10);
-    if (isNaN(categoryId)) {
-      return NextResponse.json({ error: 'Invalid Category ID' }, { status: 400 });
+    const serviceId = parseInt(data.serviceId, 10);
+    if (isNaN(serviceId)) {
+      return NextResponse.json({ error: 'Invalid Service ID' }, { status: 400 });
     }
     const newProject = await prisma.project.create({
       data: {
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
         image: data.image,
         client: data.client,
         completedDate: data.completedDate,
-        categoryId: categoryId,
+        serviceId: serviceId,
       },
     });
     revalidatePath('/');
@@ -46,26 +45,25 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT function is now corrected
 export async function PUT(request: NextRequest) {
   try {
     const data = await request.json();
-    const { id, category, ...updateData } = data; // <-- FIX: Destructure and exclude 'category'
+    const { id, category, ...updateData } = data;
 
     if (!id) {
       return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
-    if (updateData.categoryId) {
-      updateData.categoryId = parseInt(updateData.categoryId, 10);
-      if (isNaN(updateData.categoryId)) {
-        return NextResponse.json({ error: 'Invalid Category ID' }, { status: 400 });
+    if (updateData.serviceId) {
+      updateData.serviceId = parseInt(updateData.serviceId, 10);
+      if (isNaN(updateData.serviceId)) {
+        return NextResponse.json({ error: 'Invalid Service ID' }, { status: 400 });
       }
     }
 
     const updatedProject = await prisma.project.update({
       where: { id: Number(id) },
-      data: updateData, // <-- FIX: Use the cleaned updateData object
+      data: updateData,
     });
 
     revalidatePath('/');
@@ -79,7 +77,6 @@ export async function PUT(request: NextRequest) {
 }
 
 
-// DELETE function remains the same
 export async function DELETE(request: NextRequest) {
   try {
     const { id } = await request.json();

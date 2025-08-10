@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { uploadImage as apiUploadImage } from '@/lib/api';
-import { ProjectItem, SubService, SubServiceDraft, PartnerItem, Category, TimelineEvent } from '@/lib/types';
+import { ProjectItem, SubService, SubServiceDraft, PartnerItem, ServiceItem, TimelineEvent } from '@/lib/types';
 
 export const useContentManagement = (reload: () => void) => {
   const { toast } = useToast();
@@ -29,8 +29,9 @@ export const useContentManagement = (reload: () => void) => {
     let body = { ...projectData };
 
     try {
-      if (!body.title || !body.categoryId) {
-        throw new Error('Title and Category are required.');
+      // FIX: Ganti validasi dari `body.categoryId` menjadi `body.serviceId`
+      if (!body.title || !body.serviceId) {
+        throw new Error('Title and Service Category are required.');
       }
       
       if (selectedImage) {

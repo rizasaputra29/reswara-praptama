@@ -1,6 +1,6 @@
 // src/components/admin/dialogs/SubServiceDialog.tsx
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -37,6 +37,9 @@ export const SubServiceDialog: React.FC<SubServiceDialogProps> = ({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl">{isEditing ? 'Edit' : 'Add'} Sub-Service</DialogTitle>
+          <DialogDescription>
+            {isEditing ? 'Make changes to this sub-service.' : 'Add a new sub-service to the selected service category.'}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div>

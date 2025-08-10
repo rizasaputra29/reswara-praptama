@@ -12,17 +12,17 @@ export async function getHomePageContent() {
         }
       }
     });
-    const projects = await prisma.project.findMany({ include: { category: true }, orderBy: { id: 'asc' } });
-    const categories = await prisma.category.findMany({ orderBy: { id: 'asc' } });
+    const projects = await prisma.project.findMany({ include: { service: true }, orderBy: { id: 'asc' } });
+    const categories = await prisma.service.findMany({ orderBy: { id: 'asc' } });
     const statistics = await prisma.statistic.findMany({ orderBy: { id: 'asc' } });
     const partners = await prisma.partner.findMany({ orderBy: { id: 'asc' } });
 
-    const validProjects = projects ? projects.filter(p => p.category) : [];
+    const validProjects = projects ? projects.filter(p => p.service) : [];
     const projectsData = {
       title: "Proyek Nyata, Bukti Nyata",
       subtitle: "Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan.",
-      categories: ["Semua", ...(categories ? categories.map(c => c.name) : [])],
-      items: validProjects.map(p => ({ ...p, category: p.category.name })),
+      categories: ["Semua", ...(categories ? categories.map(c => c.title) : [])],
+      items: validProjects.map(p => ({ ...p, category: p.service.title })),
     };
 
     const servicesData = {
@@ -55,14 +55,14 @@ export async function getHomePageContent() {
 
 export async function getPortfolioPageContent() {
     try {
-      const projects = await prisma.project.findMany({ include: { category: true }, orderBy: { id: 'asc' } });
-      const categories = await prisma.category.findMany({ orderBy: { id: 'asc' }});
-      const validProjects = projects ? projects.filter(p => p.category) : [];
+      const projects = await prisma.project.findMany({ include: { service: true }, orderBy: { id: 'asc' } });
+      const services = await prisma.service.findMany({ orderBy: { id: 'asc' }});
+      const validProjects = projects ? projects.filter(p => p.service) : [];
       return {
           title: "Proyek Nyata, Bukti Nyata",
           subtitle: "Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan.",
-          categories: ["Semua", ...(categories ? categories.map(c => c.name) : [])],
-          items: validProjects.map(p => ({ ...p, category: p.category.name })),
+          categories: ["Semua", ...(services ? services.map(c => c.title) : [])],
+          items: validProjects.map(p => ({ ...p, category: p.service.title })),
       };
     } catch (error) {
       console.error("Database Error in getPortfolioPageContent:", error);
@@ -81,7 +81,6 @@ export async function getServicesPageContent() {
       },
     });
 
-    // Fetch the title and subtitle from the new model
     const pageContent = await prisma.pageContent.findUnique({
       where: { pageName: 'services' },
     });
@@ -99,7 +98,6 @@ export async function getServicesPageContent() {
   }
 }
 
-// Fungsi baru untuk mengambil data kontak
 export async function getContactContent() {
   try {
     const contact = await prisma.contact.findFirst();
@@ -112,16 +110,13 @@ export async function getContactContent() {
 
 export async function getAboutContent() {
   try {
-    // Fetch both about content and timeline events
     const about = await prisma.about.findFirst();
     const timelineEvents = await prisma.timelineEvent.findMany({
       orderBy: { year: 'asc' }
     });
-    return { about, timelineEvents }; // Return both
+    return { about, timelineEvents };
   } catch (error) {
     console.error("Database Error in getAboutContent:", error);
     return null;
   }
 }
-
-

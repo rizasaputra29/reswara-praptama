@@ -1,3 +1,4 @@
+// components/AnimatedSection.tsx
 "use client";
 
 import { motion } from 'framer-motion';
@@ -20,7 +21,7 @@ const AnimatedSection = ({ children, className = "", delay = 0 }: AnimatedSectio
       initial={{ opacity: 0, y: 60 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
       transition={{ duration: 0.8, delay, ease: "easeOut" }}
-      className={className}
+      className={`${className} will-change-transform will-change-opacity`}
     >
       {children}
     </motion.div>

@@ -4,16 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, Edit, Globe } from 'lucide-react';
 import Image from 'next/image';
-import { ProjectItem, Category } from '@/lib/types';
+import { ProjectItem, ServiceItem } from '@/lib/types';
 
 interface ProjectsSectionProps {
   projects: ProjectItem[];
-  categories: Category[];
+  services: ServiceItem[];
   openProjectDialog: (project: ProjectItem | null) => void;
   handleDeleteProject: (id: number) => Promise<void>;
 }
 
-export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects, categories, openProjectDialog, handleDeleteProject }) => {
+export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects, services, openProjectDialog, handleDeleteProject }) => {
   return (
     <Card className="border-0 shadow-md">
       <CardHeader>
@@ -55,7 +55,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects, cate
                       </Button>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{categories.find(c => c.id === project.categoryId)?.name}</p>
+                  <p className="text-sm text-gray-600 mb-2">{services.find(s => s.id === project.serviceId)?.title}</p>
                   <p className="text-xs text-gray-500 line-clamp-2">{project.description}</p>
                 </div>
               </div>

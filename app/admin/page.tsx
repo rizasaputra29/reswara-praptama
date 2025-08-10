@@ -12,7 +12,7 @@ import { useAdminData } from '@/hooks/useAdminData';
 import { useContentManagement } from '@/hooks/useContentManagement';
 import { useDialogs } from '@/hooks/useDialogs';
 import { DashboardStats } from '@/components/admin/dashboard/DashboardStats';
-import { HeroContent, AboutContent, ContactContent, ServicesPageContent, Category, ServiceItem } from '@/lib/types';
+import { HeroContent, AboutContent, ContactContent, ServicesPageContent, ServiceItem } from '@/lib/types';
 import { useToast } from "@/hooks/use-toast";
 
 // Import all dialog components
@@ -172,10 +172,6 @@ export default function Admin() {
     reader.readAsText(file);
   }, [loadData, toast]);
 
-  const serviceCategories = (data?.services || []).map(service => ({
-      id: service.id,
-      name: service.title,
-  }));
 
   if (isLoading) {
     return (
@@ -240,7 +236,6 @@ export default function Admin() {
             tempServicesContent,
             tempServices,
             selectedHeroImage: dialogs.selectedProjectImage,
-            tempCategoryName: dialogs.tempCategoryName,
           }}
           handlers={{
             handleContentUpdate, 
@@ -249,7 +244,6 @@ export default function Admin() {
             handleDeleteEmployee, 
             handleExport, 
             handleImport,
-            handleDeleteCategory: contentManagement.handleDeleteCategory,
             handleDeleteProject: contentManagement.handleDeleteProject,
             openProjectDialog: dialogs.openProjectDialog,
             handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
@@ -265,8 +259,6 @@ export default function Admin() {
             setTempServices,
             setSelectedHeroImage: dialogs.setSelectedProjectImage,
             setAddEmployeeDialogOpen,
-            setTempCategoryName: dialogs.setTempCategoryName,
-            openCategoryDialog: dialogs.openCategoryDialog,
           }}
           dialogs={dialogs}
         />
@@ -275,10 +267,10 @@ export default function Admin() {
           isOpen={dialogs.isProjectDialogOpen}
           onOpenChange={dialogs.setProjectDialogOpen}
           editingProject={dialogs.editingProject}
-          newProject={dialogs.newProject}
+          newProject={{ title: '', description: '', image: '', client: '', completedDate: '', serviceId: '' }}
           selectedImage={dialogs.selectedProjectImage}
           setSelectedImage={dialogs.setSelectedProjectImage}
-          categories={serviceCategories as Category[]}
+          services={data.services as ServiceItem[]}
           onSubmit={contentManagement.handleProjectSubmit}
           isUploading={contentManagement.isUploading}
         />
@@ -298,7 +290,7 @@ export default function Admin() {
           isOpen={dialogs.isPartnerDialogOpen}
           onOpenChange={dialogs.setPartnerDialogOpen}
           editingPartner={dialogs.editingPartner}
-          newPartner={dialogs.newPartner}
+          newPartner={{ logoUrl: '' }}
           setNewPartner={dialogs.setNewPartner}
           selectedImage={dialogs.selectedPartnerImage}
           setSelectedImage={dialogs.setSelectedPartnerImage}
