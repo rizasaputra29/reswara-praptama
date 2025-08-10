@@ -22,7 +22,7 @@ const VisitTracker = () => {
       .catch(error => {
         console.error("Failed to track visit. Network error:", error);
       });
-  }, []); // Run only once when the component mounts
+  }, []);
 
   return null;
 };
