@@ -26,12 +26,20 @@ import { TimelineDialog } from '@/components/admin/dialogs/TimelineDialog';
 export default function Admin() {
   const { data, employees, partners, timelineEvents, isLoading, loadData } = useAdminData();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState('hero');
 
   const handleAuthSuccess = useCallback(() => {
     loadData();
   }, [loadData]);
 
   const { currentUser, username, setUsername, password, setPassword, handleLogin, handleLogout } = useAuth(handleAuthSuccess);
+
+  useEffect(() => {
+    if (currentUser) {
+      setActiveTab(currentUser.role === 'ADMIN' ? 'hero' : 'projects');
+    }
+  }, [currentUser]);
+
 
   const contentManagement = useContentManagement(loadData);
   const dialogs = useDialogs();
@@ -82,6 +90,9 @@ export default function Admin() {
       setEditingSection(null);
       await loadData();
       toast({ title: "Success", description: `${section.charAt(0).toUpperCase() + section.slice(1)} content updated.` });
+      if (section === 'services' || section === 'services-page') {
+        setActiveTab('services');
+      }
     } catch (error: any) {
       toast({ variant: "destructive", title: "Update Failed", description: error.message });
     }
@@ -249,7 +260,7 @@ export default function Admin() {
             handleDeleteTimelineEvent: contentManagement.handleDeleteTimelineEvent,
             openTimelineDialog: dialogs.openTimelineDialog,
             openSubServiceDialog: dialogs.openSubServiceDialog,
-            handleDeleteSubService: contentManagement.handleDeleteSubService,
+            handleDeleteSubService: (id: number) => contentManagement.handleDeleteSubService(id, () => setActiveTab('services')),
             openPartnerDialog: dialogs.openPartnerDialog,
             handleDeletePartner: contentManagement.handleDeletePartner,
             setTempHero,
@@ -261,6 +272,8 @@ export default function Admin() {
             setAddEmployeeDialogOpen,
           }}
           dialogs={dialogs}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
         />
         
         <ProjectDialog
@@ -282,7 +295,14 @@ export default function Admin() {
           setEditingSubService={dialogs.setEditingSubService}
           selectedImage={dialogs.selectedSubServiceImage}
           setSelectedImage={dialogs.setSelectedSubServiceImage}
-          onSubmit={contentManagement.handleSubServiceSubmit}
+          onSubmit={(subServiceData, isEditing, selectedImage) =>
+            contentManagement.handleSubServiceSubmit(
+              subServiceData,
+              isEditing,
+              selectedImage,
+              () => setActiveTab('services')
+            )
+          }
           isUploading={contentManagement.isUploading}
         />
         

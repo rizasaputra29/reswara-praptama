@@ -61,7 +61,7 @@ export const useContentManagement = (reload: () => void) => {
     }
   };
 
-  const handleSubServiceSubmit = async (subServiceData: SubServiceDraft, isEditing: boolean, selectedImage: File | null) => {
+  const handleSubServiceSubmit = async (subServiceData: SubServiceDraft, isEditing: boolean, selectedImage: File | null, onSuccess?: () => void) => {
     const url = '/api/content/subservices';
     const method = isEditing ? 'PUT' : 'POST';
     let body = { ...subServiceData };
@@ -80,12 +80,15 @@ export const useContentManagement = (reload: () => void) => {
       
       toast({ title: 'Success', description: `Sub-service ${isEditing ? 'updated' : 'added'}.` });
       reload();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Error', description: error.message });
     }
   };
 
-  const handleDeleteSubService = async (subServiceId: number) => {
+  const handleDeleteSubService = async (subServiceId: number, onSuccess?: () => void) => {
     if (!confirm('Are you sure?')) return;
     try {
       const response = await fetch('/api/content/subservices', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: subServiceId }) });
@@ -93,6 +96,9 @@ export const useContentManagement = (reload: () => void) => {
       
       toast({ title: 'Success', description: 'Sub-service deleted.' });
       reload();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Error', description: error.message });
     }
