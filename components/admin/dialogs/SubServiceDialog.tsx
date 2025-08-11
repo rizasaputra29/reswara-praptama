@@ -46,27 +46,27 @@ export const SubServiceDialog: React.FC<SubServiceDialogProps> = ({
         <div className="space-y-4 py-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-            <Input 
-              placeholder="Sub-service title" 
-              value={editingSubService.title} 
-              onChange={(e) => setEditingSubService({...editingSubService, title: e.target.value})} 
+            <Input
+              placeholder="Sub-service title"
+              value={editingSubService.title}
+              onChange={(e) => setEditingSubService({...editingSubService, title: e.target.value})}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-            <Textarea 
-              placeholder="Sub-service description" 
-              value={editingSubService.description} 
-              onChange={(e) => setEditingSubService({...editingSubService, description: e.target.value})} 
+            <Textarea
+              placeholder="Sub-service description"
+              value={editingSubService.description}
+              onChange={(e) => setEditingSubService({...editingSubService, description: e.target.value})}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
             <div className="space-y-2">
-              <Input 
-                placeholder="Image URL (optional)" 
-                value={editingSubService.image || ''} 
-                onChange={(e) => setEditingSubService({...editingSubService, image: e.target.value})} 
+              <Input
+                placeholder="Image URL (optional)"
+                value={editingSubService.image || ''}
+                onChange={(e) => setEditingSubService({...editingSubService, image: e.target.value})}
               />
               <div className="flex items-center space-x-2">
                 <Input type="file" onChange={(e) => setSelectedImage(e.target.files?.[0] || null)} />

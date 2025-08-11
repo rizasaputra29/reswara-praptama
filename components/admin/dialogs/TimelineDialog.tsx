@@ -27,7 +27,7 @@ export const TimelineDialog: React.FC<TimelineDialogProps> = ({
     const { name, value } = e.target;
     setEditingEvent({ ...editingEvent, [name]: value });
   };
-  
+
   const isSaveDisabled = !editingEvent.year || !editingEvent.title || !editingEvent.description;
 
   return (

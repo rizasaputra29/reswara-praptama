@@ -35,9 +35,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             <CardTitle className="text-xl">About Section</CardTitle>
             <CardDescription>Company information and values</CardDescription>
           </div>
-          <Button 
+          <Button
             variant={editingSection === 'about' ? 'default' : 'outline'}
-            onClick={() => editingSection === 'about' ? handleContentUpdate('about', tempAbout) : handleToggleEdit('about')} 
+            onClick={() => editingSection === 'about' ? handleContentUpdate('about', tempAbout) : handleToggleEdit('about')}
             className="flex items-center space-x-2"
             disabled={editingSection === 'about' && isSaveDisabled}
           >
@@ -52,8 +52,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               {editingSection === 'about' ? (
-                <Input 
-                  value={tempAbout?.title || ''} 
+                <Input
+                  value={tempAbout?.title || ''}
                   onChange={(e) => setTempAbout({...tempAbout!, title: e.target.value})}
                   placeholder="Enter about title..."
                 />
@@ -66,9 +66,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
               {editingSection === 'about' ? (
-                <Textarea 
-                  rows={5} 
-                  value={tempAbout?.content || ''} 
+                <Textarea
+                  rows={5}
+                  value={tempAbout?.content || ''}
                   onChange={(e) => setTempAbout({...tempAbout!, content: e.target.value})}
                   placeholder="Enter about content..."
                 />
@@ -81,8 +81,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Mission</label>
               {editingSection === 'about' ? (
-                <Textarea 
-                  value={tempAbout?.mission || ''} 
+                <Textarea
+                  value={tempAbout?.mission || ''}
                   onChange={(e) => setTempAbout({...tempAbout!, mission: e.target.value})}
                   placeholder="Enter mission statement..."
                 />
@@ -95,8 +95,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Vision</label>
               {editingSection === 'about' ? (
-                <Textarea 
-                  value={tempAbout?.vision || ''} 
+                <Textarea
+                  value={tempAbout?.vision || ''}
                   onChange={(e) => setTempAbout({...tempAbout!, vision: e.target.value})}
                   placeholder="Enter vision statement..."
                 />
@@ -107,7 +107,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               )}
             </div>
           </div>
-          
+
           <PreviewCard title="Live Preview">
             <div className="space-y-4">
               <h2 className="text-xl font-bold text-gray-900 text-center">

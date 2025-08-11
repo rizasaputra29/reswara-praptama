@@ -30,7 +30,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     { key: 'email', label: 'Email' },
     { key: 'hours', label: 'Hours' },
   ];
-  
+
   const isSaveDisabled = !tempContact?.address || !tempContact?.phone || !tempContact?.email || !tempContact?.hours;
 
   return (
@@ -41,7 +41,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <CardTitle className="text-xl">Contact Information</CardTitle>
             <CardDescription>Company contact details and information</CardDescription>
           </div>
-          <Button 
+          <Button
             variant={editingSection === 'contact' ? 'default' : 'outline'}
             onClick={() => editingSection === 'contact' ? handleContentUpdate('contact', tempContact) : handleToggleEdit('contact')}
             className="flex items-center space-x-2"
@@ -59,8 +59,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div key={key}>
                 <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
                 {editingSection === 'contact' ? (
-                  <Input 
-                    value={(tempContact as any)?.[key] || ''} 
+                  <Input
+                    value={(tempContact as any)?.[key] || ''}
                     onChange={(e) => setTempContact({...tempContact!, [key]: e.target.value})}
                     placeholder={`Enter ${label}...`}
                   />
@@ -72,7 +72,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               </div>
             ))}
           </div>
-          
+
           <PreviewCard title="Live Preview">
             <div className="space-y-3">
               <div className="text-center mb-4">

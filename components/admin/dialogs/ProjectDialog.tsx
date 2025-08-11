@@ -33,22 +33,22 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
   isOpen, onOpenChange, editingProject, newProject, selectedImage, setSelectedImage, services, onSubmit, isUploading
 }) => {
   const isEditing = !!editingProject;
-  
+
   const [formData, setFormData] = React.useState<ProjectFormData>(
-    isEditing 
-      ? { 
-          ...editingProject!, 
+    isEditing
+      ? {
+          ...editingProject!,
           serviceId: String((editingProject as any).serviceId),
           client: editingProject?.client || '',
           completedDate: editingProject?.completedDate || ''
-        } 
+        }
       : newProject
   );
 
   React.useEffect(() => {
     if (isEditing && editingProject) {
-      setFormData({ 
-        ...editingProject, 
+      setFormData({
+        ...editingProject,
         serviceId: String((editingProject as any).serviceId),
         client: editingProject?.client || '',
         completedDate: editingProject?.completedDate || ''
@@ -71,7 +71,7 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
     await onSubmit(formData, isEditing, selectedImage);
     onOpenChange(false);
   };
-  
+
   const isSaveDisabled = !formData.title || !formData.serviceId || !formData.description || (!formData.image && !selectedImage)
 
   return (
@@ -87,7 +87,7 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-              <Input 
+              <Input
                 name="title"
                 placeholder="Project title"
                 value={formData.title || ''}
@@ -119,7 +119,7 @@ export const ProjectDialog: React.FC<ProjectDialogProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
             <div className="space-y-2">
-              <Input 
+              <Input
                 name="image"
                 placeholder="Image URL"
                 value={formData.image || ''}

@@ -17,6 +17,8 @@ interface AddEmployeeDialogProps {
 }
 
 export const AddEmployeeDialog: React.FC<AddEmployeeDialogProps> = ({ isOpen, onOpenChange, username, setUsername, password, setPassword, onSubmit, isSubmitting }) => {
+  const isSaveDisabled = !username || !password;
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -34,7 +36,7 @@ export const AddEmployeeDialog: React.FC<AddEmployeeDialogProps> = ({ isOpen, on
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
-            <Button onClick={onSubmit} disabled={isSubmitting}>
+            <Button onClick={onSubmit} disabled={isSubmitting || isSaveDisabled}>
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               Create Employee
             </Button>
