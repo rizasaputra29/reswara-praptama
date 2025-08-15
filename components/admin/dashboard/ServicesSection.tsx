@@ -53,7 +53,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       );
     }
   };
-  
+
   const handleSaveServices = () => {
     if (tempServices) {
       handleContentUpdate('services', tempServices);

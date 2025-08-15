@@ -41,9 +41,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <CardTitle className="text-xl">Hero Section</CardTitle>
             <CardDescription>Main banner content for your homepage</CardDescription>
           </div>
-          <Button 
+          <Button
             variant={editingSection === 'hero' ? 'default' : 'outline'}
-            onClick={() => editingSection === 'hero' ? handleContentUpdate('hero', tempHero) : handleToggleEdit('hero')} 
+            onClick={() => editingSection === 'hero' ? handleContentUpdate('hero', tempHero) : handleToggleEdit('hero')}
             disabled={isUploading || (editingSection === 'hero' && isSaveDisabled)}
             className="flex items-center space-x-2"
           >
@@ -60,8 +60,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               {editingSection === 'hero' ? (
-                <Textarea 
-                  value={tempHero?.title || ''} 
+                <Textarea
+                  value={tempHero?.title || ''}
                   onChange={(e) => setTempHero({...tempHero!, title: e.target.value})}
                   className="min-h-[80px]"
                   placeholder="Enter hero title..."
@@ -75,8 +75,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
               {editingSection === 'hero' ? (
-                <Textarea 
-                  value={tempHero?.subtitle || ''} 
+                <Textarea
+                  value={tempHero?.subtitle || ''}
                   onChange={(e) => setTempHero({...tempHero!, subtitle: e.target.value})}
                   className="min-h-[100px]"
                   placeholder="Enter hero subtitle..."
@@ -90,8 +90,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Button Text</label>
               {editingSection === 'hero' ? (
-                <Input 
-                  value={tempHero?.buttonText || ''} 
+                <Input
+                  value={tempHero?.buttonText || ''}
                   onChange={(e) => setTempHero({...tempHero!, buttonText: e.target.value})}
                   placeholder="Enter button text..."
                 />
@@ -102,7 +102,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               )}
             </div>
           </div>
-          
+
           <PreviewCard title="Live Preview">
             <div className="text-center space-y-4">
               <div className="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full">

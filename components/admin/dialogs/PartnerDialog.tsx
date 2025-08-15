@@ -43,6 +43,8 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
     onOpenChange(false);
   };
 
+  const isSaveDisabled = !formData.logoUrl && !selectedImage;
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -55,10 +57,10 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
         <div className="space-y-4 py-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Logo URL</label>
-            <Input 
+            <Input
               name="logoUrl"
-              placeholder="Partner logo URL" 
-              value={formData.logoUrl || ''} 
+              placeholder="Partner logo URL"
+              value={formData.logoUrl || ''}
               onChange={handleChange}
             />
           </div>
@@ -71,7 +73,7 @@ export const PartnerDialog: React.FC<PartnerDialogProps> = ({
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={isUploading}>
+            <Button onClick={handleSubmit} disabled={isUploading || isSaveDisabled}>
               {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               Save Partner
             </Button>

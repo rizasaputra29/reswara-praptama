@@ -52,9 +52,11 @@ interface ContentTabsProps {
     setAddEmployeeDialogOpen: (open: boolean) => void;
   };
   dialogs: ReturnType<typeof useDialogs>;
+  activeTab: string;
+  onTabChange: (value: string) => void;
 }
 
-export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, state, handlers, dialogs }) => {
+export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, state, handlers, dialogs, activeTab, onTabChange }) => {
   const {
     heroContent, aboutContent, services, servicesPageContent, projects, partners, contactContent, employees, timelineEvents
   } = data;
@@ -77,7 +79,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ currentUser, data, sta
         <CardDescription>Manage your website content with live preview</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue={currentUser.role === 'ADMIN' ? 'hero' : 'projects'}>
+        <Tabs value={activeTab} onValueChange={onTabChange}>
           <TabsList className={`grid w-full ${currentUser.role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-2'} bg-gray-100`}>
             {currentUser.role === 'ADMIN' && (
               <>
