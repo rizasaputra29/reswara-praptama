@@ -90,70 +90,70 @@ export default function ContactClientComponent({ contactContent }: ContactClient
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                   {/* Contact Info */}
                   <div className="p-8 space-y-10 bg-gray-700/5 backdrop-blur-2xl rounded-2xl mx-4 border-white border-x border-y">
-                    <h3 className="text-2xl font-bold text-gray-100">
+                    <h3 className="text-2xl font-bold text-white">
                       Contact Information
                     </h3>
                     <div className="flex items-start space-x-4">
-                      <MapPin className="h-6 w-6 text-gray-200 mt-1" />
+                      <MapPin className="h-6 w-6 text-white mt-1" />
                       <div>
                         <h3 className="text-lg font-semibold text-gray-100">Address</h3>
-                        <p className="text-gray-200">{contactContent.address}</p>
+                        <p className="text-white">{contactContent.address}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start space-x-4">
-                      <Phone className="h-6 w-6 text-gray-200 mt-1" />
+                      <Phone className="h-6 w-6 text-white mt-1" />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-100">Phone</h3>
-                        <p className="text-gray-200">{contactContent.phone}</p>
+                        <h3 className="text-lg font-semibold text-white">Phone</h3>
+                        <p className="text-white">{contactContent.phone}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start space-x-4">
-                      <Mail className="h-6 w-6 text-gray-200 mt-1" />
+                      <Mail className="h-6 w-6 text-white mt-1" />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-100">Email</h3>
-                        <p className="text-gray-200">{contactContent.email}</p>
+                        <h3 className="text-lg font-semibold text-white">Email</h3>
+                        <p className="text-white">{contactContent.email}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-start space-x-4">
-                      <Clock className="h-6 w-6 text-gray-200 mt-1" />
+                      <Clock className="h-6 w-6 text-white mt-1" />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-100">Hours</h3>
-                        <p className="text-gray-200">{contactContent.hours}</p>
+                        <h3 className="text-lg font-semibold text-white">Hours</h3>
+                        <p className="text-white">{contactContent.hours}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Contact Form */}
                   <div className="bg-gray-500/20 backdrop-blur-2xl rounded-2xl mx-4 border-white border-x border-y p-8">
-                    <h3 className="text-2xl font-bold text-gray-100 mb-6">
+                    <h3 className="text-2xl font-bold text-white mb-6">
                       Send us a message
                     </h3>
                     <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label className="block text-sm font-medium text-gray-200 mb-2">
+                          <label className="block text-sm font-medium text-white mb-2">
                             Name
                           </label>
                           <Input placeholder="Your name" name="user_name" className='bg-transparent placeholder:text-white text-white' />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-200 mb-2">
+                          <label className="block text-sm font-medium text-white mb-2">
                             Email
                           </label>
                           <Input type="email" name="user_email" placeholder="your.email@example.com" className='bg-transparent placeholder:text-white text-white' />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-medium text-white mb-2">
                           Subject
                         </label>
                         <Input placeholder="Message subject" name="subject" className='bg-transparent placeholder:text-white text-white' />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-200 mb-2">
+                        <label className="block text-sm font-medium text-white mb-2">
                           Message
                         </label>
                         <Textarea rows={6} placeholder="Tell us about your project..." name="message" className='bg-transparent placeholder:text-white text-white' />
