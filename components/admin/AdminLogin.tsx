@@ -3,7 +3,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Users } from 'lucide-react';
+import { ArrowBigLeft, ArrowLeft, SendToBackIcon, Users } from 'lucide-react';
+import Link from 'next/link';
 import { Toaster } from '@/components/ui/toaster';
 
 interface AdminLoginProps {
@@ -19,6 +20,9 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ username, setUsername, p
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Toaster />
       <Card className="w-full max-w-md shadow-xl border-0">
+        <Link href="/" className='relative top-4 left-4 flex items-center space-x-2' passHref>
+          <ArrowLeft />
+        </Link>
         <CardHeader className="text-center pb-8">
           <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4">
             <Users className="w-8 h-8 text-gray-700" />

@@ -1,16 +1,16 @@
-// app/api/content/projects/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+// GET function
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany({ include: { service: true } });
+    const projects = await prisma.project.findMany({ include: { service: true }});
     const services = await prisma.service.findMany();
     const response = {
         title: "Proyek Nyata, Bukti Nyata",
         subtitle: "Lihat bagaimana kami memberikan solusi terbaik untuk berbagai sektor melalui berbagai proyek yang telah kami kerjakan.",
-        categories: ["Semua", ...services.map(s => s.title)],
+        categories: ["Semua", ...services.map(c => c.title)],
         items: projects.map(p => ({ ...p, category: p.service.title })),
     }
     return NextResponse.json(response);
@@ -19,6 +19,7 @@ export async function GET() {
   }
 }
 
+// POST function
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
@@ -45,20 +46,28 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// FIX: PUT function is now corrected to handle service relation
 export async function PUT(request: NextRequest) {
   try {
     const data = await request.json();
-    const { id, category, ...updateData } = data;
+    const { id, serviceId, ...updateData } = data;
 
     if (!id) {
       return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
+    // Jika ada serviceId dalam data, buat objek `service` untuk menghubungkan
+    if (serviceId) {
+      updateData.service = {
+        connect: {
+          id: Number(serviceId),
+        },
+      };
+    }
+
+    // Hapus serviceId dari updateData jika ada agar tidak bentrok dengan `service`
     if (updateData.serviceId) {
-      updateData.serviceId = parseInt(updateData.serviceId, 10);
-      if (isNaN(updateData.serviceId)) {
-        return NextResponse.json({ error: 'Invalid Service ID' }, { status: 400 });
-      }
+        delete updateData.serviceId;
     }
 
     const updatedProject = await prisma.project.update({
@@ -77,6 +86,7 @@ export async function PUT(request: NextRequest) {
 }
 
 
+// DELETE function remains the same
 export async function DELETE(request: NextRequest) {
   try {
     const { id } = await request.json();

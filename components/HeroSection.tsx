@@ -1,20 +1,18 @@
 // components/HeroSection.tsx
-"use client"; // Komponen ini perlu 'use client' jika ada interaksi, jadi kita biarkan saja
+"use client";
 
 import React from 'react';
-import WaveSeparator from './WaveSeperator'; // Tambahkan import WaveSeparator
+import WaveSeparator from './WaveSeperator';
 import AnimatedSection from './AnimatedSection';
 import { Button } from './ui/button';
 import Link from 'next/link';
 
-// 1. Definisikan tipe untuk props
 interface HeroProps {
   title: string;
   subtitle: string;
   buttonText: string;
 }
 
-// 2. Terima props di dalam komponen
 const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
   return (
     <section className="relative text-white py-24 md:py-48"
@@ -28,7 +26,6 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
           CV. Reswara Praptama • Profesionalisme No.1
         </div>
 
-        {/* 3. Gunakan data dari props, bukan hardcoded */}
         <h1 className="max-w-4xl mx-auto text-center text-4xl md:text-6xl font-extrabold leading-tight mb-4">
           {title}
         </h1>
@@ -45,7 +42,10 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText }) => {
         </AnimatedSection>
       </div>
 
-      <WaveSeparator /> {/* Ganti SVG inline dengan komponen */}
+      {/* FIX: Ganti `WaveSeparator` dengan warna isian yang sama dengan latar belakang konten berikutnya */}
+      <div className="text-white"> {/* Tambahkan `text-white` untuk menyelaraskan dengan warna latar belakang Hero */}
+        <WaveSeparator />
+      </div>
     </section>
   );
 };

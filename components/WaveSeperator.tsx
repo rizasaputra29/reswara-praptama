@@ -11,7 +11,8 @@ const WaveSeparator = () => {
         preserveAspectRatio="none"
       >
         <path
-          fill="#ffffff"
+          // FIX: Ubah fill="#ffffff" menjadi fill="currentcolor"
+          fill="currentcolor"
           fillOpacity="1"
           d="M0,50 C360,-10 1080,110 1440,50 L1440,120 L0,120 Z"
         ></path>
