@@ -36,8 +36,8 @@ export async function getHomePageContent() {
     const statisticsData = { items: statistics || [] };
     
     const partnersData = {
-      title: "Trusted by Leading Organizations",
-      subtitle: "We're proud to work with industry leaders and trusted partners worldwide.",
+      title: "Dipercaya oleh Organisasi Terkemuka",
+      subtitle: "Kami bangga dapat bekerja sama dengan para pemimpin industri dan mitra terpercaya di seluruh dunia.",
       logos: partners ? partners.map(p => p.logoUrl) : [],
     };
     

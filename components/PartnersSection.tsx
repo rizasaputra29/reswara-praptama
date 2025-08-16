@@ -25,7 +25,7 @@ const PartnersSection = ({ title, subtitle, logos }: PartnersSectionProps) => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {logos.map((logo, index) => (
                 <motion.div
                   key={index}
