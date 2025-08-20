@@ -64,7 +64,7 @@ export default function AboutClientComponent({ content, timelineEvents }: AboutC
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Mitra Rekayasa Teknik Terpercaya Anda
           </h1>
-          <p className="text-lg md:text-xl opacity-80">
+          <p className="text-lg md:text-xl font-light">
             Solusi Konsultan Teknik, Perencanaan, dan Penyelidikan Profesional bersama CV. Reswara
             Praptama
           </p>

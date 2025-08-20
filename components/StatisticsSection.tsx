@@ -22,7 +22,7 @@ interface StatisticsSectionProps {
 const StatisticsSection = ({ projectsCount, partnersCount, subservicesCount }: StatisticsSectionProps) => {
   const statistics: { number: string; label: string; icon: IconName }[] = [
     { number: `${projectsCount}+`, label: "Proyek Selesai", icon: "Building" },
-    { number: `${partnersCount}+`, label: "Klien Puas", icon: "Users" },
+    { number: `${partnersCount}+`, label: "Klien", icon: "Users" },
     { number: `${subservicesCount}+`, label: "Sub-Layanan Disediakan", icon: "Award" },
   ];
   

@@ -53,7 +53,7 @@ export default async function ServicesPage() {
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
                 {content.title}
               </h1>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-xl text-white font-light max-w-3xl mx-auto">
                 {content.subtitle}
               </p>
             </AnimatedSection>

@@ -2,6 +2,7 @@
 import { getContactContent, getServicesPageContent } from '@/lib/data';
 import { Phone, Mail, MapPin, Instagram, Linkedin, PhoneIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Footer = async () => {
   const contactInfo = await getContactContent();
@@ -26,9 +27,15 @@ const Footer = async () => {
               Solusi terintegrasi untuk kebutuhan konstruksi dan arsitektur dengan standar kualitas terbaik.
             </p>
             <div className="flex space-x-4">
-              <PhoneIcon className="h-5 w-5 text-gray-600 hover:text-green-500 cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
-              <Linkedin className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
+              <a href={`tel:${contactInfo?.phone.replace(/\s/g, '')}`} target="_blank" rel="noopener noreferrer">
+                <PhoneIcon className="h-5 w-5 text-gray-600 hover:text-green-500 cursor-pointer transition-colors" />
+              </a>
+              <a href="https://www.instagram.com/reswarapraptama" target="_blank" rel="noopener noreferrer">
+                <Instagram className="h-5 w-5 text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+              </a>
+              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo?.email}`} target="_blank" rel="noopener noreferrer">
+                <Mail className="h-5 w-5 text-gray-600 hover:text-blue-500 cursor-pointer transition-colors" />
+              </a>
             </div>
           </div>
 

@@ -76,7 +76,7 @@ export default function ContactClientComponent({ contactContent }: ContactClient
             <h1 className="text-5xl md:text-6xl font-bold text-white mt-9 mb-3">
               {contactContent.title}
             </h1>
-            <p className="text-xl text-white max-w-3xl mx-auto">
+            <p className="text-xl text-white font-light max-w-3xl mx-auto">
               {contactContent.subtitle}
             </p>
           </AnimatedSection>
