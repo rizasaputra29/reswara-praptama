@@ -1,0 +1,10 @@
+// app/sitemap.ts
+export default function sitemap() {
+  return [
+    {
+      url: 'https://reswarapraptama.com',
+      lastModified: new Date(),
+      priority: 1,
+    }
+  ]
+}
