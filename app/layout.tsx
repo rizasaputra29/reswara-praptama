@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://reswarapraptama.com'), // Ganti dengan domain Anda
+  metadataBase: new URL('https://reswarapraptama.com/'), // Ganti dengan domain Anda
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Reswara Praptama - Konsultan Teknik Semarang Terpercaya',
     description: 'Konsultan teknik Semarang profesional. Layanan konstruksi, arsitektur, dan perizinan bangunan terlengkap di Semarang, Jawa Tengah.',
-    url: 'https://reswarapraptama.com', // Ganti dengan domain Anda
+    url: 'https://reswarapraptama.com/', // Ganti dengan domain Anda
     siteName: 'Reswara Praptama',
     locale: 'id_ID',
     type: 'website',
@@ -97,7 +97,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Reswara Praptama",
-              "url": "https://reswarapraptama.com", // Ganti dengan domain Anda
+              "url": "https://reswarapraptama.com/", // Ganti dengan domain Anda
               "logo": "https://reswarapraptama.com/images/logo-merah.svg", // Ganti dengan domain Anda
               "description": "Konsultan teknik terpercaya di Semarang untuk layanan konstruksi, arsitektur, dan perizinan bangunan",
               "areaServed": {
@@ -127,7 +127,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "Reswara Praptama - Konsultan Teknik Semarang",
-              "url": "https://reswarapraptama.com", // Ganti dengan domain Anda
+              "url": "https://reswarapraptama.com/", // Ganti dengan domain Anda
               "description": "Konsultan teknik Semarang profesional untuk layanan konstruksi dan arsitektur",
               "inLanguage": "id-ID",
               "potentialAction": {
