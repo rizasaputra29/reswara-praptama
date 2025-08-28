@@ -3,7 +3,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Onest } from 'next/font/google';
 import VisitTracker from '@/components/VisitTracker';
-import Script from 'next/script'; // Tambahkan ini
 
 const onest = Onest({ subsets: ['latin'] });
 
@@ -31,14 +30,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://reswarapraptama.com/'), // Ganti dengan domain Anda
+  metadataBase: new URL('https://reswarapraptama.com/'),
   alternates: {
-    canonical: 'https://reswarapraptama.com/', // Ganti dengan domain Anda
+    canonical: 'https://reswarapraptama.com/',
   },
   openGraph: {
     title: 'Reswara Praptama - Konsultan Teknik Semarang Terpercaya',
     description: 'Konsultan teknik Semarang profesional. Layanan konstruksi, arsitektur, dan perizinan bangunan terlengkap di Semarang, Jawa Tengah.',
-    url: 'https://reswarapraptama.com/', // Ganti dengan domain Anda
+    url: 'https://reswarapraptama.com/',
     siteName: 'Reswara Praptama',
     locale: 'id_ID',
     type: 'website',
@@ -86,57 +85,6 @@ export default function RootLayout({
       <body className={onest.className}>
         <VisitTracker />
         {children}
-        <Script
-          id="organization-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "Reswara Praptama",
-              "url": "https://reswarapraptama.com/",
-              "logo": "https://reswarapraptama.com/images/logo-merah.svg",
-              "description": "Konsultan teknik terpercaya di Semarang untuk layanan konstruksi, arsitektur, dan perizinan bangunan",
-              "areaServed": {
-                "@type": "Place",
-                "name": "Semarang, Jawa Tengah, Indonesia"
-              },
-              "serviceType": [
-                "Konsultan Teknik",
-                "Konsultan Sipil",
-                "Konsultan Arsitektur",
-                "Jasa Konstruksi",
-                "Perencanaan Bangunan",
-                "Perizinan Bangunan"
-              ],
-              "sameAs": [
-                "https://instagram.com/reswarapraptama"
-              ]
-            })
-          }}
-        />
-        <Script
-          id="website-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Reswara Praptama - Konsultan Teknik Semarang",
-              "url": "https://reswarapraptama.com/",
-              "description": "Konsultan teknik Semarang profesional untuk layanan konstruksi dan arsitektur",
-              "inLanguage": "id-ID",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                  "@type": "EntryPoint",
-                  "urlTemplate": "https://reswarapraptama.com/search?q={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
-              }
-            })
-          }}
-        />
       </body>
     </html>
   );
