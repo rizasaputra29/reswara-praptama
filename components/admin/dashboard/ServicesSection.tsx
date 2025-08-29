@@ -1,12 +1,12 @@
 // components/admin/dashboard/ServicesSection.tsx
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Edit, Plus, Trash2, Users, ImageIcon, Save } from 'lucide-react';
+import { Edit, Plus, Trash2, Users, Save } from 'lucide-react';
 import Image from 'next/image';
 import { ServiceItem, SubService } from '@/lib/types';
 
@@ -60,6 +60,20 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     }
   };
 
+  // State lokal untuk mengontrol accordion
+  const [openServiceAccordions, setOpenServiceAccordions] = useState<string[]>([]);
+  
+  const handleToggleEditServices = () => {
+    if (isEditingServices) {
+        handleToggleEdit('services');
+        setOpenServiceAccordions([]); // Tutup semua accordion saat selesai mengedit
+    } else {
+        handleToggleEdit('services');
+        // Buka semua accordion saat memulai mode edit
+        setOpenServiceAccordions(services.map(s => `service-${s.id}`));
+    }
+  };
+
   return (
     <Card className="border-0 shadow-md">
       <CardHeader>
@@ -79,7 +93,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </Button>
             <Button
               variant={isEditingServices ? 'default' : 'outline'}
-              onClick={() => isEditingServices ? handleSaveServices() : handleToggleEdit('services')}
+              onClick={() => isEditingServices ? handleSaveServices() : handleToggleEditServices()}
             >
               {isEditingServices ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
               {isEditingServices ? 'Save Services' : 'Edit Services'}
@@ -113,7 +127,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </div>
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
+        {/* Gunakan state `openServiceAccordions` untuk mengontrol Accordion */}
+        <Accordion
+          type="multiple"
+          value={openServiceAccordions}
+          onValueChange={setOpenServiceAccordions}
+          className="w-full"
+        >
           {services.map(service => (
             <AccordionItem value={`service-${service.id}`} key={service.id} className="border border-gray-200 rounded-lg mb-4 px-4">
               <div className="flex items-center justify-between">
@@ -140,15 +160,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 </div>
               </div>
               <AccordionContent className="pl-4 pb-4">
-                {isEditingServices && (
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Service Description</label>
-                    <Textarea
-                      value={(tempServices?.find(s => s.id === service.id)?.description || '')}
-                      onChange={(e) => handleServiceChange(service.id, 'description', e.target.value)}
-                    />
-                  </div>
-                )}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Service Description</label>
+                  <Textarea
+                    value={(isEditingServices ? tempServices?.find(s => s.id === service.id)?.description : service.description) || ''}
+                    onChange={(e) => isEditingServices && handleServiceChange(service.id, 'description', e.target.value)}
+                    disabled={!isEditingServices}
+                  />
+                </div>
                 {service.subServices && service.subServices.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     {service.subServices.map((subService) => (
