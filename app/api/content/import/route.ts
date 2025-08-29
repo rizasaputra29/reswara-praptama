@@ -14,7 +14,6 @@ export async function POST(request: NextRequest) {
       await tx.subService.deleteMany({});
       await tx.project.deleteMany({});
       await tx.service.deleteMany({});
-      // FIX: Hapus baris ini: `await tx.category.deleteMany({});`
       await tx.statistic.deleteMany({});
       await tx.partner.deleteMany({});
       await tx.hero.deleteMany({});
@@ -28,7 +27,6 @@ export async function POST(request: NextRequest) {
       if (data.hero) {
         await tx.hero.createMany({ data: data.hero });
       }
-      // FIX: Hapus kode yang berhubungan dengan `data.categories`
       
       if (data.services) {
         for (const service of data.services) {
@@ -51,18 +49,23 @@ export async function POST(request: NextRequest) {
           return acc;
         }, {} as Record<string, number>);
 
+        // FIX: Perbaiki logika impor untuk membaca properti 'service' dari data backup
         await tx.project.createMany({
           data: data.projects.map((project: any) => {
-            const { category, ...projectDataWithoutCategory } = project;
-            const categoryName = category?.name || category; // FIX: Menyesuaikan jika `category` adalah string atau objek
-            if (typeof categoryName !== 'string' || !serviceMap[categoryName]) {
+            // Ambil nama layanan dari objek 'service' yang ada di data backup
+            const serviceName = project.service?.title || null;
+            
+            if (!serviceName || !serviceMap[serviceName]) {
               console.error(`Skipping project due to invalid service category: ${project.title}`);
               return null;
             }
             
+            // Hapus properti 'service' yang tidak diperlukan sebelum membuat data baru
+            const { service, ...projectDataWithoutService } = project;
+            
             return {
-              ...projectDataWithoutCategory,
-              serviceId: serviceMap[categoryName],
+              ...projectDataWithoutService,
+              serviceId: serviceMap[serviceName],
             };
           }).filter(Boolean),
         });
