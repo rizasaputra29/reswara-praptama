@@ -8,7 +8,7 @@ const onest = Onest({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Reswara Praptama - Konsultan Teknik Semarang',
-  description: 'Konsultan teknik Semarang terbaik. Layanan lengkap konstruksi dan arsitektur dari perizinan hingga penyelesaian proyek.',
+  description: 'Konsultan Teknik Semarang Profesional. Layanan lengkap konstruksi dan arsitektur dari perizinan hingga penyelesaian proyek.',
   keywords: [
     'konsultan teknik semarang',
     'konsultan sipil semarang',
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     canonical: 'https://reswarapraptama.com/',
   },
   openGraph: {
-    title: 'Reswara Praptama - Konsultan Teknik Semarang Terpercaya',
-    description: 'Konsultan teknik Semarang profesional. Layanan konstruksi, arsitektur, dan perizinan bangunan terlengkap di Semarang, Jawa Tengah.',
+    title: 'Reswara Praptama - Konsultan Teknik Semarang',
+    description: 'Konsultan Teknik Semarang Profesional. Layanan konstruksi, arsitektur, dan perizinan bangunan di Semarang, Jawa Tengah.',
     url: 'https://reswarapraptama.com/',
     siteName: 'Reswara Praptama',
     locale: 'id_ID',
@@ -64,8 +64,21 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/images/logo-merah.svg',
+    icon: [
+      { url: '/images/favicon.ico' },
+      { url: '/images/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: '/images/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/images/safari-pinned-tab.svg',
+        color: '#ff0000',
+      },
+    ],
   },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
