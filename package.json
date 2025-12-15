@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "prisma generate && prisma db push && npm run prisma:seed && next build",
-  "start": "next start",
-  "lint": "next lint",
-  "register-admin": "node scripts/runner.js",
-  "prisma:seed": "node scripts/seed-runner.js",
-  "deploy": "chmod +x deploy.sh && ./deploy.sh"
+    "dev": "next dev",
+    "build": "prisma generate && prisma db push && npm run prisma:seed && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "register-admin": "node scripts/runner.js",
+    "prisma:seed": "node scripts/seed-runner.js",
+    "deploy": "chmod +x deploy.sh && ./deploy.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -62,7 +62,7 @@
     "input-otp": "^1.2.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.446.0",
-    "next": "^15.4.4",
+    "next": "^15.4.10",
     "next-themes": "^0.3.0",
     "postcss": "8.4.30",
     "react": "^18.3.1",
